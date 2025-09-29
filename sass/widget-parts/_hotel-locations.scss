@@ -1,0 +1,132 @@
+@use '../abstracts/variable' as *;
+@use '../abstracts/mixins' as *;
+
+.sht-locations-wrapper {
+    .sht-locations-content {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+
+        @media #{$max991} {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media #{$max768} {
+            gap: 16px;
+        }
+
+        @media #{$max575} {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        .sht-location-single-item {
+            @include bd-radius(24px);
+            background: $sht-color-white;
+            background: linear-gradient(180deg, rgba(46, 29, 12, 0.00) 48.2%, #2E1D0C 100%), lightgray 50% / cover no-repeat;
+            position: relative;
+            min-height: 522px;
+            padding: 24px;
+            @include d-flex();
+            flex-direction: column;
+            @include justify-content(end);
+
+            @media #{$max768} {
+                min-height: 420px;
+                padding: 20px;
+            }
+
+            .sht-locations-badges {
+                position: absolute;
+                top: 24px;
+                left: 24px;
+                @include d-flex();
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .sht-location-item-content {
+                @include d-flex();
+                flex-wrap: nowrap;
+                flex-direction: column;
+                gap: 8px;
+
+                .sht-locaiton-content-middle {
+                    @include d-flex();
+                    flex-wrap: nowrap;
+                    @include justify-content(space-between);
+                    gap: 8px;
+                    color: $sht-color-white;
+
+                    .sht-locaiton-content-info {
+                        @include d-flex();
+                        flex-direction: column;
+                        gap: 8px;
+
+                        .sht-location-item-title {
+                            font-size: 24px;
+
+                            a {
+                                display: block;
+                                color: $sht-color-white;
+                                @include transition(0.3s);
+
+                                &:hover {
+                                    color: $sht-color-primary;
+                                }
+                            }
+                        }
+
+                        .sht-location-item-description {
+                            p {
+                                overflow: hidden;
+                                display: -webkit-box;
+                                -webkit-line-clamp: 1;
+                                -webkit-box-orient: vertical;
+                            }
+                        }
+                    }
+
+                    .sht-location-item-price {
+                        font-size: 14px;
+                        color: $sht-color-white;
+                        font-weight: 400;
+                        line-height: 1.5;
+
+                        .sht-location-item-price-value {
+                            @include d-flex();
+                            flex-wrap: nowrap;
+                            @include align-items(center);
+                            gap: 4px;
+
+                            .amount {
+                                font-size: 20px;
+                                font-weight: 700;
+                                line-height: 1.4;
+                                display: block;
+                                position: relative;
+                                padding-right: 8px;
+                                width: fit-content;
+
+                                &::after {
+                                    content: "/";
+                                    position: absolute;
+                                    top: 50%;
+                                    right: -3px;
+                                    transform: translateY(-50%);
+                                }
+                            }
+
+                            .price-per-label {
+                                margin-top: 2px;
+                            }
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+    }
+
+}

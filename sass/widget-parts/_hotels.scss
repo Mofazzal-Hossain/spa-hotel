@@ -1,0 +1,187 @@
+@use '../abstracts/variable' as *;
+@use '../abstracts/mixins' as *;
+
+.sht-hotels-wrapper {
+    .sht-hotels-content {
+        .sht-hotel-single-item {
+            @include bd-radius(16px);
+            background: $sht-color-white;
+            box-shadow: 0 4px 6px 0 rgba(94, 49, 1, 0.04);
+            position: relative;
+            box-sizing: border-box;
+
+            .sht-rator-badge {
+                position: absolute;
+                top: 24px;
+                left: 24px;
+            }
+
+            .sht-hotel-item-thumbnail {
+                img {
+                    @include bd-radius(16px);
+                    border-bottom-left-radius: 0;
+                    border-bottom-right-radius: 0;
+                    width: 100%;
+                    min-height: 250px;
+                    max-height: 250px;
+                    object-fit: cover;
+                }
+            }
+
+            .sht-hotel-item-content {
+                padding: 24px;
+                @include d-flex();
+                flex-direction: column;
+                gap: 16px;
+
+                .sht-hotel-item-title {
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                    flex: 1;
+
+                    a {
+
+                        display: block;
+                        color: $sht-color-heading;
+                        @include transition(0.3s);
+
+                        &:hover {
+                            color: $sht-color-primary;
+                        }
+                    }
+                }
+
+                .sht-hotel-item-location {
+                    @include d-flex();
+                    flex-wrap: nowrap;
+                    @include align-items(center);
+                    gap: 3px;
+
+                    span {
+                        overflow: hidden;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1;
+                        -webkit-box-orient: vertical;
+                        flex: 1;
+                    }
+                }
+
+                .sht-hotels-price-info {
+                    @include d-flex();
+                    @include align-items(center);
+                    @include justify-content(space-between);
+                    padding-bottom: 16px;
+                    border-bottom: 1px solid $sht-border-default;
+
+                    .sht-hotel-item-price {
+                        font-size: 14px;
+                        color: $sht-color-heading;
+                        font-weight: 400;
+                        line-height: 1.5;
+                        @include d-flex();
+                        @include align-items(center);
+                        gap: 4px;
+
+                        .tf-price {
+
+                            &>.amount,
+                            .sale-price>.amount {
+                                font-size: 24px;
+                                font-weight: 700;
+                                position: relative;
+                                padding-right: 8px;
+
+                                &::after {
+                                    content: "/";
+                                    position: absolute;
+                                    top: 50%;
+                                    right: -3px;
+                                    transform: translateY(-50%);
+                                }
+                            }
+
+                            .booking-type {
+                                display: none;
+                            }
+
+                            .discount-price {
+                                .amount {
+                                    font-size: 17px;
+                                }
+                            }
+
+                        }
+
+
+                        .price-per-night {
+                            display: none;
+                        }
+
+                        .price-per-label {
+                            margin-top: 4px;
+                        }
+                    }
+                }
+
+                .sht-hotel-item-features {
+                    ul {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 8px;
+
+                        @media #{$max575} {
+                            grid-template-columns: repeat(2, 1fr);
+                        }
+
+                        li {
+                            @include d-flex();
+                            @include align-items(center);
+                            gap: 8px;
+                            color: $sht-color-text;
+                            font-size: 14px;
+
+                            i {
+                                color: $sht-color-primary;
+                            }
+
+                            svg {
+                                width: 16px;
+                                height: 16px;
+
+                                path {
+                                    stroke: $sht-color-primary;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .sht-hotel-item-description {
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                }
+
+                .sht-hotel-item-buttons {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 24px;
+
+                    @media (max-width: 350px) {
+                        grid-template-columns: repeat(1, 1fr);
+                        gap: 16px;
+                    }
+
+                    a {
+                        display: block;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
+}

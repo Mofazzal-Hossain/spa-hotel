@@ -1,0 +1,33 @@
+// Abstract Styles
+
+@use "./abstracts/mixins";
+@use "./abstracts/variable";
+
+//Base Styles
+@use "./base/global";
+
+//Component
+@use "./component/button";
+@use "./component/search";
+
+
+//Pages Styles
+@use "./pages/hotel-single";
+@use "./pages/hotel-archive";
+
+
+/** 
+*
+* Widget Parts Start 
+*
+**/
+
+
+// latest news
+@use './widget-parts/booking-rator';
+@use './widget-parts/latest-news';
+@use './widget-parts/hotels';
+@use './widget-parts/hotel-locations';
+
+
+

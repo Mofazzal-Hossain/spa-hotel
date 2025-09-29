@@ -1,0 +1,262 @@
+@use '../abstracts/variable' as *;
+@use '../abstracts/mixins' as *;
+
+.spa-hotel {
+    .tf-spa-hero-search {
+        max-width: 966px;
+        margin: auto;
+        padding: 24px 24px 24px 32px;
+        border: 1px solid $sht-border-default;
+        background: $sht-fill-foreground;
+        @include bd-radius(56px);
+        box-shadow: 0 16px 32px 0 rgba(83, 50, 16, 0.08);
+
+        .tf-search__form__input,
+        input[type="text"],
+        input::placeholder,
+        .field--title,
+        .tf-search__form__field {
+            font-size: 17px;
+            color: $sht-text-faint;
+            background: transparent;
+            height: auto;
+            margin: 0;
+            padding: 0;
+            border: 0;
+
+        }
+
+        .tf-booking-forms-wrapper {
+            .tf-search__form {
+                padding: 0;
+                background: transparent;
+
+                &__fieldset {
+                    gap: 16px;
+
+                    @media (max-width: 1366px) {
+                        flex-direction: row;
+                        align-items: center;
+                    }
+
+                    @media #{$max991} {
+                        display: grid;
+                        grid-template-columns: 220px 1fr;
+                        gap: 16px;
+                    }
+
+                    @media #{$max768} {
+                        max-width: 100%;
+                    }
+
+                    @media (max-width: 680px) {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: start;
+                    }
+
+                    &__left {
+                        max-width: 240px;
+
+                        @media #{$max768} {
+                            max-width: 100%;
+                        }
+
+                        .autocomplete-items {
+                            top: 180%;
+
+                            div {
+                                &:hover {
+                                    background-color: $sht-fill-foreground;
+                                }
+                            }
+                        }
+                    }
+
+                    &__middle {
+                        gap: 16px;
+
+                        @media (max-width: 640px) {
+                            margin: 6px 0;
+                        }
+
+                        @media (max-width: 370px) {
+                            flex-direction: column;
+                            align-items: baseline;
+                        }
+
+                    }
+
+                    &__right {
+                        flex: inherit;
+                    }
+                }
+
+                &__group {
+                    flex: 1;
+
+                    @media #{$max768} {
+                        max-width: 100%;
+                    }
+
+                    @media (max-width: 370px) {
+                        width: 100%;
+                    }
+
+                    &:last-child {
+                        .tf-search__form__field {
+                            border-right: none;
+                        }
+                    }
+
+                    .tf-search__form__field {
+                        padding: 0 24px 0 28px;
+                        display: block;
+                        border-right: 1px solid $sht-border-secondary;
+                        min-height: 26px;
+
+                        @media (max-width: 370px) {
+                            border-right: 0;
+                        }
+
+                        &::before,
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            width: 20px;
+                            height: 20px;
+                        }
+
+                        &::before {
+                            left: 0;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            min-width: 20px;
+                            min-height: 20px;
+                            position: absolute;
+                        }
+
+                        &::after {
+                            right: 24px;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%231a1a1a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+
+                            @media #{$max768} {
+                                right: 12px;
+                            }
+
+                            @media (max-width: 400px) {
+                                right: 5px;
+                            }
+                        }
+
+                        .tf_checkin_dates,
+                        .tf_checkout_dates {
+                            height: 26px;
+                        }
+
+                        .tf-search__form__field__mthyr {
+                            flex-direction: row;
+                            gap: 5px;
+
+                            @media #{$max768} {
+                                margin-left: 0;
+                            }
+
+                            .month::after {
+                                content: ',';
+                                margin: 0;
+                                color: $sht-text-faint;
+                            }
+                        }
+                    }
+                }
+
+                &__label,
+                &__divider {
+                    display: none;
+                }
+
+                &__field {
+                    font-size: 17px;
+                    color: $sht-text-faint;
+                    background: transparent;
+                    border: 0;
+                    height: auto;
+                    margin: 0;
+                    padding: 0;
+                    position: relative;
+                    border-right: 1px solid $sht-border-secondary;
+
+                    @media (max-width: 680px) {
+                        border-right: 0;
+                    }
+
+                    @media (max-width: 370px) {
+                        border: 0;
+                    }
+
+                    input {
+                        height: 26px;
+                        border: 0;
+                    }
+
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
+
+                &__submit {
+                    flex-direction: row-reverse;
+                    background: $sht-color-primary;
+                    color: $sht-fill-background;
+                    filter: none;
+                    padding: 12px 24px;
+                    border-radius: 38px;
+                    min-height: auto;
+                    min-width: auto;
+                    gap: 8px;
+                    transition-duration: 0.5s;
+
+                    &:hover {
+                        background: $sht-color-dark;
+                        filter: none;
+                    }
+                }
+
+                .tf_selectperson-wrap,
+                .tf_checkin_to_label,
+                .icon--location svg,
+                .tf-search__form__field__icon svg {
+                    display: none;
+                }
+
+                .field--title {
+                    font-size: 17px;
+                    margin-right: 5px;
+                    color: $sht-text-faint;
+                    margin-left: 0;
+                }
+            }
+
+            .tf-search__form__field::before {
+                background-image: url('../images/calendar.png');
+            }
+
+            .tf-search__form__fieldset__left {
+                padding-left: 28px;
+
+                .tf-search__form__field::before {
+                    background-image: url('../images/building.png');
+                    left: -28px;
+                }
+            }
+
+
+        }
+    }
+}

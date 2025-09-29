@@ -1,0 +1,126 @@
+@use '../abstracts/variable' as *;
+@use '../abstracts/mixins' as *;
+
+.sht-review-rator-box {
+    padding: 32px;
+    background: $sht-color-secondary;
+    @include bd-radius(16px);
+    @include d-flex();
+    flex-direction: column;
+    gap: 24px;
+    color: $sht-color-white;
+
+    @media #{$max991} {
+        padding: 20px;
+        gap: 20px;
+    }
+
+    @media #{$max768} {
+        padding: 16px;
+        gap: 20px;
+    }
+
+    .sht-review-gauge {
+        position: relative;
+        width: fit-content;
+        margin: auto;
+
+        .sht-rator-meter {
+            text-align: center;
+
+            .sht-gauge-needle {
+                width: fit-content;
+                position: absolute;
+                bottom: 40px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .sht-gauge-score {
+                @include d-flex();
+                @include align-items(end);
+                @include justify-content(center);
+                gap: 7.5px;
+
+                .sht-score {
+                    font-size: 35px;
+                    line-height: 1.2;
+                    font-weight: 700;
+                }
+
+                .sht-text {
+                    margin-bottom: 3px;
+                }
+            }
+        }
+    }
+
+    .sht-review-progress-lists {
+        @include d-flex();
+        flex-direction: column;
+        gap: 24px;
+
+        .sht-review-item {
+            @include d-flex();
+            gap: 8px;
+
+            @media #{$max768} {
+                font-size: 16px;
+            }
+
+            .icon {
+                padding: 6px;
+                @include d-flex();
+                @include align-items(center);
+                @include justify-content(center);
+
+                @media #{$max991} {
+                    padding-left: 0;
+                }
+
+                img {
+                    @media #{$max768} {
+                        width: 22px;
+                    }
+                }
+            }
+
+            .sht-review-item-content {
+                flex: 1;
+
+                .sht-review-progress-report {
+                    @include d-flex();
+                    @include justify-content(space-between);
+                    gap: 8px;
+
+                    .sht-review-score {
+                        font-weight: 700;
+                    }
+                }
+
+                .sht-review-bar {
+                    @include bd-radius(24px);
+                    background: rgba(255, 255, 255, 0.30);
+                    width: 100%;
+                    min-height: 10px;
+                    margin-top: 8px;
+                    position: relative;
+
+                    @media #{$max768} {
+                        margin-top: 5px;
+                        min-height: 8px;
+                    }
+
+                    .sht-bar-fill {
+                        @include bd-radius(24px);
+                        background: $sht-color-primary;
+                        height: 100%;
+                        position: absolute;
+                    }
+                }
+
+
+            }
+        }
+    }
+}
