@@ -12,13 +12,10 @@
             gap: 32px;
             padding-bottom: 96px;
             padding-top: 48px;
-
-
         }
 
         .tf-container {
             padding: 0;
-
             gap: 32px;
 
             .spa-single-section {
@@ -255,6 +252,13 @@
                 }
             }
 
+            // location
+            .tf-hotel-location-section{
+                iframe{
+                    height: 250px;
+                    @include bd-radius(8px);
+                }
+            }
 
             // facilities
             .tf-hotel-facilities-section {
@@ -293,7 +297,6 @@
                             gap: 8px;
 
                             .feature-icon {
-                                @include d-flex();
                                 color: $sht-text-faint;
                             }
                         }

@@ -13,7 +13,7 @@ defined('ABSPATH') || exit;
             <iframe src="https://maps.google.com/maps?q=<?php echo esc_attr($address); ?>&output=embed" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         <?php } elseif ($address && $tf_openstreet_map == "default" && !empty($address_latitude) && !empty($address_longitude)) {
         ?>
-            <div id="hotel-location" style="height: 250px"></div>
+            <div id="hotel-location"></div>
             <script>
                 const map = L.map('hotel-location').setView([<?php echo esc_html($address_latitude); ?>, <?php echo esc_html($address_longitude); ?>], <?php echo esc_html($address_zoom); ?>);
 
@@ -36,7 +36,7 @@ defined('ABSPATH') || exit;
             <iframe src="https://maps.google.com/maps?q=<?php echo esc_html($address); ?>&output=embed" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         <?php } elseif ($address && $tf_openstreet_map == "default" && !empty($address_latitude) && !empty($address_longitude)) {
         ?>
-            <div id="hotel-location" style="height: 250px"></div>
+            <div id="hotel-location"></div>
             <script>
                 const map = L.map('hotel-location').setView([<?php echo esc_html($address_latitude); ?>, <?php echo esc_html($address_longitude); ?>], <?php echo esc_html($address_zoom); ?>);
 

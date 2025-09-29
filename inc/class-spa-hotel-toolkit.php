@@ -25,6 +25,7 @@ class Spa_Hotel_Toolkit {
         // filters
         add_filter('body_class', [ $this, 'sht_body_class' ]);
         add_filter('wp_list_categories', [ $this, 'sht_categories_list_filter' ]);
+        add_filter('tourfic_add_review_button_text', [ $this, 'sht_add_review_button_text' ]);
 
         // template override
         add_filter( 'tf_hotel_single_legacy_template', [ $this, 'sht_hotel_single_legacy_template' ] );
@@ -118,6 +119,11 @@ class Spa_Hotel_Toolkit {
     public function sht_hotel_archive_legacy_template( $template ) {
         $template = SPA_HOTEL_TOOLKIT_PATH . 'inc/templates/archive/spa-archive-hotels.php';
         return $template;
+    }
+
+    // Change "Add Review" button text
+    public function sht_add_review_button_text( $text ) {
+        return esc_html__( 'Leave your review', 'spa-hotel-toolkit' );
     }
 
 }

@@ -444,6 +444,7 @@ a:focus {
 .spa-hotel .tf-spa-hero-search .tf-booking-forms-wrapper .tf-search__form__field input {
   height: 26px;
   border: 0;
+  padding: 0;
 }
 .spa-hotel .tf-spa-hero-search .tf-booking-forms-wrapper .tf-search__form__field::before {
   content: "";
@@ -806,6 +807,12 @@ a:focus {
 .spa-hotel .spa-single-details .tf-container .tf-single-description .tf-hotel-place-review ul li p {
   font-size: 14px;
 }
+.spa-hotel .spa-single-details .tf-container .tf-hotel-location-section iframe {
+  height: 250px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+}
 .spa-hotel .spa-single-details .tf-container .tf-hotel-facilities-section .hotel-facility-item {
   margin-bottom: 16px;
 }
@@ -853,12 +860,6 @@ a:focus {
   gap: 8px;
 }
 .spa-hotel .spa-single-details .tf-container .tf-hotel-facilities-section .hotel-facility-item ul li .feature-icon {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  flex-wrap: wrap;
   color: #7C7C7C;
 }
 .spa-hotel .spa-single-details .tf-container .tf-faq-items-wrapper {
