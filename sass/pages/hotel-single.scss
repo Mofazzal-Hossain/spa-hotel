@@ -178,6 +178,64 @@
                 }
             }
 
+            // availability
+            .tf-availability-wrapper {
+                .tf-availability-inner {
+                    .tf-availability-info {
+                        padding: 24px;
+                        background-color: $sht-fill-foreground;
+                        @include bd-radius(16px);
+                        margin-bottom: 16px;
+
+                        .tf-rates-info {
+                            margin-top: 16px;
+                            color: $sht-semantic-yellow;
+                            font-size: 14px;
+                            gap: 8px;
+                            align-items: center;
+
+                            .icon {
+                                @include d-flex();
+                            }
+                        }
+                    }
+
+                    .tf-availability-platform {
+                        ul {
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            gap: 16px;
+
+                            li {
+                                padding: 32px 24px;
+                                background: $sht-fill-background;
+                                @include bd-radius(16px);
+                                @include d-flex();
+                                @include align-items(center);
+                                flex-direction: column;
+                                gap: 24px;
+
+                                img {
+                                    width: fit-content;
+                                }
+
+                                a {
+                                    display: block;
+                                    width: 100%;
+                                    font-weight: 600;
+                                    background: $sht-fill-foreground;
+                                    &:hover{
+                                        background: $sht-color-primary;
+                                        color: $sht-color-white;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
             // descriptions
             .tf-single-description {
 
@@ -222,9 +280,9 @@
                                 svg {
                                     position: absolute;
                                     bottom: 0px;
-                                    left: -1px;
-                                    width: 16px;
-                                    height: 10px;
+                                    left: 0px;
+                                    width: 15px;
+                                    height: 12px;
                                 }
                             }
 
@@ -252,9 +310,219 @@
                 }
             }
 
+            // reviews
+            .tf-review-wrapper {
+                .reviews {
+                    @include d-flex();
+                    flex-direction: column-reverse;
+                    gap: 16px;
+
+                    .no-review {
+                        h4 {
+                            font-size: 17px;
+                        }
+                    }
+
+                    .tf-btn-wrap {
+                        .tf-modal-btn {
+                            padding: 0;
+                            background: transparent;
+                            flex-direction: row-reverse;
+                            color: $sht-color-primary;
+                            gap: 8px;
+                            box-shadow: none;
+                            border: 0;
+
+                            &:hover {
+                                color: $sht-color-dark;
+                            }
+                        }
+                    }
+
+                    #tf-rating-modal {
+                        .tf-modal-content {
+                            max-width: 803px;
+                            padding: 32px;
+
+                            .tf-modal-header {
+                                @include d-flex();
+                                flex-direction: column;
+                                gap: 16px;
+                            }
+
+                            .tf-review-form-container {
+                                min-width: 100%;
+
+                                .tf-review-form {
+                                    @include d-flex();
+                                    flex-direction: column;
+
+                                    .tf-rating-wrapper {
+                                        grid-template-columns: repeat(3, 1fr);
+                                        row-gap: 16px;
+                                        margin: 32px 0;
+
+                                        .tf-form-single-rating {
+                                            grid-template-columns: 1fr;
+                                            gap: 8px;
+
+                                            label {
+                                                font-size: 17px;
+                                                color: $sht-color-heading;
+                                                font-weight: 400;
+                                            }
+
+                                            .ratings-container {
+                                                width: 100%;
+                                                text-align: left;
+
+                                                label {
+                                                    margin-right: 5px;
+
+                                                    &::before {
+                                                        font-size: 20px;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    textarea,
+                                    input:not([type='submit']) {
+                                        @include bd-radius(24px);
+                                        background: transparent;
+                                        border: 1px solid $sht-border-secondary;
+                                        padding: 8px 20px;
+                                        height: 42px;
+                                        color: $sht-color-text;
+
+                                        &::placeholder {
+                                            color: $sht-text-faint;
+                                        }
+                                    }
+
+                                    .tf-visitor-info {
+                                        gap: 24px;
+                                        order: 2;
+                                        margin-top: 0;
+                                        margin-bottom: 24px;
+                                    }
+
+                                    .review-desc {
+                                        @include d-flex();
+                                        order: 3;
+
+                                        textarea {
+                                            height: 112px;
+                                            resize: vertical;
+                                            @include bd-radius(16px);
+                                            overflow-y: auto;
+
+                                            &::-webkit-scrollbar {
+                                                width: 2px;
+                                            }
+
+                                            &::-webkit-scrollbar-thumb {
+                                                background: #ccc;
+                                                border-radius: 16px;
+                                            }
+                                        }
+                                    }
+
+                                    .tf-review-submit {
+                                        order: 4;
+                                        margin-top: 24px;
+
+                                        input[type="submit"] {
+                                            padding: 12px 24px;
+                                            font-weight: 700;
+                                            @include bd-radius(38px);
+
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        }
+                    }
+
+                    .tf-review-container {
+
+                        .tf-single-review,
+                        .tf-review-progress-bar {
+                            display: none;
+                        }
+
+                        .tf-total-review {
+                            margin: 0;
+
+                            .tf-total-average {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    .tf-single-review {
+                        @include d-flex();
+                        flex-direction: column;
+                        gap: 16px;
+
+                        .tf-single-details {
+                            @include bd-radius(16px);
+                            padding: 24px;
+                            display: block;
+
+                            .tf-review-header {
+                                @include d-flex();
+                                justify-content: space-between;
+                                gap: 16px;
+                                margin-bottom: 16px;
+
+                                .tf-review-details {
+                                    @include d-flex();
+                                    @include d-flex();
+                                    @include align-items(center);
+                                    gap: 8px;
+                                }
+
+                                .tf-name {
+                                    font-weight: 600;
+                                    font-size: 17px;
+                                }
+
+                                .tf-rating-stars {
+                                    div {
+                                        @include d-flex();
+                                        gap: 5px;
+
+                                        i {
+                                            font-size: 15px;
+                                            height: auto;
+                                            color: $sht-semantic-yellow;
+                                        }
+                                    }
+
+                                }
+                            }
+
+                            .tf-hotel-show-more {
+                                cursor: pointer;
+                                color: $sht-color-heading;
+                                font-weight: 500;
+                                margin-top: 5px;
+                            }
+
+                        }
+
+                    }
+
+                }
+            }
+
             // location
-            .tf-hotel-location-section{
-                iframe{
+            .tf-hotel-location-section {
+                iframe {
                     height: 250px;
                     @include bd-radius(8px);
                 }

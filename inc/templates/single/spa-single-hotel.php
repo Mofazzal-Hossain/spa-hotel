@@ -26,6 +26,8 @@ if (!Helper::tf_is_woo_active()) {
 			<?php
 				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/hero.php';
 				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/facilities.php';
+				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/other-facilities.php';
+				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/availability.php';
 				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/about.php';
 				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/review.php';
 				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/location.php';
