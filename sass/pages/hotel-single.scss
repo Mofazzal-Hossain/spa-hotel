@@ -348,10 +348,12 @@
                                 margin-top: 4px;
                             }
                         }
-                        .tf-peak-session{
+
+                        .tf-peak-session {
                             margin-top: 8px;
                             margin-bottom: 16px;
                         }
+
                         .tf-rates-info {
                             color: $sht-semantic-yellow;
                             font-size: 14px;
@@ -545,6 +547,7 @@
                                                 label {
                                                     margin-right: 3px;
                                                     width: 19px;
+
                                                     &::before {
                                                         font-size: 19px;
                                                     }
@@ -732,6 +735,99 @@
 
                             .feature-icon {
                                 color: $sht-text-faint;
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            // feeds
+            .tf-insta-post-wrap {
+                @include d-flex();
+                @include align-items(center);
+                @include justify-content(center);
+                gap: 32px;
+                .tf-insta-post {
+                    flex-basis: calc(25% - 24px);
+                    .tf-insta-post-top {
+                        position: relative;
+                        @include bd-radius(8px);
+                        z-index: 1;
+                        min-height: 350px;
+                        max-height: 350px;
+                        overflow: hidden;
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            inset: 0;
+                            border-radius: 8px;
+                            background: linear-gradient(180deg, rgba(250, 247, 242, 0.00) 0%, rgba(48, 40, 26, 0.50) 100%);
+                            z-index: -1;
+                        }
+
+                        .insta-icon {
+                            position: absolute;
+                            left: 16px;
+                            top: 16px;
+                        }
+
+                        .tf-insta-feed-image {
+                            width: 100%;
+                            height: 100%;
+                            @include bd-radius(8px);
+                        }
+
+                        .insta-user-info {
+                            position: absolute;
+                            left: 16px;
+                            bottom: 16px;
+                            @include d-flex();
+                            gap: 4px;
+
+                            img {
+                                width: 20px;
+                                height: 20px;
+                                aspect-ratio: 1/1;
+
+                            }
+
+                            a {
+                                color: $sht-color-white;
+                            }
+                        }
+                    }
+
+                    .tf-insta-post-bottom {
+                        .tf-post-title {
+                            margin: 8px 0;
+                            font-weight: 600;
+                            color: $sht-color-heading;
+
+                            &:hover {
+                                color: $sht-color-primary;
+                            }
+                        }
+
+                        .tf-post-meta {
+                            ul {
+                                @include d-flex();
+                                @include align-items(center);
+                                gap: 16px;
+
+                                li {
+                                    @include d-flex();
+                                    @include align-items(center);
+                                    gap: 3px;
+
+                                    .icon {
+                                        @include d-flex();
+                                    }
+                                }
                             }
                         }
                     }

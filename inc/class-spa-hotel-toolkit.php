@@ -173,10 +173,10 @@ class Sht_Hotel_Toolkit
             if (!empty($sections['review']['fields'])) {
                 foreach ($sections['review']['fields'] as &$field) {
                     if (isset($field['id']) && $field['id'] === 'r-hotel' && isset($field['fields'])) {
-                      
+
                         $field['fields'][] = array(
                             'id'    => 'r-field-icon',
-                            'type'  => 'image', 
+                            'type'  => 'image',
                             'label' => __('Image', 'spa-hotel-toolkit'),
                             'url'   => true,
                         );
@@ -414,8 +414,45 @@ class Sht_Hotel_Toolkit
         );
 
 
+        // Brand rating section
+        $sections['insta_feeds'] = array(
+            'title'  => __('Instagram Feeds', 'spa-hotel-toolkit'),
+            'icon'   => 'fa-brands fa-instagram',
+            'fields' => array(
+                array(
+                    'id'      => 'feeds-heading',
+                    'type'    => 'heading',
+                    'label'   => __('Feeds Settings', 'spa-hotel-toolkit'),
+                    'subtitle' => esc_html__('These are some instagram feeds settings specific to this Hotel.', 'spa-hotel-toolkit'),
+                ),
+                array(
+                    'id'      => 'feeds-sec-title',
+                    'type'    => 'text',
+                    'label'   => __('Section Title', 'spa-hotel-toolkit'),
+                    'default' => __('Guest Experiences', 'spa-hotel-toolkit'),
+                ),
+                array(
+                    'id'      => 'feeds-account-id',
+                    'type'    => 'text',
+                    'label'   => __('Account ID', 'spa-hotel-toolkit'),
+                    'placeholder' => __('Add your account ID', 'spa-hotel-toolkit'),
+                ),
+                array(
+                    'id'      => 'feeds-username',
+                    'type'    => 'text',
+                    'label'   => __('Username', 'spa-hotel-toolkit'),
+                    'placeholder' => __('Add your username', 'spa-hotel-toolkit'),
+                ),
+                array(
+                    'id'      => 'feeds-access-token',
+                    'type'    => 'text',
+                    'label'   => __('Access Token', 'spa-hotel-toolkit'),
+                    'placeholder' => __('Add your access token', 'spa-hotel-toolkit'),
+                ),
+            ),
+        );
+
+
         return $sections;
     }
-
-   
 }
