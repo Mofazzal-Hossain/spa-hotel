@@ -45,14 +45,14 @@
 
          // Full Description Showing
         $('.tf-single-description .tf-see-description').on('click', function () {
-            $('.tf-short-description').slideUp();
-            $('.tf-full-description').slideDown();
+            $('.tf-single-description .tf-short-description').slideUp();
+            $('.tf-single-description .tf-full-description').slideDown();
         });
 
         // See Less Description Showing
         $('.tf-single-description .tf-see-less-description').on('click', function () {
-            $('.tf-full-description').slideUp();
-            $('.tf-short-description').slideDown();
+            $('.tf-single-description .tf-full-description').slideUp();
+            $('.tf-single-description .tf-short-description').slideDown();
         });
 
         // review modal 

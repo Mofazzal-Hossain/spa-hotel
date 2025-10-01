@@ -24,14 +24,16 @@ if (!Helper::tf_is_woo_active()) {
 	<div class="tf-container">
 		<div class="spa-single-details-sections">
 			<?php
-				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/hero.php';
-				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/facilities.php';
-				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/other-facilities.php';
-				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/availability.php';
-				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/about.php';
-				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/review.php';
-				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/location.php';
-				include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/faq.php';
+				include SHT_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/hero.php';
+				include SHT_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/rator-progress.php';
+				include SHT_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/facilities.php';
+				include SHT_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/other-facilities.php';
+				include SHT_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/availability.php';
+				include SHT_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/about.php';
+				include SHT_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/review.php';
+				include SHT_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/location.php';
+				include SHT_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/insta-feeds.php';
+				include SHT_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/faq.php';
 			?>
 		</div>
 	</div>
@@ -48,7 +50,7 @@ if (!Helper::tf_is_woo_active()) {
 			</p>
 
 		</div>
-		<?php include SPA_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/related-hotels.php'; ?>
+		<?php include SHT_HOTEL_TOOLKIT_TEMPLATES . 'single/template-parts/related-hotels.php'; ?>
 	</div>
 </div>
 

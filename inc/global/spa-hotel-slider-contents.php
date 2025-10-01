@@ -1,11 +1,12 @@
-<?php 
+<?php
 // Don't load directly
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
+
 use \Tourfic\Classes\Hotel\Pricing;
 use \Tourfic\Classes\Helper;
 use \Tourfic\Classes\Room\Room;
 
-if ( empty( $query ) || ! $query instanceof WP_Query ) {
+if (empty($query) || ! $query instanceof WP_Query) {
     return;
 }
 ?>
@@ -56,24 +57,6 @@ if ( empty( $query ) || ! $query instanceof WP_Query ) {
                         }
                     }
 
-                    switch ($index) {
-                        case 1:
-                            $sht_rator_name = 'exceptional';
-                            break;
-                        case 2:
-                            $sht_rator_name = 'outstanding';
-                            break;
-                        case 3:
-                            $sht_rator_name = 'excellent';
-                            break;
-                        case 4:
-                            $sht_rator_name = 'very-good';
-                            break;
-                        default:
-                            $sht_rator_name = 'good';
-                            break;
-                    }
-
                     // rooms
                     $rooms = Room::get_hotel_rooms($post_id);
                     $room_id = ! empty($rooms) ? $rooms[0]->ID : '';
@@ -85,13 +68,15 @@ if ( empty( $query ) || ! $query instanceof WP_Query ) {
                         $price_multi_text = 'day';
                     }
 
+
+                    $rating_badge = sht_sparator_rating_badge($post_id);
                 ?>
                     <!-- single destination -->
                     <div class="sht-hotel-single-item swiper-slide">
-                        <!-- destination thumbnail -->
-                        <div class="sht-rator-badge <?php echo esc_attr($sht_rator_name); ?>">
-                            <?php echo esc_html__('SpaRator 9.2: Exceptional', 'spa-hotel-toolkit'); ?>
+                        <div class="sht-rator-badge <?php echo esc_attr($rating_badge['class']); ?>">
+                            <?php echo esc_html($rating_badge['text']); ?>
                         </div>
+                        <!-- destination thumbnail -->
                         <div class="sht-hotel-item-thumbnail">
                             <a href="<?php echo esc_url(get_the_permalink()) ?>">
                                 <?php $sht_hotel_image = !empty(get_the_post_thumbnail_url(get_the_ID())) ? esc_url(get_the_post_thumbnail_url(get_the_ID())) : esc_url(site_url() . '/wp-content/plugins/elementor/assets/images/placeholder.png');                                    ?>

@@ -1,11 +1,26 @@
 <?php
 // Don't load directly
 defined('ABSPATH') || exit;
+
+use \Tourfic\Classes\Room\Room;
+use \Tourfic\Classes\Hotel\Pricing;
+
 $hotel_meta = get_post_meta($post_id, 'tf_hotels_opt', true);
-$avilability_sec_title = ! empty($hotel_meta['availability-sec-title']) ? $hotel_meta['availability-sec-title'] : '';
+$avilability_sec_title = ! empty($hotel_meta['availability-sec-title']) ? $hotel_meta['availability-sec-title'] : 'Pricing & Availability';
 $avilability_peak_session = ! empty($hotel_meta['availability-peak-session']) ? $hotel_meta['availability-peak-session'] : '';
 $avilability_rates_info = ! empty($hotel_meta['availability-rates-info']) ? $hotel_meta['availability-rates-info'] : '';
 $avilability_booking = ! empty($hotel_meta['availability-booking']) ? $hotel_meta['availability-booking'] : [];
+
+$rooms = Room::get_hotel_rooms($post_id);
+$room_id = ! empty($rooms) ? $rooms[0]->ID : '';
+$room_meta = get_post_meta($room_id, 'tf_room_opt', true);
+$price_multi_day = ! empty($room_meta['price_multi_day']) ? $room_meta['price_multi_day'] : 0;
+if ($price_multi_day == 1) {
+    $price_multi_text = 'night';
+} else {
+    $price_multi_text = 'day';
+}
+
 ?>
 
 <div class="tf-availability-wrapper spa-single-section">
@@ -14,6 +29,10 @@ $avilability_booking = ! empty($hotel_meta['availability-booking']) ? $hotel_met
     <?php endif; ?>
     <div class="tf-availability-inner">
         <div class="tf-availability-info">
+            <div class="tf-availability-price">
+                <?php echo wp_kses_post(Pricing::instance($post_id, $room_id)->get_per_price_html()); ?>
+                <div class="price-per-label"><?php echo esc_html($price_multi_text); ?></div>
+            </div>
             <?php if (!empty($avilability_peak_session)): ?>
                 <div class="tf-peak-session"><?php echo esc_html($avilability_peak_session); ?></div>
             <?php endif; ?>

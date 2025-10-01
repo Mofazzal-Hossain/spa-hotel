@@ -1,5 +1,8 @@
 <?php
 
+use \Tourfic\App\TF_Review;
+use \Tourfic\Classes\Helper;
+
 class Spa_Booking_Rator extends \Elementor\Widget_Base
 {
     /**
@@ -130,72 +133,6 @@ class Spa_Booking_Rator extends \Elementor\Widget_Base
             ]
         );
 
-        $this->add_control(
-            'label_treatments',
-            [
-                'label'       => __('Treatments Label', 'spa-hotel-toolkit'),
-                'type'        => \Elementor\Controls_Manager::TEXT,
-                'label_block' => true,
-                'default'     => __('Treatments', 'spa-hotel-toolkit'),
-                'placeholder' => __('Enter label', 'spa-hotel-toolkit'),
-            ]
-        );
-
-        $this->add_control(
-            'label_spa_facilities',
-            [
-                'label'       => __('Spa Facilities Label', 'spa-hotel-toolkit'),
-                'type'        => \Elementor\Controls_Manager::TEXT,
-                'label_block' => true,
-                'default'     => __('Spa Facilities', 'spa-hotel-toolkit'),
-                'placeholder' => __('Enter label', 'spa-hotel-toolkit'),
-            ]
-        );
-
-        $this->add_control(
-            'label_wellness',
-            [
-                'label'       => __('Wellness Programs Label', 'spa-hotel-toolkit'),
-                'type'        => \Elementor\Controls_Manager::TEXT,
-                'label_block' => true,
-                'default'     => __('Wellness Programs', 'spa-hotel-toolkit'),
-                'placeholder' => __('Enter label', 'spa-hotel-toolkit'),
-            ]
-        );
-
-        $this->add_control(
-            'label_staff',
-            [
-                'label'       => __('Staff & Service Label', 'spa-hotel-toolkit'),
-                'type'        => \Elementor\Controls_Manager::TEXT,
-                'label_block' => true,
-                'default'     => __('Staff & Service', 'spa-hotel-toolkit'),
-                'placeholder' => __('Enter label', 'spa-hotel-toolkit'),
-            ]
-        );
-
-        $this->add_control(
-            'label_experience',
-            [
-                'label'       => __('Experience Label', 'spa-hotel-toolkit'),
-                'type'        => \Elementor\Controls_Manager::TEXT,
-                'label_block' => true,
-                'default'     => __('Experience', 'spa-hotel-toolkit'),
-                'placeholder' => __('Enter label', 'spa-hotel-toolkit'),
-            ]
-        );
-
-        $this->add_control(
-            'label_value',
-            [
-                'label'       => __('Value for Money Label', 'spa-hotel-toolkit'),
-                'type'        => \Elementor\Controls_Manager::TEXT,
-                'label_block' => true,
-                'default'     => __('Value for Money', 'spa-hotel-toolkit'),
-                'placeholder' => __('Enter label', 'spa-hotel-toolkit'),
-            ]
-        );
-
 
         $this->end_controls_section();
 
@@ -208,48 +145,58 @@ class Spa_Booking_Rator extends \Elementor\Widget_Base
     {
         $settings = $this->get_settings_for_display();
 
-        $rator_data = [
-            'treatments' => [
-                'label' => $settings['label_treatments'],
-                'score' => 8,
-                'icon'  => SPA_HOTEL_TOOLKIT_ASSETS . 'images/treatments.svg',
-            ],
-            'spa_facilities' => [
-                'label' => $settings['label_spa_facilities'],
-                'score' => 9,
-                'icon'  => SPA_HOTEL_TOOLKIT_ASSETS . 'images/facilities.svg',
-            ],
-            'wellness' => [
-                'label' => $settings['label_wellness'],
-                'score' =>7,
-                'icon'  => SPA_HOTEL_TOOLKIT_ASSETS . 'images/wellness.svg',
-            ],
-            'staff' => [
-                'label' => $settings['label_staff'],
-                'score' => 6,
-                'icon'  => SPA_HOTEL_TOOLKIT_ASSETS . 'images/staff.svg',
-            ],
-            'experience' => [
-                'label' => $settings['label_experience'],
-                'score' => 4,
-                'icon'  => SPA_HOTEL_TOOLKIT_ASSETS . 'images/experience.svg',
-            ],
-            'value' => [
-                'label' => $settings['label_value'],
-                'score' => 9,
-                'icon'  => SPA_HOTEL_TOOLKIT_ASSETS . 'images/money.svg',
-            ],
+        /**
+         * Review query
+         */
+        $hotel_posts = get_posts([
+            'post_type'      => 'tf_hotel',
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+        ]);
+        $args = [
+            'post__in' => $hotel_posts,
+            'status'   => 'approve',
+            'type'     => 'comment',
         ];
 
-        $rator_meter = SPA_HOTEL_TOOLKIT_ASSETS . 'images/rator-meter.png';
-        $rator_handle = SPA_HOTEL_TOOLKIT_ASSETS . 'images/rator-handle.png';
+        $comments_query = new WP_Comment_Query($args);
+        $comments = $comments_query->comments;
 
-        // Extract scores
-        $scores = array_column($rator_data, 'score');
-        $total_score = array_sum($scores);
-        $count       = count($scores);
-        $average     = $count > 0 ? round($total_score / $count, 1) : 0;
-        $transform = get_rating_transform($average);
+        $tf_overall_rate        = [];
+        $tf_settings_base = ! empty(Helper::tfopt('r-base')) ? Helper::tfopt('r-base') : 10;
+        $tf_hotel_review     = ! empty(Helper::tf_data_types(Helper::tfopt('r-hotel'))) ? Helper::tf_data_types(Helper::tfopt('r-hotel')) : [];
+
+        TF_Review::tf_calculate_comments_rating($comments, $tf_overall_rate, $total_rating);
+        TF_Review::tf_get_review_fields($fields);
+
+        if (!empty($tf_hotel_review)) {
+            foreach ($tf_hotel_review as $review_field) {
+                $key   = !empty($review_field['r-field-type']) ? sanitize_title($review_field['r-field-type']) : '';
+                $label = !empty($review_field['r-field-type']) ? $review_field['r-field-type'] : '';
+                $icon  = !empty($review_field['r-field-icon']) ? $review_field['r-field-icon'] : '';
+                $normalized_label = strtolower(str_replace([' ', '_'], '', $label));
+                $score = 0;
+                foreach ($tf_overall_rate as $rate_key => $values) {
+                    $normalized_rate_key = strtolower(str_replace([' ', '_'], '', $rate_key));
+                    if ($normalized_label === $normalized_rate_key) {
+                        $score = TF_Review::Tf_average_ratings($values);
+                        break;
+                    }
+                }
+                $key = sanitize_title($label);
+                if ($key) {
+                    $rator_data[$key] = [
+                        'label' => $label,
+                        'score' => $score,
+                        'icon'  => $icon,
+                    ];
+                }
+            }
+        }
+
+        $rator_meter = SHT_HOTEL_TOOLKIT_ASSETS . 'images/rator-meter.png';
+        $rator_handle = SHT_HOTEL_TOOLKIT_ASSETS . 'images/rator-handle.png';
+        $transform = get_rating_transform($total_rating);
 
 
 ?>
@@ -264,7 +211,7 @@ class Spa_Booking_Rator extends \Elementor\Widget_Base
                     </div>
                     <div class="sht-gauge-score">
                         <span class="sht-text"><?php echo esc_html($settings['rator_title']); ?></span>
-                        <span class="sht-score"><?php echo esc_html($average); ?></span>
+                        <span class="sht-score"><?php echo esc_html($total_rating); ?></span>
                         <span class="sht-text"><?php echo esc_html($settings['rator_score']); ?></span>
                     </div>
                 </div>
@@ -278,10 +225,10 @@ class Spa_Booking_Rator extends \Elementor\Widget_Base
                         <div class="sht-review-item-content">
                             <div class="sht-review-progress-report">
                                 <span class="sht-review-label"><?php echo esc_html__($item['label'], 'spa-hotel-toolkit'); ?></span>
-                                <div class="sht-review-score"><?php echo esc_html($item['score']); ?>/10</div>
+                                <div class="sht-review-score"><?php echo esc_html($item['score']); ?>/<?php echo esc_html($tf_settings_base); ?></div>
                             </div>
                             <div class="sht-review-bar">
-                                <span class="sht-bar-fill" style="width: <?php echo ($item['score'] * 10); ?>%"></span>
+                                <span class="sht-bar-fill" style="width: <?php echo intval(($item['score'] / $tf_settings_base) * 100); ?>%"></span>
                             </div>
                         </div>
                     </div>
@@ -296,7 +243,8 @@ class Spa_Booking_Rator extends \Elementor\Widget_Base
 }
 
 // Get rating transform
-function get_rating_transform($average) {
+function get_rating_transform($average)
+{
     $positions = [
         1  => ['rotate' => -92, 'tx' => -28, 'ty' => -60],
         2  => ['rotate' => -73, 'tx' => -27, 'ty' => -35],
@@ -312,19 +260,19 @@ function get_rating_transform($average) {
 
     // Clamp value between 1 and 10
     $average = max(1, min(10, $average));
-    
+
     // Find the two closest positions to interpolate between
     $floor = floor($average);
     $ceil = ceil($average);
-    
+
     // If it's exactly on an integer, return that position
     if ($floor == $ceil) {
         return $positions[$floor];
     }
-    
+
     // Calculate interpolation ratio (0 to 1)
     $ratio = $average - $floor;
-    
+
     // Interpolate between the two positions
     $result = [];
     foreach (['rotate', 'tx', 'ty'] as $property) {
@@ -332,6 +280,6 @@ function get_rating_transform($average) {
         $end = $positions[$ceil][$property];
         $result[$property] = $start + ($end - $start) * $ratio;
     }
-    
+
     return $result;
 }

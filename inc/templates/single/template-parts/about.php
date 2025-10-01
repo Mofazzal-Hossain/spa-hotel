@@ -4,7 +4,7 @@
 defined('ABSPATH') || exit;
 $hotel_meta = get_post_meta($post_id, 'tf_hotels_opt', true);
 $rating_sec_title = ! empty($hotel_meta['rating-sec-title']) ? $hotel_meta['rating-sec-title'] : '';
-error_log(print_r($hotel_meta['rating-booking-score'], true));
+
 // booking.com rating
 $rating_booking_feedback = ! empty($hotel_meta['rating-booking-feedback']) ? $hotel_meta['rating-booking-feedback'] : '';
 $rating_booking_score = ! empty($hotel_meta['rating-booking-score']) ? $hotel_meta['rating-booking-score'] : 0;
@@ -57,7 +57,7 @@ $rating_tripadvisor_desc = ! empty($hotel_meta['rating-tripadvisor-desc']) ? $ho
                 </div>
             </li>
             <li>
-                <img src="<?php echo esc_url(SPA_HOTEL_TOOLKIT_ASSETS . 'images/google-maps.png'); ?>" alt="Google Map">
+                <img src="<?php echo esc_url(SHT_HOTEL_TOOLKIT_ASSETS . 'images/google-maps.png'); ?>" alt="Google Map">
                 <div class="review-info">
                     <h6>
                         <div class="rating-icon">
@@ -74,7 +74,7 @@ $rating_tripadvisor_desc = ! empty($hotel_meta['rating-tripadvisor-desc']) ? $ho
             </li>
             <li>
 
-                <img src="<?php echo esc_url(SPA_HOTEL_TOOLKIT_ASSETS . 'images/tripadvisior.png'); ?>" alt="Trip Advisor">
+                <img src="<?php echo esc_url(SHT_HOTEL_TOOLKIT_ASSETS . 'images/tripadvisior.png'); ?>" alt="Trip Advisor">
                 <div class="review-info">
                     <h6>
                         <div class="rating-icon">

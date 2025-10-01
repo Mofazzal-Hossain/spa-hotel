@@ -178,6 +178,118 @@
                 }
             }
 
+            // sparator progress
+            .tf-rator-progress {
+                .tf-rator-progress-inner {
+                    @include d-flex();
+                    flex-direction: column;
+                    gap: 32px;
+
+                    .tf-rator-desc {
+                        padding: 16px;
+                        @include bd-radius(16px);
+                        background: $sht-color-white;
+                        border: 1px solid $sht-color-secondary;
+                        border-left-width: 4px;
+                        font-size: 14px;
+                        color: $sht-color-heading;
+                    }
+
+                    .tf-rator-average-progress {
+                        .average {
+                            @include d-flex();
+                            @include align-items(center);
+                            @include justify-content(space-between);
+                            color: $sht-color-heading;
+                            font-weight: 700;
+                        }
+
+                        .tf-rator-average-inner {
+                            margin-top: 8px;
+
+                            .tf-rator-average-bar {
+                                width: 100%;
+                                height: 12px;
+                                position: relative;
+                                @include bd-radius(24px);
+                                background: rgba(212, 165, 116, 0.20);
+
+                                .tf-rator-average-bar-fill {
+                                    position: absolute;
+                                    height: 100%;
+                                    @include bd-radius(24px);
+                                    background: $sht-color-primary;
+                                }
+                            }
+
+                            .tf-rator-progress-scale {
+                                @include d-flex();
+                                @include align-items(center);
+                                @include justify-content(space-between);
+                                margin-top: 8px;
+                                font-size: 14px;
+                                color: $sht-text-faint;
+                            }
+
+
+                        }
+                    }
+
+                    .tf-rator-progress-fields {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        row-gap: 24px;
+                        column-gap: 48px;
+
+                        .tf-progress-item {
+                            @include d-flex();
+                            @include align-items(center);
+                            gap: 8px;
+
+                            .icon {
+                                width: 48px;
+                                height: 48px;
+                                @include bd-radius(8px);
+                                background: $sht-color-primary;
+                                @include d-flex();
+                                @include align-items(center);
+                                @include justify-content(center);
+
+                                img {
+                                    width: 32px;
+                                    height: 32px;
+                                }
+                            }
+
+                            .tf-review-feature {
+                                flex: 1;
+
+                                p {
+                                    color: $sht-color-heading;
+                                    margin-bottom: 8px;
+                                    text-transform: capitalize;
+                                }
+
+                                .tf-progress-bar {
+                                    width: 100%;
+                                    height: 10px;
+                                    position: relative;
+                                    @include bd-radius(24px);
+                                    background: rgba(212, 165, 116, 0.20);
+
+                                    .percent-progress {
+                                        position: absolute;
+                                        height: 100%;
+                                        @include bd-radius(24px);
+                                        background: $sht-color-primary;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             // availability
             .tf-availability-wrapper {
                 .tf-availability-inner {
@@ -187,8 +299,60 @@
                         @include bd-radius(16px);
                         margin-bottom: 16px;
 
+                        .tf-availability-price {
+                            font-size: 24px;
+                            color: $sht-color-heading;
+                            font-weight: 400;
+                            line-height: 1.4;
+                            @include d-flex();
+                            @include align-items(center);
+                            gap: 10px;
+
+                            .tf-price {
+
+                                &>.amount,
+                                .sale-price>.amount {
+                                    font-size: 42px;
+                                    font-weight: 700;
+                                    line-height: 1.2;
+                                    position: relative;
+                                    padding-right: 8px;
+
+                                    &::after {
+                                        content: "/";
+                                        position: absolute;
+                                        top: 50%;
+                                        right: -10px;
+                                        transform: translateY(-50%);
+                                    }
+                                }
+
+                                .booking-type {
+                                    display: none;
+                                }
+
+                                .discount-price {
+                                    .amount {
+                                        font-size: 24px;
+                                    }
+                                }
+
+                            }
+
+
+                            .price-per-night {
+                                display: none;
+                            }
+
+                            .price-per-label {
+                                margin-top: 4px;
+                            }
+                        }
+                        .tf-peak-session{
+                            margin-top: 8px;
+                            margin-bottom: 16px;
+                        }
                         .tf-rates-info {
-                            margin-top: 16px;
                             color: $sht-semantic-yellow;
                             font-size: 14px;
                             gap: 8px;
@@ -224,7 +388,8 @@
                                     width: 100%;
                                     font-weight: 600;
                                     background: $sht-fill-foreground;
-                                    &:hover{
+
+                                    &:hover {
                                         background: $sht-color-primary;
                                         color: $sht-color-white;
                                     }
@@ -360,6 +525,7 @@
                                     .tf-rating-wrapper {
                                         grid-template-columns: repeat(3, 1fr);
                                         row-gap: 16px;
+                                        column-gap: 30px;
                                         margin: 32px 0;
 
                                         .tf-form-single-rating {
@@ -377,10 +543,10 @@
                                                 text-align: left;
 
                                                 label {
-                                                    margin-right: 5px;
-
+                                                    margin-right: 3px;
+                                                    width: 19px;
                                                     &::before {
-                                                        font-size: 20px;
+                                                        font-size: 19px;
                                                     }
                                                 }
                                             }
@@ -494,7 +660,7 @@
                                 .tf-rating-stars {
                                     div {
                                         @include d-flex();
-                                        gap: 5px;
+                                        gap: 3px;
 
                                         i {
                                             font-size: 15px;

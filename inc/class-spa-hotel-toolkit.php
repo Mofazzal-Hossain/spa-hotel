@@ -3,7 +3,8 @@ if (! defined('ABSPATH')) exit;
 
 use \Tourfic\Classes\Helper;
 
-class Spa_Hotel_Toolkit
+
+class Sht_Hotel_Toolkit
 {
 
     public function __construct()
@@ -44,10 +45,10 @@ class Spa_Hotel_Toolkit
     // Enqueue frontend scripts and styles
     public function sht_enqueue_scripts()
     {
-        wp_enqueue_style('sht-style-min-css', SPA_HOTEL_TOOLKIT_URL . 'assets/css/style.min.css', array(), time(), 'all');
-        wp_enqueue_style('sht-swiper-css', '//cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css', array(), SPA_HOTEL_TOOLKIT_VERSION, 'all');
-        wp_enqueue_script('sht-swiper-js', '//cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js', array('jquery'), SPA_HOTEL_TOOLKIT_VERSION, true);
-        wp_enqueue_script('sht-main-js', SPA_HOTEL_TOOLKIT_URL . 'assets/js/main.js', array('jquery'), time(), true);
+        wp_enqueue_style('sht-style-min-css', SHT_HOTEL_TOOLKIT_URL . 'assets/css/style.min.css', array(), time(), 'all');
+        wp_enqueue_style('sht-swiper-css', '//cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css', array(), SHT_HOTEL_TOOLKIT_VERSION, 'all');
+        wp_enqueue_script('sht-swiper-js', '//cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js', array('jquery'), SHT_HOTEL_TOOLKIT_VERSION, true);
+        wp_enqueue_script('sht-main-js', SHT_HOTEL_TOOLKIT_URL . 'assets/js/main.js', array('jquery'), time(), true);
     }
 
     // Add custom category for Elementor widgets
@@ -71,12 +72,12 @@ class Spa_Hotel_Toolkit
             return;
         }
 
-        require_once SPA_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-hotels.php';
-        require_once SPA_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-booking-rator.php';
-        require_once SPA_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-hotel-locations.php';
-        require_once SPA_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-blog-posts.php';
-        require_once SPA_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-latests-posts.php';
-        require_once SPA_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-related-posts.php';
+        require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-hotels.php';
+        require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-booking-rator.php';
+        require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-hotel-locations.php';
+        require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-blog-posts.php';
+        require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-latests-posts.php';
+        require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-related-posts.php';
         $widgets_manager->register(new \Spa_Hotels());
         $widgets_manager->register(new \Spa_Booking_Rator());
         $widgets_manager->register(new \Spa_Hotel_Locations());
@@ -129,14 +130,14 @@ class Spa_Hotel_Toolkit
     // Template override for single hotel legacy design
     public function sht_hotel_single_legacy_template($template)
     {
-        $template = SPA_HOTEL_TOOLKIT_PATH . 'inc/templates/single/spa-single-hotel.php';
+        $template = SHT_HOTEL_TOOLKIT_PATH . 'inc/templates/single/spa-single-hotel.php';
         return $template;
     }
 
     // Template override for hotel archive legacy design
     public function sht_hotel_archive_legacy_template($template)
     {
-        $template = SPA_HOTEL_TOOLKIT_PATH . 'inc/templates/archive/spa-archive-hotels.php';
+        $template = SHT_HOTEL_TOOLKIT_PATH . 'inc/templates/archive/spa-archive-hotels.php';
         return $template;
     }
 
@@ -151,6 +152,7 @@ class Spa_Hotel_Toolkit
     {
         if (isset($sections['review'])) {
 
+            // Add title
             $sections['review']['fields'][] = array(
                 'id'       => 'review-popup-title',
                 'type'     => 'text',
@@ -159,6 +161,7 @@ class Spa_Hotel_Toolkit
                 'subtitle' => __('Add title for review popup', 'spa-hotel-toolkit'),
             );
 
+            // Add description
             $sections['review']['fields'][] = array(
                 'id'       => 'review-popup-description',
                 'type'     => 'textarea',
@@ -166,7 +169,22 @@ class Spa_Hotel_Toolkit
                 'default'  => __('Your email address will not be published. Required fields are marked.', 'spa-hotel-toolkit'),
                 'subtitle' => __('Add description for review popup', 'spa-hotel-toolkit'),
             );
+
+            if (!empty($sections['review']['fields'])) {
+                foreach ($sections['review']['fields'] as &$field) {
+                    if (isset($field['id']) && $field['id'] === 'r-hotel' && isset($field['fields'])) {
+                      
+                        $field['fields'][] = array(
+                            'id'    => 'r-field-icon',
+                            'type'  => 'image', 
+                            'label' => __('Image', 'spa-hotel-toolkit'),
+                            'url'   => true,
+                        );
+                    }
+                }
+            }
         }
+
         return $sections;
     }
 
@@ -221,6 +239,38 @@ class Spa_Hotel_Toolkit
                     'label'    => esc_html__('Facilities Icon', 'spa-hotel-toolkit'),
                     'subtitle' => esc_html__('Choose an appropriate icon', 'spa-hotel-toolkit'),
                     'default'  => 'fa fa-check',
+                ),
+            ),
+        );
+
+        // Brand rating section
+        $sections['spa_rator'] = array(
+            'title'  => __('Spa Rator', 'spa-hotel-toolkit'),
+            'icon'   => 'fa-solid fa-spa',
+            'fields' => array(
+                array(
+                    'id'      => 'rator-heading',
+                    'type'    => 'heading',
+                    'label'   => __('Spa Rator Settings', 'spa-hotel-toolkit'),
+                    'subtitle' => esc_html__('These are some spa rator settings specific to this Hotel.', 'spa-hotel-toolkit'),
+                ),
+                array(
+                    'id'      => 'rator-sec-title',
+                    'type'    => 'text',
+                    'label'   => __('Section Title', 'spa-hotel-toolkit'),
+                    'default' => __('SpaRator', 'spa-hotel-toolkit'),
+                ),
+                array(
+                    'id'      => 'rator-overall-text',
+                    'type'    => 'text',
+                    'label'   => __('Overall Text', 'spa-hotel-toolkit'),
+                    'default' => __('Overall Spa Score', 'spa-hotel-toolkit'),
+                ),
+                array(
+                    'id'      => 'rator-description',
+                    'type'    => 'textarea',
+                    'label'   => __('Description', 'spa-hotel-toolkit'),
+                    'default' => __("This spa provides everything any wellness enthusiast could need. From signature treatments to world-class facilities, this hotel has created a transformative spa atmosphere that you won't want to miss.", 'spa-hotel-toolkit'),
                 ),
             ),
         );
@@ -366,4 +416,6 @@ class Spa_Hotel_Toolkit
 
         return $sections;
     }
+
+   
 }

@@ -2,6 +2,7 @@
 // Don't load directly
 defined('ABSPATH') || exit;
 
+$rating_badge = sht_sparator_rating_badge($post_id);
 ?>
 <div class="spa-hero-wrapper tf-single-hero">
     <!-- Search -->
@@ -44,8 +45,8 @@ defined('ABSPATH') || exit;
     <!-- head -->
     <div class="tf-head">
         <div class="tf-head-left">
-            <div class="sht-rator-badge exceptional">
-                <?php echo esc_html__('SpaRator 9.8: Exceptional', 'spa-hotel-toolkit'); ?>
+            <div class="sht-rator-badge <?php echo esc_attr($rating_badge['class']); ?>">
+                <?php echo esc_html($rating_badge['text']); ?>
             </div>
             <h1><?php the_title(); ?></h1>
             <?php if (!empty($locations)) : ?>

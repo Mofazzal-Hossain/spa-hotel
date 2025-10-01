@@ -179,7 +179,7 @@ class Spa_Hotels extends \Elementor\Widget_Base
         }
 
         $query = new \WP_Query($args);
-        include SPA_HOTEL_TOOLKIT_PATH . 'inc/global/spa-hotel-slider-contents.php';
+        include SHT_HOTEL_TOOLKIT_PATH . 'inc/global/spa-hotel-slider-contents.php';
 ?>
         
 <?php
