@@ -179,20 +179,21 @@
 
 
             .slick-list {
+                margin: 0 -32px;
                 .slick-track {
                     display: flex;
                     align-items: stretch;
-                    gap: 64px;
-
-                    .tf-testimonial-item {
-                        height: auto;
+                    .slick-slide {
+                       margin-left: 32px;
+                       margin-right: 32px;
+                       height: auto;
                     }
                 }
             }
         }
 
         .sht-slider-controls {
-            max-width: 520px;
+            max-width: 540px;
             width: 100%;
             margin: auto;
             @include d-flex();
@@ -200,8 +201,8 @@
             @include justify-content(space-between);
             position: absolute;
             left: 51%;
-            top: 47%;
-            transform: translate(-51.5%, -50%);
+            top: 46%;
+            transform: translate(-52%, -50%);
 
             button {
                 width: 48px;
