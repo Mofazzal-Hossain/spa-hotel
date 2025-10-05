@@ -218,31 +218,10 @@ class Spa_Hotel_Locations extends \Elementor\Widget_Base
 
                             wp_reset_postdata();
                         }
-
-                        // $meta = get_post_meta($post_id, 'tf_hotels_opt', true);
-                        switch ($index) {
-                            case 1:
-                                $sht_rator_name = 'exceptional';
-                                break;
-                            case 2:
-                                $sht_rator_name = 'outstanding';
-                                break;
-                            case 3:
-                                $sht_rator_name = 'excellent';
-                                break;
-                            case 4:
-                                $sht_rator_name = 'very-good';
-                                break;
-                            default:
-                                $sht_rator_name = 'good';
-                                break;
-                        }
-
-                        $location_featured = get_term_meta($term_id, 'sht_location_featured', true);
-
-
+                        
                         $tf_location_meta  = get_term_meta($term_id, 'tf_hotel_location', true);
                         $tf_location_image = ! empty($tf_location_meta['image']) ? $tf_location_meta['image'] : SHT_HOTEL_TOOLKIT_ASSETS . 'images/location-bg-fallback.png';
+                        $location_featured = ! empty( $tf_location_meta['featured'] ) ? $tf_location_meta['featured'] : '';
 
                         $rooms = Room::get_hotel_rooms($post_id);
                         $room_id = ! empty($rooms) ? $rooms[0]->ID : '';

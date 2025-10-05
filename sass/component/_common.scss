@@ -1,0 +1,215 @@
+@use '../abstracts/variable' as *;
+@use '../abstracts/mixins' as *;
+
+// faq
+.tf-faq-wrapper {
+    background: $sht-fill-foreground;
+
+    .tf-faq-inner {
+        @include d-flex();
+        flex-direction: column;
+        gap: 24px;
+        max-width: 880px;
+        margin: 0 auto;
+
+        .tf-faq-item {
+            padding: 24px;
+            border: 1px solid $sht-border-default;
+            background: $sht-fill-background;
+            @include bd-radius(16px);
+
+
+            .tf-faq-item-title {
+                padding: 0;
+                gap: 8px;
+                color: $sht-color-heading;
+                font-weight: 700;
+                @include d-flex();
+                @include align-items(center);
+                gap: 8px;
+                cursor: pointer;
+
+                .tf-faq-item-icon {
+                    @include d-flex();
+
+                    .tf-plus {
+                        display: flex;
+                    }
+
+                    .tf-minus {
+                        display: none;
+                    }
+                }
+
+                &.active {
+                    .tf-icon-minus {
+                        display: block;
+                    }
+                }
+            }
+
+            .tf-faq-item-content {
+                display: none;
+                padding: 4px 0 0 28px;
+
+            }
+
+            &.active {
+                .tf-faq-item-title {
+                    .tf-faq-item-icon {
+                        .tf-plus {
+                            display: none;
+                        }
+
+                        .tf-minus {
+                            display: flex;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// testimonial
+.tf-testimonial-wrapper {
+    background: $sht-fill-foreground;
+
+    .tf-testimonial-inner {
+        position: relative;
+
+        &::after,
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(1px);
+            z-index: 2;
+        }
+
+        &::before {
+            left: 0;
+        }
+
+        &::after {
+            right: 0;
+        }
+
+        .tf-testimonial-slider {
+            .tf-testimonial-item {
+                padding: 24px;
+                background: $sht-color-white;
+                @include bd-radius(16px 16px 16px 0);
+                @include d-flex();
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+                position: relative;
+                margin-bottom: 40px;
+
+
+                @media #{$max768} {
+                    padding: 16px;
+                }
+
+                .tf-shape {
+                    position: absolute;
+                    bottom: -32px;
+                    left: 0;
+                    width: 35px;
+                    height: 42px;
+                }
+
+                .tf-review-header {
+                    @include d-flex();
+                    @include justify-content(center);
+                    gap: 8px;
+
+                    .tf-review-avatar {
+                        img {
+                            @include bd-radius(50%);
+                        }
+                    }
+
+                    .tf-review-meta {
+                        text-align: left;
+
+                        .tf-name {
+                            font-weight: 700;
+                            color: $sht-color-heading;
+                        }
+                    }
+
+
+                }
+
+                .tf-rating-stars {
+                    @include d-flex();
+                    @include align-items(center);
+                    @include justify-content(center);
+                    gap: 4px;
+
+                    div {
+                        display: flex;
+                        gap: 2px;
+                    }
+
+                    i {
+                        color: $sht-semantic-yellow;
+                    }
+                }
+
+                .tf-description {
+                    p {
+                        overflow: hidden;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 4;
+                        -webkit-box-orient: vertical;
+                    }
+                }
+
+                &.slick-center {
+                    box-shadow: 0 16px 32px 0 rgba(83, 50, 16, 0.08);
+                }
+            }
+
+
+
+            .slick-list {
+                .slick-track {
+                    display: flex;
+                    align-items: stretch;
+                    gap: 64px;
+
+                    .tf-testimonial-item {
+                        height: auto;
+                    }
+                }
+            }
+        }
+
+        .sht-slider-controls {
+            max-width: 520px;
+            width: 100%;
+            margin: auto;
+            @include d-flex();
+            @include align-items(center);
+            @include justify-content(space-between);
+            position: absolute;
+            left: 51%;
+            top: 47%;
+            transform: translate(-51.5%, -50%);
+
+            button {
+                width: 48px;
+                height: 48px;
+                box-shadow: 0 16px 32px 0 rgba(83, 50, 16, 0.08);
+                background: $sht-fill-foreground;
+            }
+        }
+    }
+
+}

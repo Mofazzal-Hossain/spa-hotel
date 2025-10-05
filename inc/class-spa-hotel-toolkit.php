@@ -40,6 +40,7 @@ class Sht_Hotel_Toolkit
         // template override
         add_filter('tf_hotel_single_legacy_template', [$this, 'sht_hotel_single_legacy_template']);
         add_filter('tf_hotel_archive_legacy_template', [$this, 'sht_hotel_archive_legacy_template']);
+        add_filter('tf_hotel_location_archive_legacy_template', [$this, 'sht_hotel_location_archive_legacy_template'], 10, 5);
     }
 
     // Enqueue frontend scripts and styles
@@ -78,12 +79,14 @@ class Sht_Hotel_Toolkit
         require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-blog-posts.php';
         require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-latests-posts.php';
         require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-related-posts.php';
+        require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/elementor-widgets/spa-faq.php';
         $widgets_manager->register(new \Spa_Hotels());
         $widgets_manager->register(new \Spa_Booking_Rator());
         $widgets_manager->register(new \Spa_Hotel_Locations());
         $widgets_manager->register(new \Spa_Blog_Posts());
         $widgets_manager->register(new \Spa_Latest_Posts());
         $widgets_manager->register(new \Spa_Related_Posts());
+        $widgets_manager->register(new \Spa_Faq());
     }
 
 
@@ -141,6 +144,13 @@ class Sht_Hotel_Toolkit
         return $template;
     }
 
+    public function sht_hotel_location_archive_legacy_template($content, $post_type, $taxonomy, $taxonomy_name, $taxonomy_slug)
+    {
+        ob_start();
+        include SHT_HOTEL_TOOLKIT_PATH . 'inc/templates/archive/spa-hotel-locations.php';
+        return ob_get_clean();
+    }
+
     // Change "Add Review" button text
     public function sht_add_review_button_text($text)
     {
@@ -150,6 +160,125 @@ class Sht_Hotel_Toolkit
     // Add custom fields to the review sections
     public function sht_tourfic_admin_setting_sections($sections)
     {
+
+        // Add banner image for hotel archive
+        if (isset($sections['tf-template-settings']['fields'][1]['tabs'][0]['fields'])) {
+
+            // Go through all fields inside this section
+            if (isset($sections['tf-template-settings']['fields'][1]['tabs'][0]['fields'])) {
+                $new_field = array(
+                    'id'       => 'hotel_archive_design_1_bannar',
+                    'type'     => 'image',
+                    'label'    => esc_html__('Archive & Search Result Banner Image', 'tourfic'),
+                    'subtitle' => esc_html__('Upload Banner Image for this hotel archive template.', 'tourfic'),
+                    'library'  => 'image',
+                    'default'  => SHT_HOTEL_TOOLKIT_ASSETS . "images/archive-hero.png",
+                    'dependency' => array('hotel-archive', '==', 'default'),
+                );
+                $fields = &$sections['tf-template-settings']['fields'][1]['tabs'][0]['fields'];
+                $inserted = false;
+
+                foreach ($fields as $index => $field) {
+                    if (isset($field['id']) && $field['id'] === 'hotel-archive') {
+                        array_splice($fields, $index + 1, 0, array($new_field));
+                        $inserted = true;
+                        break;
+                    }
+                }
+                if (! $inserted) {
+                    $fields[] = $new_field;
+                }
+            }
+        }
+
+        // FAQ section
+        $faq_section = array(
+            'faq' => array(
+                'title'  => __('FAQ', 'spa-hotel-toolkit'),
+                'icon'   => 'fa-solid fa-question',
+                'fields' => array(
+                    array(
+                        'id'       => 'faq-subtitle',
+                        'type'     => 'text',
+                        'label'    => __('FAQ Subtitle', 'spa-hotel-toolkit'),
+                        'default'  => __('FAQ', 'spa-hotel-toolkit'),
+                    ),
+                    array(
+                        'id'       => 'faq-title',
+                        'type'     => 'text',
+                        'label'    => __('FAQ Title', 'spa-hotel-toolkit'),
+                        'default'  => __("Got Questions? We've Got Answers.", 'spa-hotel-toolkit'),
+                    ),
+                    array(
+                        'id'       => 'faq-description',
+                        'type'     => 'textarea',
+                        'label'    => __('FAQ Description', 'spa-hotel-toolkit'),
+                        'default'  => __('Everything you need to know about finding and booking your perfect spa getaway.', 'spa-hotel-toolkit'),
+                    ),
+                    array(
+                        'id'       => 'faq-items',
+                        'type'     => 'repeater',
+                        'label'    => __('FAQ Items', 'spa-hotel-toolkit'),
+                        'button_title' => esc_html__('Add New', 'tourfic'),
+                        'subtitle' => __('Add multiple FAQ questions and answers', 'spa-hotel-toolkit'),
+                        'fields'   => array(
+                            array(
+                                'id'       => 'faq-question',
+                                'type'     => 'text',
+                                'label'    => __('Question', 'spa-hotel-toolkit'),
+                                'default'  => '',
+                            ),
+                            array(
+                                'id'       => 'faq-answer',
+                                'type'     => 'textarea',
+                                'label'    => __('Answer', 'spa-hotel-toolkit'),
+                                'default'  => '',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        );
+
+        $position = 10;
+        $sections = array_slice($sections, 0, $position, true)
+            + $faq_section
+            + array_slice($sections, $position, null, true);
+
+
+        // testimonial section
+        $testimonial_section = array(
+            'testimonial' => array(
+                'title'  => __('Testimonial', 'spa-hotel-toolkit'),
+                'icon'   => 'fa-regular fa-star',
+                'fields' => array(
+                    array(
+                        'id'       => 'testimonial-subtitle',
+                        'type'     => 'text',
+                        'label'    => __('Testimonial Subtitle', 'spa-hotel-toolkit'),
+                        'default'  => __('Testimonial', 'spa-hotel-toolkit'),
+                    ),
+                    array(
+                        'id'       => 'testimonial-title',
+                        'type'     => 'text',
+                        'label'    => __('Testimonial Title', 'spa-hotel-toolkit'),
+                        'default'  => __("Trusted by 1200+ World Class Business", 'spa-hotel-toolkit'),
+                    ),
+                    array(
+                        'id'       => 'testimonial-description',
+                        'type'     => 'textarea',
+                        'label'    => __('Testimonial Description', 'spa-hotel-toolkit'),
+                    ),
+                ),
+            ),
+        );
+
+        $position = 11;
+        $sections = array_slice($sections, 0, $position, true)
+            + $testimonial_section
+            + array_slice($sections, $position, null, true);
+
+
         if (isset($sections['review'])) {
 
             // Add title

@@ -9,11 +9,14 @@
 // Don't load directly
 defined( 'ABSPATH' ) || exit;
 
- use \Tourfic\Classes\Helper;
 ?>
 
 <div class="spa-hotel-archive-template">
-	<div class="tf-container">
-		<h3>Working....</h3>
-	</div>
+	<?php 
+		// archive hotel template
+		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/hero.php';
+		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/latest-posts.php';
+		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/reviews.php';
+		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/faq.php';
+	?>
 </div>

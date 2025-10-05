@@ -95,5 +95,62 @@
             }
         });
 
+        // faq 
+        $('.tf-faq-item-title').on('click', function (e) {
+            e.preventDefault();
+            var $item = $(this).closest('.tf-faq-item');
+            var $content = $item.find('.tf-faq-item-content');
+
+            if ($item.hasClass('active')) {
+                $item.removeClass('active');
+                $content.stop(true, true).slideUp(400);
+            } else {
+                $('.tf-faq-item.active').removeClass('active')
+                    .find('.tf-faq-item-content').stop(true, true).slideUp(400);
+
+                $item.addClass('active');
+                $content.stop(true, true).slideDown(400);
+            }
+        });
+
+
+        $('.tf-testimonial-slider').slick({
+            infinite: true,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            adaptiveHeight: false,
+            speed: 1500,
+            centerMode: true,
+            centerPadding: '0',
+            prevArrow: '.tf-testimonial-wrapper .sht-prev',
+            nextArrow: '.tf-testimonial-wrapper .sht-next',
+            responsive: [
+                {
+                    breakpoint: 1200,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 1,
+                        spaceBetween: 32,
+                    },
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 1.1,
+                        slidesToScroll: 1,
+                        spaceBetween: 16,
+                    },
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+            ],
+        });
+
+
     });
 })(jQuery);

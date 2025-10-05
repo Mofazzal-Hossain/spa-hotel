@@ -17,12 +17,24 @@ a:focus {
     outline: none;
 }
 
-.spa-heading-wrap{
+.sht-sec-space {
+    padding: 96px 0;
+
+    @media #{$max768} {
+        padding: 40px 0;
+    }
+}
+
+.spa-heading-wrap {
     margin-bottom: 64px;
     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+
     @media #{$max768} {
         margin-bottom: 32px;
     }
+
     .spa-subtitle {
         font-size: 14px;
         font-weight: 700;
@@ -34,7 +46,8 @@ a:focus {
         width: fit-content;
         margin: auto;
     }
-    .spa-title{
+
+    .spa-title {
         margin: 8px 0 32px;
     }
 }

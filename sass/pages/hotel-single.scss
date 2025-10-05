@@ -324,6 +324,7 @@
                                         top: 50%;
                                         right: -10px;
                                         transform: translateY(-50%);
+                                        font-weight: 400;
                                     }
                                 }
 
@@ -550,6 +551,7 @@
 
                                                     &::before {
                                                         font-size: 19px;
+                                                        color: $sht-semantic-gold;
                                                     }
                                                 }
                                             }
@@ -787,6 +789,7 @@
                             left: 16px;
                             bottom: 16px;
                             @include d-flex();
+                            @include align-items(center);
                             gap: 4px;
 
                             img {

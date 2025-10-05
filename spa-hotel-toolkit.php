@@ -18,6 +18,7 @@ define('SHT_HOTEL_TOOLKIT_ASSETS', SHT_HOTEL_TOOLKIT_URL . 'assets/');
 define('SHT_HOTEL_TOOLKIT_TEMPLATES', SHT_HOTEL_TOOLKIT_PATH . 'inc/templates/');
 define('SHT_HOTEL_TOOLKIT_VERSION', '1.0.0');
 
+
 // Load files
 require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/class-spa-hotel-toolkit.php';
 require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/metabox/spa-metabox.php';

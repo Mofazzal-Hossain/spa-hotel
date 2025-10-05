@@ -1,6 +1,63 @@
-.spa-hotel-archive-template{
-    padding: 0 16px;
-    .tf-container{
+@use '../abstracts/variable' as *;
+@use '../abstracts/mixins' as *;
+
+.spa-hotel-archive-template {
+    .tf-container {
         padding: 0;
     }
+
+    // hero
+    .tf-hotel-archive-banner {
+        margin: 0 -16px;
+        min-height: 410px;
+        position: relative;
+        z-index: 1;
+        @include d-flex();
+        @include align-items(center);
+        @include justify-content(center);
+        flex-direction: column;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(250, 247, 242, 0.00) 0%, #30281A 100%);
+            z-index: -1;
+        }
+
+        .tf-banner-content {
+            text-align: center;
+            height: 100%;
+
+            h1 {
+                color: $sht-color-white;
+            }
+        }
+        .tf-spa-hero-search{
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            transform: translate(-50%, -50%);
+            min-width: 966px;
+        }
+
+    }
+
+    // latest posts
+    .tf-archive-latest-posts{
+        background: $sht-rose-gold-tint;
+    }
+
+    // videos
+    .tf-video-wrapper{
+        background: $sht-fill-background;
+        .spa-heading-wrap{
+            max-width: 800px;
+        }
+    }
+
+
 }
