@@ -15,6 +15,7 @@ defined( 'ABSPATH' ) || exit;
 	<?php 
 		// archive hotel template
 		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/hero.php';
+		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/archive-details.php';
 		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/latest-posts.php';
 		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/reviews.php';
 		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/faq.php';

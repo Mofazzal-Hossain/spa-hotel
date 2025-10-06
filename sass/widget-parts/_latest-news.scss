@@ -27,7 +27,7 @@
             @include d-flex();
             @include bd-radius(24px);
             background-color: $sht-fill-foreground;
-            border: 1px solid $sht-border-default;
+            border: 1px solid $sht-border-faint;
             max-height: 183px;
 
             @media #{$max575} {

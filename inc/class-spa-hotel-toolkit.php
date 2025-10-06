@@ -41,6 +41,9 @@ class Sht_Hotel_Toolkit
         add_filter('tf_hotel_single_legacy_template', [$this, 'sht_hotel_single_legacy_template']);
         add_filter('tf_hotel_archive_legacy_template', [$this, 'sht_hotel_archive_legacy_template']);
         add_filter('tf_hotel_location_archive_legacy_template', [$this, 'sht_hotel_location_archive_legacy_template'], 10, 5);
+
+        // widget init  
+        add_action('widgets_init', [$this, 'sht_widget_init'], 20);
     }
 
     // Enqueue frontend scripts and styles
@@ -583,5 +586,19 @@ class Sht_Hotel_Toolkit
 
 
         return $sections;
+    }
+
+
+    public function sht_widget_init()
+    {
+       
+        require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/widgets/class-hotel-score-filter.php';
+        require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/widgets/class-hotel-feature-filter.php';
+        require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/widgets/class-hotel-other-facility-filter.php';
+        require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/widgets/class-hotel-rating-filter.php';
+        register_widget('Spa_Hotel_Toolkit\Widgets\Sht_Hotel_Score_Filter');
+        register_widget('Spa_Hotel_Toolkit\Widgets\Sht_Hotel_Feature_Filter');
+        register_widget('Spa_Hotel_Toolkit\Widgets\Sht_Hotel_Other_Facility_Filter');
+        register_widget('Spa_Hotel_Toolkit\Widgets\Sht_Rating_Filter_Widget');
     }
 }

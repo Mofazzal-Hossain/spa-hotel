@@ -151,6 +151,76 @@
             ],
         });
 
+        
+         /* see more checkbox filter started */
+
+        $('.tf-booking-sidebar a.see-more').on('click', function (e) {
+            var $this = $(this);
+            e.preventDefault();
+            $this.parent('.sht-filter').find('.sht-filter-item').filter(function (index) {
+                return index > 10;
+            }).removeClass("hidden");
+            $this.hide();
+
+            $this.parent('.sht-filter').find('.see-less').css('display', 'block');
+        });
+
+        /* see less checkbox filter started */
+        $('.tf-booking-sidebar a.see-less').on('click', function (e) {
+            console.log('clicked');
+            var $this = $(this);
+            e.preventDefault();
+            $this.parent('.sht-filter').find('.sht-filter-item').filter(function (index) {
+                return index > 10;
+            }).addClass("hidden");
+            $this.hide();
+            $this.parent('.sht-filter').find('.see-more').css('display', 'block');
+        });
+
+        $('.tf-booking-sidebar .sht-filter').each(function () {
+            var len = $(this).find('ul').children().length;
+            $(this).find('.see-more').hide();
+            if (len > 10) {
+                $(this).find('.see-more').css('display', 'block');
+            }
+            //hide items if crossed showing limit
+            $(this).find('.sht-filter-item').filter(function (index) {
+                return index > 10;
+            }).addClass("hidden");
+
+        });
+
+        // sticky archive sidebar
+        var $sidebar = $('.tf-sidebar');
+        if (!$sidebar.length) return;
+
+        var $adminBar = $('#wpadminbar');
+
+        if ($adminBar.length && $adminBar.hasClass('nojq')) {
+            $sidebar.css('top', '42px');
+        } else {
+            $sidebar.css('top', '10px');
+        }
+
+        // view switcher
+        $('.sht-archive-view button').on('click', function () {
+            var $this = $(this);
+            var isList = $this.hasClass('list-view');
+            var isMap = $this.hasClass('map-view');
+
+            // Toggle active button in the view switcher
+            $this.addClass('active').siblings().removeClass('active');
+
+            // Toggle active class on the related sections
+            if (isList) {
+                $('.sht-list-view').addClass('active');
+                $('.sht-map-view').removeClass('active');
+            } else if (isMap) {
+                $('.sht-map-view').addClass('active');
+                $('.sht-list-view').removeClass('active');
+            }
+        });
 
     });
 })(jQuery);
+

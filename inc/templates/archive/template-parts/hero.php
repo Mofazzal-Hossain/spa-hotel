@@ -5,6 +5,7 @@ defined('ABSPATH') || exit;
 
 use \Tourfic\Classes\Helper;
 
+
 $tf_template = Helper::tf_data_types(Helper::tfopt('tf-template'));
 $tf_hotel_arc_banner = ! empty($tf_template['hotel_archive_design_1_bannar'])
     ? $tf_template['hotel_archive_design_1_bannar']
@@ -23,3 +24,5 @@ $banner_style = $tf_hotel_arc_banner ? 'style="background-image: url(' . esc_url
         </div>
     </div>
 </div>
+
+

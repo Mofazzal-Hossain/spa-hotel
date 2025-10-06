@@ -36,7 +36,8 @@
                 color: $sht-color-white;
             }
         }
-        .tf-spa-hero-search{
+
+        .tf-spa-hero-search {
             position: absolute;
             left: 50%;
             top: 100%;
@@ -46,15 +47,345 @@
 
     }
 
+    // archive details
+    .tf-archive-details {
+        background: $sht-fill-foreground;
+
+        .tf-archive-details-content {
+            @include d-flex();
+            gap: 32px;
+
+            .tf-sidebar {
+                padding-left: 0;
+                max-width: 328px;
+                height: 100%;
+                position: sticky;
+                top: 0;
+
+                .tf-booking-sidebar {
+                    padding: 16px;
+                    background: $sht-color-white;
+                    @include bd-radius(16px);
+                    box-shadow: 0 16px 32px 0 rgba(83, 50, 16, 0.08);
+
+                    .tf-filter-title {
+                        @include d-flex();
+                        @include align-items(center);
+                        @include justify-content(space-between);
+                        gap: 8px;
+                        margin-bottom: 16px;
+                        color: $sht-color-heading;
+                        font-weight: 600;
+
+                        button {
+                            background: transparent;
+                            box-shadow: none;
+                            color: $sht-color-primary;
+                            padding: 0;
+                        }
+                    }
+
+                    .tf_widget {
+                        border: 0;
+                        border-bottom: 1px solid $sht-border-faint;
+                        border-radius: 0;
+                        margin-bottom: 16px;
+                        padding-bottom: 24px;
+
+                        &:last-child {
+                            border: 0;
+                            margin: 0;
+                            padding: 0;
+                        }
+
+                        .tf-widget-title {
+                            background-color: transparent;
+                            pointer-events: none;
+                            border: 0;
+                            padding: 0;
+                            height: auto;
+                            margin-bottom: 12px;
+
+                            span {
+                                font-size: 17px;
+                                font-weight: 600;
+                                color: $sht-color-heading;
+                            }
+
+                            i {
+                                display: none;
+                            }
+                        }
+
+                        .sht-filter {
+                            padding: 0;
+
+                            ul {
+                                @include d-flex();
+                                flex-direction: column;
+                                gap: 8px;
+
+                                .sht-filter-item {
+                                    padding: 0;
+                                    margin: 0;
+                                    background: transparent;
+
+                                    label:not(.spa-rator-item label) {
+                                        color: $sht-color-heading;
+                                        line-height: 1.5;
+                                        padding-left: 20px;
+                                        user-select: none;
+
+                                        .rating-stars {
+                                            @include d-flex();
+                                            gap: 2px;
+
+                                            i {
+                                                color: $sht-semantic-yellow;
+                                            }
+                                        }
+                                    }
+
+                                    label {
+                                        position: relative;
+                                        cursor: pointer;
+                                        @include d-flex();
+                                        font-weight: 400;
+
+                                        input {
+                                            display: none;
+
+                                            &:checked~.sht-checkmark {
+                                                background: $sht-color-primary;
+
+                                                &::after {
+                                                    display: block;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    &.hidden {
+                                        display: none;
+                                    }
+
+                                    &.spa-rator-item {
+                                        label {
+                                            font-weight: 700;
+                                            padding: 4px 16px;
+                                            width: fit-content;
+                                            border: 1.5px solid transparent;
+                                        }
+
+                                        &.active {
+                                            label {
+                                                border-color: $sht-color-dark;
+                                            }
+                                        }
+                                    }
+
+                                    .sht-checkmark {
+                                        position: absolute;
+                                        top: 50%;
+                                        left: 0px;
+                                        transform: translateY(-50%);
+                                        width: 12px;
+                                        height: 12px;
+                                        @include bd-radius(2px);
+                                        border: 0.8px solid $sht-border-faint;
+                                        background: $sht-fill-foreground;
+
+                                        &::after {
+                                            content: '';
+                                            position: absolute;
+                                            left: 3.5px;
+                                            top: 0;
+                                            width: 4px;
+                                            height: 8px;
+                                            border: solid #fff;
+                                            border-width: 0 1.5px 1.5px 0;
+                                            transform: rotate(45deg);
+                                        }
+                                    }
+                                }
+                            }
+
+                            .btn-link {
+                                font-size: 14px;
+                                color: $sht-color-heading;
+                                margin-top: 10px;
+                                text-align: left;
+
+                                &:hover {
+                                    color: $sht-color-primary;
+                                }
+
+                                span {
+                                    font-size: 13px;
+                                    margin-left: 3px;
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            .tf-archive-hotels {
+                flex: 1;
+
+                .sht-archive-view {
+                    @include d-flex();
+                    @include align-items(center);
+                    @include bd-radius(10px);
+                    margin-bottom: 32px;
+                    border: 1px solid $sht-border-faint;
+                    padding: 2px;
+                    background: $sht-color-white;
+                    width: fit-content;
+                    user-select: none;
+
+                    button {
+                        border: 0;
+                        padding: 8px 12px;
+                        @include bd-radius(8px);
+                        font-weight: 700;
+                        color: $sht-color-heading;
+                        background-color: transparent;
+
+                        &.active {
+                            background: $sht-color-secondary;
+                            color: $sht-color-white;
+                        }
+                    }
+                }
+
+                .sht-hotels-content {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 16px;
+                    display: none;
+
+                    .sht-hotel-single-item {
+                        .sht-hotel-item-content {
+                            .sht-hotel-item-features {
+                                ul {
+                                    grid-template-columns: 1fr 1fr;
+                                }
+                            }
+                        }
+                    }
+
+                    &.active {
+                        display: grid;
+                    }
+                }
+
+                .sht-map-view {
+                    overflow: hidden;
+                    display: none;
+
+                    &.active {
+                        display: grid;
+                    }
+
+                    .tf-notice {
+                        @include justify-content(center);
+                    }
+
+                    .tf-map-view-inner {
+                        .tf-mobile-list-btn {
+                            display: none;
+                        }
+
+                        .tf-hotel-archive-map-wrap {
+                            &>div {
+                                height: 1180px;
+                                @include bd-radius(8px);
+
+                                .gm-style-mtc {
+                                    button {
+                                        border-radius: 0 !important;
+                                    }
+                                }
+                            }
+                        }
+
+                        .sht-hotels-content {
+                            display: grid;
+                            margin-top: 64px;
+                        }
+                    }
+
+                    .gm-style-iw-tc::after {
+                        display: none !important;
+                    }
+
+                    .gm-style {
+                        :focus-visible {
+                            outline: none !important;
+                        }
+
+                        .gm-style-iw-c {
+                            min-width: 480px!important;
+                            border-radius: 16px !important;
+                            padding: 0;
+                            overflow: visible;
+                        }
+
+                        .gm-style-iw-d {
+                            overflow: visible !important;
+
+                            &:focus-visible {
+                                outline: none !important;
+                            }
+                        }
+
+                        .gm-style-iw-chr,
+                        .gm-style-iw-ch {
+                            display: none !important;
+                        }
+                    }
+
+                }
+
+             
+
+                .tf_map_price {
+                    .tf_price_inner {
+                        background: $sht-color-white;
+                        border-radius: 30px;
+                        text-align: center;
+                        color: $sht-color-text;
+                        padding: 8px 12px;
+                        font-size: 0.875rem;
+                        line-height: 1;
+                        font-weight: 700;
+
+                        box-shadow: 0px 4px 30px 0px rgba(255, 237, 225, 0.40);
+                        cursor: pointer;
+
+                        &:hover,
+                        &.active {
+                            background: $sht-color-primary;
+                            color: $sht-color-white;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
     // latest posts
-    .tf-archive-latest-posts{
+    .tf-archive-latest-posts {
         background: $sht-rose-gold-tint;
     }
 
     // videos
-    .tf-video-wrapper{
+    .tf-video-wrapper {
         background: $sht-fill-background;
-        .spa-heading-wrap{
+
+        .spa-heading-wrap {
             max-width: 800px;
         }
     }

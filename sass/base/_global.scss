@@ -76,7 +76,8 @@ a:focus {
         color: $sht-color-white;
     }
 
-    &.very-good {
+    &.very-good,
+    &.very_good {
         background: $sht-semantic-blue;
         color: $sht-color-white;
     }
