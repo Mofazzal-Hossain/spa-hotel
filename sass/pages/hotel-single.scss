@@ -34,34 +34,6 @@
                 // breadcrumb
                 .tf-single-breadcrumb {
                     margin: 24px 0 32px 0;
-
-                    ul {
-                        list-style: none;
-                        @include d-flex();
-                        @include align-items(center);
-                        @include justify-content(center);
-
-                        li {
-                            font-size: 14px;
-                            color: $sht-text-faint;
-
-                            a {
-                                @include d-flex();
-                                @include align-items(center);
-
-                                color: $sht-color-heading;
-
-                                svg {
-                                    width: 20px;
-                                    height: 20px;
-                                }
-                            }
-
-                            span {
-                                color: $sht-text-faint;
-                            }
-                        }
-                    }
                 }
 
                 // head
@@ -308,47 +280,45 @@
                             @include align-items(center);
                             gap: 10px;
 
-                            .tf-price {
+                            .amount,
+                            .sale-price>.amount {
+                                font-size: 42px;
+                                font-weight: 700;
+                                line-height: 1.2;
+                                position: relative;
+                                padding-right: 8px;
 
-                                &>.amount,
-                                .sale-price>.amount {
-                                    font-size: 42px;
-                                    font-weight: 700;
-                                    line-height: 1.2;
-                                    position: relative;
-                                    padding-right: 8px;
-
-                                    &::after {
-                                        content: "/";
-                                        position: absolute;
-                                        top: 50%;
-                                        right: -10px;
-                                        transform: translateY(-50%);
-                                        font-weight: 400;
-                                    }
+                                &::after {
+                                    content: "/";
+                                    position: absolute;
+                                    top: 50%;
+                                    right: -10px;
+                                    transform: translateY(-50%);
+                                    font-weight: 400;
                                 }
-
-                                .booking-type {
-                                    display: none;
-                                }
-
-                                .discount-price {
-                                    .amount {
-                                        font-size: 24px;
-                                    }
-                                }
-
                             }
 
-
-                            .price-per-night {
+                            .booking-type {
                                 display: none;
                             }
 
-                            .price-per-label {
-                                margin-top: 4px;
+                            .discount-price {
+                                .amount {
+                                    font-size: 24px;
+                                }
                             }
+
                         }
+
+
+                        .price-per-night {
+                            display: none;
+                        }
+
+                        .price-per-label {
+                            margin-top: 4px;
+                        }
+
 
                         .tf-peak-session {
                             margin-top: 8px;
@@ -750,8 +720,10 @@
                 @include align-items(center);
                 @include justify-content(center);
                 gap: 32px;
+
                 .tf-insta-post {
                     flex-basis: calc(25% - 24px);
+
                     .tf-insta-post-top {
                         position: relative;
                         @include bd-radius(8px);
@@ -759,6 +731,7 @@
                         min-height: 350px;
                         max-height: 350px;
                         overflow: hidden;
+
                         &::after {
                             content: '';
                             position: absolute;

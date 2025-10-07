@@ -3,75 +3,59 @@ namespace Spa_Hotel_Toolkit\Widgets;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Simplified Hotel Other Facility Filter Widget
+ */
 class Sht_Hotel_Other_Facility_Filter extends \WP_Widget {
 
     public function __construct() {
         parent::__construct(
-            'sht_hotel_other_facility_filter',
-            esc_html__('Hotels Filter by Other Facilities', 'spa-hotel-toolkit'),
-            ['description' => esc_html__('Filter hotels by custom other facilities (from repeater field).', 'spa-hotel-toolkit')]
+            'sht_hotel_facility_filter',
+            esc_html__('Hotels Filters by Facility', 'spa-hotel-toolkit'),
+            array('description' => esc_html__('Filter hotels by Facility (auto load all facilities)', 'spa-hotel-toolkit'))
         );
     }
 
     /**
-     * Frontend widget output
+     * Frontend Output
      */
     public function widget($args, $instance) {
         $posttype = isset($_GET['type']) ? sanitize_text_field(wp_unslash($_GET['type'])) : get_post_type();
 
-        // Only show for hotels
-        if (is_admin() || $posttype == 'tf_hotel') {
+        // Show only for hotels
+        if (is_admin() || $posttype === 'tf_hotel') {
             extract($args);
+            $title = !empty($instance['title']) ? $instance['title'] : esc_html__('Other Hotel Facilites:', 'spa-hotel-toolkit');
 
             echo wp_kses_post($before_widget);
-            $title = isset($instance['title']) ? $instance['title'] : esc_html__('Other Hotel Facilites:', 'spa-hotel-toolkit');
             echo wp_kses_post($before_title . esc_html($title) . $after_title);
 
-            global $wpdb;
-            $meta_key = 'tf_hotels_opt';
-            $results = $wpdb->get_col("
-                SELECT meta_value FROM {$wpdb->postmeta}
-                WHERE meta_key = '{$meta_key}'
-            ");
+            $terms = get_terms(array(
+                'taxonomy'   => 'hotel_facilities',
+                'hide_empty' => false,
+            ));
 
-            $facilities = [];
-            foreach ($results as $meta_value) {
-                $hotel_meta = maybe_unserialize($meta_value);
-                if (!empty($hotel_meta['hotel-other-facilities'])) {
-                    foreach ($hotel_meta['hotel-other-facilities'] as $facility) {
-                        if (!empty($facility['facilities-feature'])) {
-                            $facilities[] = trim($facility['facilities-feature']);
-                        }
-                    }
-                }
-            }
-
-            // Remove duplicates and sort alphabetically
-            $facilities = array_unique($facilities);
-            sort($facilities);
-
-            // Selected values from URL
+            // Get selected features from URL
             $selected = isset($_GET['facilities']) ? (array) wp_unslash($_GET['facilities']) : [];
 
-            if (!empty($facilities)) {
+            if (!empty($terms) && !is_wp_error($terms)) {
                 echo "<div class='sht-filter'><ul>";
-                foreach ($facilities as $feature_name) {
-                    $checked = in_array($feature_name, $selected) ? 'checked' : '';
+                foreach ($terms as $term) {
+                    $id   = $term->term_id;
+                    $slug = $term->slug;
+                    $name = $term->name;
+                    $checked = in_array($slug, $selected, true) ? 'checked' : '';
                     echo '<li class="sht-filter-item">
                         <label>
-                            <input type="checkbox" name="facilities[]" value="' . esc_attr($feature_name) . '" ' . $checked . '>
-                            <span class="sht-checkmark"></span> ' . esc_html($feature_name) . '
+                            <input type="checkbox" name="sht_facilities[]" value="' . esc_attr($id) . '" ' . $checked . ' />
+                            <span class="sht-checkmark"></span> ' . esc_html($name) . '
                         </label>
                     </li>';
                 }
                 echo "</ul>";
-                echo '<a href="#" class="see-more btn-link">'
-                    . esc_html__('See more', 'spa-hotel-toolkit') .
-                    '<span class="fa fa-angle-down"></span></a>';
-                echo '<a href="#" class="see-less btn-link">'
-                    . esc_html__('See less', 'spa-hotel-toolkit') .
-                    '<span class="fa fa-angle-up"></span></a>';
 
+                echo '<a href="#" class="see-more btn-link">' . esc_html__('See more', 'spa-hotel-toolkit') . '<span class="fa fa-angle-down"></span></a>';
+                echo '<a href="#" class="see-less btn-link">' . esc_html__('See less', 'spa-hotel-toolkit') . '<span class="fa fa-angle-up"></span></a>';
                 echo "</div>";
             } else {
                 echo '<p>' . esc_html__('No facilities found.', 'spa-hotel-toolkit') . '</p>';
@@ -82,10 +66,10 @@ class Sht_Hotel_Other_Facility_Filter extends \WP_Widget {
     }
 
     /**
-     * Backend widget form
+     * Backend Form (Title Only)
      */
     public function form($instance) {
-        $title = isset($instance['title']) ? $instance['title'] : esc_html__('Other Hotel Facilites:', 'spa-hotel-toolkit'); ?>
+        $title = isset($instance['title']) ? $instance['title'] : esc_html__('Hotel Facilities', 'spa-hotel-toolkit'); ?>
         <p>
             <label for="<?php echo esc_attr($this->get_field_id('title')); ?>">
                 <?php esc_html_e('Title:', 'spa-hotel-toolkit'); ?>
@@ -100,7 +84,7 @@ class Sht_Hotel_Other_Facility_Filter extends \WP_Widget {
     }
 
     /**
-     * Save widget settings
+     * Save Settings
      */
     public function update($new_instance, $old_instance) {
         $instance = [];

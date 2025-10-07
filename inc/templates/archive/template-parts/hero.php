@@ -19,7 +19,7 @@ $banner_style = $tf_hotel_arc_banner ? 'style="background-image: url(' . esc_url
         <div class="tf-banner-content">
             <h1><?php echo esc_html__('Hotels', 'spa-hotel-toolkit'); ?></h1>
         </div>
-        <div class="tf-spa-hero-search">
+        <div class="tf-spa-hero-search tf-archive-search">
             <?php echo do_shortcode("[tf_search_form type='hotel' fullwidth='true' classes='tf-hero-search-form' advanced='disabled' design='4']"); ?>
         </div>
     </div>

@@ -171,3 +171,34 @@ a:focus {
         }
     }
 }
+
+// breadcrumb
+.sht-breadcrumb {
+    ul {
+        list-style: none;
+        @include d-flex();
+        @include align-items(center);
+        @include justify-content(center);
+
+        li {
+            font-size: 14px;
+            color: $sht-text-faint;
+
+            a {
+                @include d-flex();
+                @include align-items(center);
+
+                color: $sht-color-heading;
+
+                svg {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+
+            span {
+                color: $sht-text-faint;
+            }
+        }
+    }
+}

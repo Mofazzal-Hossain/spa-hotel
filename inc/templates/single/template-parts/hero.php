@@ -10,7 +10,7 @@ $rating_badge = sht_sparator_rating_badge($post_id);
         <?php echo do_shortcode("[tf_search_form type='hotel' fullwidth='true' classes='tf-hero-search-form' advanced='disabled' design='4']"); ?>
     </div>
     <!-- Breadcrumb -->
-    <div class="tf-single-breadcrumb">
+    <div class="tf-single-breadcrumb sht-breadcrumb">
         <ul>
             <li>
                 <a href="<?php echo esc_url(home_url('/')); ?>">
@@ -82,7 +82,7 @@ $rating_badge = sht_sparator_rating_badge($post_id);
     <!-- Hotel Gallery Section -->
     <div class="tf-hero-gallery">
         <div class="tf-gallery-featured <?php echo empty($gallery_ids) ? esc_attr('tf-without-gallery-featured') : ''; ?>">
-            <img src="<?php echo !empty(wp_get_attachment_url(get_post_thumbnail_id(), 'tf_gallery_thumb')) ? esc_url(wp_get_attachment_url(get_post_thumbnail_id(), 'tf_gallery_thumb')) : esc_url(TF_ASSETS_APP_URL . 'images/feature-default.jpg'); ?>" alt="<?php esc_html_e('Hotel Image', 'tourfic'); ?>">
+            <img src="<?php echo !empty(wp_get_attachment_url(get_post_thumbnail_id(), 'tf_gallery_thumb')) ? esc_url(wp_get_attachment_url(get_post_thumbnail_id(), 'tf_gallery_thumb')) : esc_url(TF_ASSETS_APP_URL . 'images/feature-default.jpg'); ?>" alt="<?php esc_html_e('Hotel Image', 'spa-hotel-toolkit'); ?>">
         </div>
         <div class="tf-gallery">
             <?php

@@ -191,16 +191,16 @@
         });
 
         // sticky archive sidebar
-        var $sidebar = $('.tf-sidebar');
-        if (!$sidebar.length) return;
+        // var $sidebar = $('.tf-sidebar');
+        // if (!$sidebar.length) return;
 
-        var $adminBar = $('#wpadminbar');
+        // var $adminBar = $('#wpadminbar');
 
-        if ($adminBar.length && $adminBar.hasClass('nojq')) {
-            $sidebar.css('top', '42px');
-        } else {
-            $sidebar.css('top', '10px');
-        }
+        // if ($adminBar.length && $adminBar.hasClass('nojq')) {
+        //     $sidebar.css('top', '42px');
+        // } else {
+        //     $sidebar.css('top', '10px');
+        // }
 
         // view switcher
         $('.sht-archive-view button').on('click', function () {
@@ -219,6 +219,108 @@
                 $('.sht-map-view').addClass('active');
                 $('.sht-list-view').removeClass('active');
             }
+        });
+
+        // $(document).on('submit', '.tf-archive-search #tf_hotel_aval_check', function (e) {
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        //     var $this = $(this);
+        //     var data = $this.serialize();
+        //     var url = $this.attr('action');
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: url,
+        //         data: data,
+        //         success: function (response) {
+        //             window.location.href = response;
+        //         }
+        //     });
+        // });
+
+       let filter_xhr;
+
+        // Get term IDs by field name
+        const termIdsByFieldName = (fieldName) => {
+            let termIds = [];
+            $(`[name*="${fieldName}"]`).each(function () {
+                if ($(this).is(':checked')) {
+                    termIds.push($(this).val());
+                }
+            });
+            return termIds.join();
+        };
+
+        const makeFilter = (page = 1, mapCoordinates = []) => {
+            const features = termIdsByFieldName('sht_features');
+            const facilities = termIdsByFieldName('sht_facilities');
+            const ratings = termIdsByFieldName('ratings');
+            const score = termIdsByFieldName('score');
+
+            const taxonomy = $('.tf-sidebar').find('.tf-archive-taxonomy').val();
+            const term = $('.tf-sidebar').find('.tf-archive-slug').val();
+
+
+            const formData = new FormData();
+            formData.append('action', 'sht_archive_filter');
+            formData.append('_nonce', tf_params.nonce);
+            formData.append('features', features);
+            formData.append('facilities', facilities);
+            formData.append('ratings', ratings);
+            formData.append('score', score);
+            formData.append('taxonomy', taxonomy);
+            formData.append('term', term);
+            
+            formData.append('page', page);
+
+            // Abort previous request if still running
+            if (filter_xhr && filter_xhr.readyState !== 4) {
+                filter_xhr.abort();
+            }
+
+            console.log('Sending filter AJAX:', Array.from(formData.entries()));
+
+            filter_xhr = $.ajax({
+                type: 'POST',
+                url: tf_params.ajax_url,
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: () => {
+                    $('.archive_ajax_result').block({
+                        message: null,
+                        overlayCSS: { background: "#fff", opacity: 0.5 }
+                    });
+                    $('#tf_ajax_searchresult_loader').show();
+                },
+                complete: () => {
+                    $('.archive_ajax_result').unblock();
+                    $('#tf_ajax_searchresult_loader').hide();
+                },
+                success: (data) => {
+                    console.log(data);
+                    if(data.success == true){
+                        $('.archive_ajax_result .sht-list-view').html(data.data.posts.join('')); // render returned HTML
+                        $('.archive_ajax_result .sht-map-view .sht-hotels-content').html(data.data.posts.join('')); // render returned HTML
+                    }else{
+                        console.log(data.data.message);
+                        $('.archive_ajax_result .sht-list-view').html('<p class="sht-no-results">' + data.data.message + '</p>');
+                        $('.archive_ajax_result .sht-map-view .sht-hotels-content').html('<p class="sht-no-results">' + data.data.message + '</p>'); 
+                    }
+                   
+                },
+            });
+        };
+
+        // Trigger filter on checkbox change
+        $(document).on('change', '.sht-filter input[type="checkbox"]', function () {
+            makeFilter();
+        });
+
+        $(document).on('click', '.tf-sidebar .sht-sidebar-reset', function (e) {
+            e.preventDefault();
+            $('.sht-filter input[type="checkbox"]').prop('checked', false);
+            $('.sht-filter li').removeClass('active');
+            makeFilter();
         });
 
     });

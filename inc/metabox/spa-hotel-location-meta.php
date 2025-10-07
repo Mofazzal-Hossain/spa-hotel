@@ -2,7 +2,6 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-
 add_filter('tf_hotel_location_metabox_args', function($args){
     $args['fields'][] = array(
         'id'    => 'featured',
@@ -55,3 +54,6 @@ add_filter('tf_hotel_location_metabox_args', function($args){
 
     return $args;
 });
+
+
+

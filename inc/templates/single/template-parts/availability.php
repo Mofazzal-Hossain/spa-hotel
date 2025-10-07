@@ -20,6 +20,17 @@ if ($price_multi_day == 1) {
 } else {
     $price_multi_text = 'day';
 }
+$min_price_arr = Pricing::instance(get_the_ID())->get_min_price();
+$min_sale_price = !empty($min_price_arr['min_sale_price']) ? $min_price_arr['min_sale_price'] : 0;
+$min_regular_price = !empty($min_price_arr['min_regular_price']) ? $min_price_arr['min_regular_price'] : 0;
+$min_discount_type = !empty($min_price_arr['min_discount_type']) ? $min_price_arr['min_discount_type'] : 'none';
+$min_discount_amount = !empty($min_price_arr['min_discount_amount']) ? $min_price_arr['min_discount_amount'] : 0;
+
+if ($min_regular_price != 0) {
+    $price_html = wc_format_sale_price($min_regular_price, $min_sale_price);
+} else {
+    $price_html = wp_kses_post(wc_price($min_sale_price)) . " ";
+}
 
 ?>
 
@@ -30,7 +41,7 @@ if ($price_multi_day == 1) {
     <div class="tf-availability-inner">
         <div class="tf-availability-info">
             <div class="tf-availability-price">
-                <?php echo wp_kses_post(Pricing::instance($post_id, $room_id)->get_per_price_html()); ?>
+                <?php echo wp_kses_post($price_html); ?>
                 <div class="price-per-label"><?php echo esc_html($price_multi_text); ?></div>
             </div>
             <?php if (!empty($avilability_peak_session)): ?>
@@ -50,13 +61,13 @@ if ($price_multi_day == 1) {
         <?php if (!empty($avilability_booking) && is_array($avilability_booking)): ?>
             <div class="tf-availability-platform">
                 <ul>
-                    <?php foreach ($avilability_booking as $booking): 
+                    <?php foreach ($avilability_booking as $booking):
                         $booking_url = ! empty($booking['availability-booking-url']) ? $booking['availability-booking-url'] : '';
                         $platform_logo = ! empty($booking['availability-platform-logo']) ? $booking['availability-platform-logo'] : '';
-                        ?>
+                    ?>
                         <li>
                             <img src="<?php echo esc_url($platform_logo); ?>" alt="Platform Logo">
-                            <?php if(!empty($booking_url)): ?>
+                            <?php if (!empty($booking_url)): ?>
                                 <a href="<?php echo esc_url($booking_url); ?>" class="sht-btn sht-btn-fill" target="_blank" rel="nofollow noopener">
                                     <?php echo esc_html__('Check Availabiltiy', 'spa-hotel-toolkit'); ?>
                                 </a>

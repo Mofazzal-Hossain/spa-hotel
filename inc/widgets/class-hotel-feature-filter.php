@@ -1,4 +1,5 @@
 <?php
+
 namespace Spa_Hotel_Toolkit\Widgets;
 
 defined('ABSPATH') || exit;
@@ -6,9 +7,11 @@ defined('ABSPATH') || exit;
 /**
  * Simplified Hotel Feature Filter Widget
  */
-class Sht_Hotel_Feature_Filter extends \WP_Widget {
+class Sht_Hotel_Feature_Filter extends \WP_Widget
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct(
             'sht_hotel_feature_filter',
             esc_html__('Hotels Filters by Feature', 'spa-hotel-toolkit'),
@@ -19,7 +22,8 @@ class Sht_Hotel_Feature_Filter extends \WP_Widget {
     /**
      * Frontend Output
      */
-    public function widget($args, $instance) {
+    public function widget($args, $instance)
+    {
         $posttype = isset($_GET['type']) ? sanitize_text_field(wp_unslash($_GET['type'])) : get_post_type();
 
         // Show only for hotels
@@ -41,11 +45,14 @@ class Sht_Hotel_Feature_Filter extends \WP_Widget {
             if (!empty($terms) && !is_wp_error($terms)) {
                 echo "<div class='sht-filter'><ul>";
                 foreach ($terms as $term) {
-                    $checked = in_array($term->slug, $selected, true) ? 'checked' : '';
+                    $id   = $term->term_id;
+                    $slug = $term->slug;
+                    $name = $term->name;
+                    $checked = in_array($slug, $selected, true) ? 'checked' : '';
                     echo '<li class="sht-filter-item">
                         <label>
-                            <input type="checkbox" name="features[]" value="' . esc_attr($term->slug) . '" ' . $checked . '>
-                            <span class="sht-checkmark"></span> ' . esc_html($term->name) . '
+                            <input type="checkbox" name="sht_features[]" value="' . esc_attr($id) . '" ' . $checked . ' />
+                            <span class="sht-checkmark"></span> ' . esc_html($name) . '
                         </label>
                     </li>';
                 }
@@ -65,7 +72,8 @@ class Sht_Hotel_Feature_Filter extends \WP_Widget {
     /**
      * Backend Form (Title Only)
      */
-    public function form($instance) {
+    public function form($instance)
+    {
         $title = isset($instance['title']) ? $instance['title'] : esc_html__('Hotel Features', 'spa-hotel-toolkit'); ?>
         <p>
             <label for="<?php echo esc_attr($this->get_field_id('title')); ?>">
@@ -77,13 +85,14 @@ class Sht_Hotel_Feature_Filter extends \WP_Widget {
                 type="text"
                 value="<?php echo esc_attr($title); ?>" />
         </p>
-        <?php
+<?php
     }
 
     /**
      * Save Settings
      */
-    public function update($new_instance, $old_instance) {
+    public function update($new_instance, $old_instance)
+    {
         $instance = [];
         $instance['title'] = !empty($new_instance['title']) ? wp_strip_all_tags($new_instance['title']) : '';
         return $instance;

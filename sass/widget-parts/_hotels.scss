@@ -83,35 +83,34 @@
                 @include align-items(center);
                 gap: 4px;
 
-                .tf-price {
+                .amount,
+                .sale-price>.amount {
+                    font-size: 24px;
+                    font-weight: 700;
+                    position: relative;
+                    padding-right: 8px;
 
-                    &>.amount,
-                    .sale-price>.amount {
-                        font-size: 24px;
-                        font-weight: 700;
-                        position: relative;
-                        padding-right: 8px;
-
-                        &::after {
-                            content: "/";
-                            position: absolute;
-                            top: 50%;
-                            right: -3px;
-                            transform: translateY(-50%);
-                        }
+                    &::after {
+                        content: "/";
+                        position: absolute;
+                        top: 50%;
+                        right: -3px;
+                        transform: translateY(-50%);
+                        font-weight: 400;
                     }
-
-                    .booking-type {
-                        display: none;
-                    }
-
-                    .discount-price {
-                        .amount {
-                            font-size: 17px;
-                        }
-                    }
-
                 }
+
+                .booking-type {
+                    display: none;
+                }
+
+                .discount-price {
+                    .amount {
+                        font-size: 17px;
+                    }
+                }
+
+
 
 
                 .price-per-night {

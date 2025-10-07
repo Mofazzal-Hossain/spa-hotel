@@ -57,7 +57,6 @@ if (empty($query) || ! $query instanceof WP_Query) {
                         }
                     }
 
-                    // rooms
                     $rooms = Room::get_hotel_rooms($post_id);
                     $room_id = ! empty($rooms) ? $rooms[0]->ID : '';
                     $room_meta = get_post_meta($room_id, 'tf_room_opt', true);
@@ -66,6 +65,17 @@ if (empty($query) || ! $query instanceof WP_Query) {
                         $price_multi_text = 'night';
                     } else {
                         $price_multi_text = 'day';
+                    }
+                    $min_price_arr = Pricing::instance(get_the_ID())->get_min_price();
+                    $min_sale_price = !empty($min_price_arr['min_sale_price']) ? $min_price_arr['min_sale_price'] : 0;
+                    $min_regular_price = !empty($min_price_arr['min_regular_price']) ? $min_price_arr['min_regular_price'] : 0;
+                    $min_discount_type = !empty($min_price_arr['min_discount_type']) ? $min_price_arr['min_discount_type'] : 'none';
+                    $min_discount_amount = !empty($min_price_arr['min_discount_amount']) ? $min_price_arr['min_discount_amount'] : 0;
+
+                    if ($min_regular_price != 0) {
+                        $price_html = wc_format_sale_price($min_regular_price, $min_sale_price);
+                    } else {
+                        $price_html = wp_kses_post(wc_price($min_sale_price)) . " ";
                     }
 
 
@@ -104,7 +114,7 @@ if (empty($query) || ! $query instanceof WP_Query) {
 
                             <div class="sht-hotels-price-info">
                                 <div class="sht-hotel-item-price">
-                                    <?php echo wp_kses_post(Pricing::instance($post_id, $room_id)->get_per_price_html()); ?>
+                                    <?php echo wp_kses_post($price_html); ?>
                                     <div class="price-per-label"><?php echo esc_html($price_multi_text); ?></div>
                                 </div>
 

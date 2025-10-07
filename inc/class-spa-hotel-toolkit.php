@@ -9,6 +9,7 @@ class Sht_Hotel_Toolkit
 
     public function __construct()
     {
+
         // Enqueue frontend scripts and styles
         add_action('wp_enqueue_scripts', [$this, 'sht_enqueue_scripts']);
 
@@ -44,7 +45,15 @@ class Sht_Hotel_Toolkit
 
         // widget init  
         add_action('widgets_init', [$this, 'sht_widget_init'], 20);
+
+        // Register taxonomies
+        add_action('init', [$this, 'sht_register_hotel_facilities_taxonomy']);
+
+        // Add custom archive filters
+        include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/spa-archive-filters.php';
+
     }
+
 
     // Enqueue frontend scripts and styles
     public function sht_enqueue_scripts()
@@ -352,28 +361,6 @@ class Sht_Hotel_Toolkit
                 'required' => 'required',
             ),
         );
-        $sections['hotel_info']['fields'][] = array(
-            'id'           => 'hotel-other-facilities',
-            'type'         => 'repeater',
-            'label' => esc_html__('Insert / Create Other Facilities', 'spa-hotel-toolkit'),
-            'button_title' => esc_html__('Add New', 'spa-hotel-toolkit'),
-            'class'        => 'tf-field-class',
-            'fields'       => array(
-                array(
-                    'id'          => 'facilities-feature',
-                    'type'        => 'text',
-                    'label'       => esc_html__('Facilities Feature', 'spa-hotel-toolkit'),
-                    'placeholder' => esc_html__('Add facilities', 'spa-hotel-toolkit'),
-                ),
-                array(
-                    'id'       => 'other-facilities-icon',
-                    'type'     => 'icon',
-                    'label'    => esc_html__('Facilities Icon', 'spa-hotel-toolkit'),
-                    'subtitle' => esc_html__('Choose an appropriate icon', 'spa-hotel-toolkit'),
-                    'default'  => 'fa fa-check',
-                ),
-            ),
-        );
 
         // Brand rating section
         $sections['spa_rator'] = array(
@@ -588,10 +575,10 @@ class Sht_Hotel_Toolkit
         return $sections;
     }
 
-
+    // Register widgets
     public function sht_widget_init()
     {
-       
+
         require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/widgets/class-hotel-score-filter.php';
         require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/widgets/class-hotel-feature-filter.php';
         require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/widgets/class-hotel-other-facility-filter.php';
@@ -600,5 +587,42 @@ class Sht_Hotel_Toolkit
         register_widget('Spa_Hotel_Toolkit\Widgets\Sht_Hotel_Feature_Filter');
         register_widget('Spa_Hotel_Toolkit\Widgets\Sht_Hotel_Other_Facility_Filter');
         register_widget('Spa_Hotel_Toolkit\Widgets\Sht_Rating_Filter_Widget');
+    }
+
+    /**
+     * Taxonomy: Facilities.
+     */
+
+    public function sht_register_hotel_facilities_taxonomy()
+    {
+
+        $labels = [
+            "name" => esc_html__("Facilities", "spa-hotel-toolkit"),
+            "singular_name" => esc_html__("Facility", "spa-hotel-toolkit"),
+        ];
+
+
+        $args = [
+            "label" => esc_html__("Facilities", "spa-hotel-toolkit"),
+            "labels" => $labels,
+            "public" => true,
+            "publicly_queryable" => true,
+            "hierarchical" => true,
+            "show_ui" => true,
+            "show_in_menu" => true,
+            "show_in_nav_menus" => true,
+            "query_var" => true,
+            "rewrite" => ['slug' => 'hotel_facilities', 'with_front' => true,],
+            "show_admin_column" => true,
+            "show_in_rest" => true,
+            "show_tagcloud" => false,
+            "rest_base" => "hotel_facilities",
+            "rest_controller_class" => "WP_REST_Terms_Controller",
+            "rest_namespace" => "wp/v2",
+            "show_in_quick_edit" => false,
+            "sort" => false,
+            "show_in_graphql" => false,
+        ];
+        register_taxonomy("hotel_facilities", ["tf_hotel"], $args);
     }
 }

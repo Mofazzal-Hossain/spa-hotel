@@ -38,7 +38,7 @@ use \Tourfic\Classes\Hotel\Pricing;
 
         <div class="sht-hotels-price-info">
             <div class="sht-hotel-item-price">
-                <?php echo wp_kses_post(Pricing::instance($post_id, $room_id)->get_per_price_html()); ?>
+                <?php echo wp_kses_post($price_html); ?>
                 <div class="price-per-label"><?php echo esc_html($price_multi_text); ?></div>
             </div>
 

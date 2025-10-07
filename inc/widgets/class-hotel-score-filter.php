@@ -30,10 +30,10 @@ class Sht_Hotel_Score_Filter extends \WP_Widget
         $counts = $this->get_spa_rator_property_counts();
 
         $ratings = [
-            ['label' => '9.0+ Exceptional', 'key' => 'exceptional', 'count' => $counts['exceptional']],
-            ['label' => '8.0+ Outstanding', 'key' => 'outstanding', 'count' => $counts['outstanding']],
-            ['label' => '7.0+ Excellent',   'key' => 'excellent',   'count' => $counts['excellent']],
-            ['label' => '6.0+ Very Good',   'key' => 'very_good',   'count' => $counts['very_good']],
+            ['label' => '9.0+ Exceptional', 'key' => 'exceptional', 'value' => 9, 'count' => $counts['exceptional']],
+            ['label' => '8.0+ Outstanding', 'key' => 'outstanding', 'value' => 8, 'count' => $counts['outstanding']],
+            ['label' => '7.0+ Excellent',   'key' => 'excellent',  'value' => 7, 'count' => $counts['excellent']],
+            ['label' => '6.0+ Very Good',   'key' => 'very_good', 'value' => 6,  'count' => $counts['very_good']],
         ];
 
         $active_filters = [];
@@ -46,7 +46,7 @@ class Sht_Hotel_Score_Filter extends \WP_Widget
         foreach ($ratings as $rating) {
             echo '<li class="sht-filter-item spa-rator-item">';
             echo '<label class="sht-rator-badge ' . esc_attr($rating['key']) . '">';
-            echo '<input type="checkbox" name="score[]" value="' . esc_attr($rating['key']) . '" ' . checked(in_array($rating['key'], $active_filters, true), true, false) . ' hidden>';
+            echo '<input type="checkbox" name="score[]" value="' . esc_attr($rating['value']) . '" ' . checked(in_array($rating['key'], $active_filters, true), true, false) . ' hidden>';
             echo esc_html($rating['label']) . ' (' . intval($rating['count']) . ' properties)';
             echo '</label>';
             echo '</li>';

@@ -24,25 +24,32 @@ $tf_map_api = !empty(Helper::tfopt('tf-googlemapapi')) ? Helper::tfopt('tf-googl
                         </div>
                         <?php dynamic_sidebar('tf_archive_booking_sidebar'); ?>
                     </div>
+                    <?php
+                        $queried_object = get_queried_object();
+                        if (!empty($queried_object) && isset($queried_object->taxonomy) && isset($queried_object->slug)) :
+                        ?>
+                            <input type="hidden" class="tf-archive-taxonomy" name="taxonomy" value="<?php echo esc_attr($queried_object->taxonomy); ?>">
+                            <input type="hidden" class="tf-archive-slug" name="term" value="<?php echo esc_attr($queried_object->slug); ?>">
+                        <?php endif; 
+                    ?>
                 <?php } ?>
             </div>
 
             <!--Available rooms start -->
             <div class="sht-hotels-wrapper tf-archive-hotels archive_ajax_result <?php echo $tf_defult_views == "list" ? esc_attr('tf-layout-list') : esc_attr('tf-layout-grid'); ?>">
+
                 <div class="sht-archive-view">
                     <button class="list-view active"><?php echo esc_html__('List ', 'spa-hotel-toolkit'); ?></button>
                     <button class="map-view"><?php echo esc_html__('Map ', 'spa-hotel-toolkit'); ?></button>
                 </div>
                 <div class="sht-hotels-content sht-list-view active">
                     <?php
+                    $count = 0;
                     while (have_posts()) {
                         the_post();
 
                         $post_id = get_the_ID();
                         $meta = get_post_meta(get_the_ID(), 'tf_hotels_opt', true);
-                        // if ($meta["featured"]) {
-                        //     continue;
-                        // }
 
                         $count++;
                         $map = !empty($meta['map']) ? Helper::tf_data_types($meta['map']) : '';
@@ -91,8 +98,6 @@ $tf_map_api = !empty(Helper::tfopt('tf-googlemapapi')) ? Helper::tfopt('tf-googl
                         } else {
                             $price_multi_text = 'day';
                         }
-
-
                         $min_price_arr = Pricing::instance(get_the_ID())->get_min_price();
                         $min_sale_price = !empty($min_price_arr['min_sale_price']) ? $min_price_arr['min_sale_price'] : 0;
                         $min_regular_price = !empty($min_price_arr['min_regular_price']) ? $min_price_arr['min_regular_price'] : 0;
@@ -112,8 +117,8 @@ $tf_map_api = !empty(Helper::tfopt('tf-googlemapapi')) ? Helper::tfopt('tf-googl
                             $lng = $map['longitude'];
                             ob_start();
                     ?>
-                            
-                            <?php include SHT_HOTEL_TOOLKIT_PATH . 'inc/templates/archive/template-parts/single-item.php';?>
+
+                            <?php include SHT_HOTEL_TOOLKIT_PATH . 'inc/templates/archive/template-parts/single-item.php'; ?>
                         <?php
                             $infoWindowtext = ob_get_clean();
 
@@ -126,6 +131,8 @@ $tf_map_api = !empty(Helper::tfopt('tf-googlemapapi')) ? Helper::tfopt('tf-googl
                                 'content' => base64_encode($infoWindowtext)
                             ];
                         }
+
+
                         include SHT_HOTEL_TOOLKIT_PATH . 'inc/templates/archive/template-parts/single-item.php';
                         ?>
 
@@ -145,14 +152,14 @@ $tf_map_api = !empty(Helper::tfopt('tf-googlemapapi')) ? Helper::tfopt('tf-googl
                             <div class="tf-notice tf-mt-24 tf-mb-30 tf-center">
                                 <?php if (current_user_can('administrator')) : ?>
                                     <p>
-                                        <?php echo esc_html__('Google Maps is selected but the API key is missing. Please configure the API key.', 'tourfic'); ?>
+                                        <?php echo esc_html__('Google Maps is selected but the API key is missing. Please configure the API key.', 'spa-hotel-toolkit'); ?>
                                         <a href="<?php echo esc_url(admin_url('admin.php?page=tf_settings#tab=map_settings')); ?>" target="_blank">
-                                            <?php esc_html_e('Map Settings', 'tourfic'); ?>
+                                            <?php esc_html_e('Map Settings', 'spa-hotel-toolkit'); ?>
                                         </a>
                                     </p>
                                 <?php else : ?>
                                     <p>
-                                        <?php esc_html_e('Access is restricted as Google Maps API key is not configured. Please contact the site administrator.', 'tourfic'); ?>
+                                        <?php esc_html_e('Access is restricted as Google Maps API key is not configured. Please contact the site administrator.', 'spa-hotel-toolkit'); ?>
                                     </p>
                                 <?php endif; ?>
                             </div>
@@ -167,19 +174,81 @@ $tf_map_api = !empty(Helper::tfopt('tf-googlemapapi')) ? Helper::tfopt('tf-googl
                                         <path d="M1.33398 12.9333C1.33398 12.1612 1.49514 12 2.26732 12H13.734C14.5062 12 14.6673 12.1612 14.6673 12.9333V13.7333C14.6673 14.5055 14.5062 14.6667 13.734 14.6667H2.26732C1.49514 14.6667 1.33398 14.5055 1.33398 13.7333V12.9333Z"
                                             stroke="#FEF9F6" stroke-linecap="round" />
                                     </svg>
-                                    <span><?php echo esc_html__('List view', 'tourfic') ?></span>
+                                    <span><?php echo esc_html__('List view', 'spa-hotel-toolkit') ?></span>
                                 </a>
                                 <div id="map-marker" data-marker="<?php echo esc_url(TF_ASSETS_URL . 'app/images/cluster-marker.png'); ?>"></div>
                                 <div class="tf-hotel-archive-map-wrap">
                                     <div id="tf-hotel-archive-map"></div>
                                 </div>
                                 <div class="sht-hotels-content">
-                                    <?php  
-                                        while (have_posts()) :
-                                            the_post();
-                                        include SHT_HOTEL_TOOLKIT_PATH . 'inc/templates/archive/template-parts/single-item.php'; 
-                                        endwhile;
-                                        wp_reset_query();
+                                    <?php
+                                    while (have_posts()) :
+                                        the_post();
+                                        $post_id = get_the_ID();
+                                        $meta = get_post_meta(get_the_ID(), 'tf_hotels_opt', true);
+
+                                        $count++;
+                                        $map = !empty($meta['map']) ? Helper::tf_data_types($meta['map']) : '';
+
+                                        // Get hotel address
+                                        if (! empty($meta['map']) && Helper::tf_data_types($meta['map'])) {
+                                            $address = ! empty(Helper::tf_data_types($meta['map'])['address']) ? Helper::tf_data_types($meta['map'])['address'] : '';
+                                        }
+                                        // Get featured
+                                        $featured = ! empty($meta['featured']) ? $meta['featured'] : '';
+                                        $featured_badge_text = !empty($meta['featured_text']) ? esc_html($meta['featured_text']) : '';
+
+                                        // Get hotel features
+                                        $features = ! empty(get_the_terms($post_id, 'hotel_feature')) ? get_the_terms($post_id, 'hotel_feature') : '';
+                                        $features_count = 4;
+
+                                        $tf_booking_type = '1';
+                                        $tf_booking_url  = $tf_booking_query_url = $tf_booking_attribute = '';
+                                        if (function_exists('is_tf_pro') && is_tf_pro()) {
+                                            $tf_booking_type      = ! empty($meta['booking-by']) ? $meta['booking-by'] : 1;
+                                            $tf_booking_url       = ! empty($meta['booking-url']) ? esc_url($meta['booking-url']) : '';
+                                        }
+                                        if (2 == $tf_booking_type && ! empty($tf_booking_url)) {
+                                            $external_search_info = array(
+                                                '{adult}'    => ! empty($adult) ? $adult : 1,
+                                                '{child}'    => ! empty($child) ? $child : 0,
+                                                '{checkin}'  => ! empty($check_in) ? $check_in : gmdate('Y-m-d'),
+                                                '{checkout}' => ! empty($check_out) ? $check_out : gmdate('Y-m-d', strtotime('+1 day')),
+                                                '{room}'     => ! empty($room_selected) ? $room_selected : 1,
+                                            );
+                                            if (! empty($tf_booking_attribute)) {
+                                                $tf_booking_query_url = str_replace(array_keys($external_search_info), array_values($external_search_info), $tf_booking_query_url);
+                                                if (! empty($tf_booking_query_url)) {
+                                                    $tf_booking_url = $tf_booking_url . '/?' . $tf_booking_query_url;
+                                                }
+                                            }
+                                        }
+
+                                        $rooms = Room::get_hotel_rooms($post_id);
+                                        $room_id = ! empty($rooms) ? $rooms[0]->ID : '';
+                                        $room_meta = get_post_meta($room_id, 'tf_room_opt', true);
+                                        $price_multi_day = ! empty($room_meta['price_multi_day']) ? $room_meta['price_multi_day'] : 0;
+                                        if ($price_multi_day == 1) {
+                                            $price_multi_text = 'night';
+                                        } else {
+                                            $price_multi_text = 'day';
+                                        }
+                                        $min_price_arr = Pricing::instance(get_the_ID())->get_min_price();
+                                        $min_sale_price = !empty($min_price_arr['min_sale_price']) ? $min_price_arr['min_sale_price'] : 0;
+                                        $min_regular_price = !empty($min_price_arr['min_regular_price']) ? $min_price_arr['min_regular_price'] : 0;
+                                        $min_discount_type = !empty($min_price_arr['min_discount_type']) ? $min_price_arr['min_discount_type'] : 'none';
+                                        $min_discount_amount = !empty($min_price_arr['min_discount_amount']) ? $min_price_arr['min_discount_amount'] : 0;
+
+                                        if ($min_regular_price != 0) {
+                                            $price_html = wc_format_sale_price($min_regular_price, $min_sale_price);
+                                        } else {
+                                            $price_html = wp_kses_post(wc_price($min_sale_price)) . " ";
+                                        }
+                                        $rating_badge = sht_sparator_rating_badge($post_id);
+
+                                        include SHT_HOTEL_TOOLKIT_PATH . 'inc/templates/archive/template-parts/single-item.php';
+                                    endwhile;
+                                    wp_reset_query();
                                     ?>
                                 </div>
                             </div>
@@ -189,14 +258,14 @@ $tf_map_api = !empty(Helper::tfopt('tf-googlemapapi')) ? Helper::tfopt('tf-googl
                         <div class="tf-notice tf-mt-24 tf-mb-30">
                             <?php if (current_user_can('administrator')) : ?>
                                 <p>
-                                    <?php echo esc_html__('Google Maps is not selected. Please configure it.', 'tourfic'); ?>
+                                    <?php echo esc_html__('Google Maps is not selected. Please configure it.', 'spa-hotel-toolkit'); ?>
                                     <a href="<?php echo esc_url(admin_url('admin.php?page=tf_settings#tab=map_settings')); ?>" target="_blank">
-                                        <?php esc_html_e('Map Settings', 'tourfic'); ?>
+                                        <?php esc_html_e('Map Settings', 'spa-hotel-toolkit'); ?>
                                     </a>
                                 </p>
                             <?php else : ?>
                                 <p>
-                                    <?php esc_html_e('Access is restricted as Google Maps is not enabled. Please contact the site administrator.', 'tourfic'); ?>
+                                    <?php esc_html_e('Access is restricted as Google Maps is not enabled. Please contact the site administrator.', 'spa-hotel-toolkit'); ?>
                                 </p>
                             <?php endif; ?>
                         </div>

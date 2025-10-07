@@ -4,15 +4,16 @@ defined('ABSPATH') || exit;
 
 
 $hotel_meta = get_post_meta($post_id, 'tf_hotels_opt', true);
-
 $sec_title = ! empty($hotel_meta['feeds-sec-title']) ? $hotel_meta['feeds-sec-title'] : esc_html__('Guest Experiences', 'spa-hotel-toolkit');
 $accountId = ! empty($hotel_meta['feeds-account-id']) ? $hotel_meta['feeds-account-id'] : '';
 $accessToken = ! empty($hotel_meta['feeds-access-token']) ? $hotel_meta['feeds-access-token'] : '';
-$username = ! empty($hotel_meta['feeds-username']) ? $hotel_meta['feeds-username'] : '';
 
 // Function to fetch posts
 function fetchInstagramPosts($accountId, $accessToken)
 {
+    global $post_id;
+    $hotel_meta = get_post_meta($post_id, 'tf_hotels_opt', true);
+    $username = ! empty($hotel_meta['feeds-username']) ? $hotel_meta['feeds-username'] : '';
     $endpoint = "https://graph.facebook.com/v12.0/{$accountId}?fields=business_discovery.username({$username}){media{id,caption,like_count,comments_count,media_type,media_url,permalink,timestamp}}&access_token={$accessToken}";
 
     $ch = curl_init();

@@ -62,9 +62,12 @@ $comments = $comments_query->comments;
 
                         // Comment details
                         $c_avatar      = get_avatar($comment, '48');
-                        $user_designation = 'Entrepreneur';
+                        $user_designation = '';
                         if ($comment->user_id) {
                             $user_designation = get_user_meta($comment->user_id, 'designation', true);
+                        }
+                        if(empty($user_designation)){
+                            $user_designation = 'Entrepreneur';
                         }
                         $c_author_name = $comment->comment_author;
                         $c_content     = $comment->comment_content;
