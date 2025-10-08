@@ -8,7 +8,13 @@
  */
 // Don't load directly
 defined( 'ABSPATH' ) || exit;
-
+$args = array(
+    'post_type' => 'tf_hotel',
+    'post_status' => 'publish',
+    'posts_per_page' => -1,
+	
+);
+$hotels = new \WP_Query($args);
 ?>
 
 <div class="spa-hotel-archive-template">

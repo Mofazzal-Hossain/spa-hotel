@@ -113,7 +113,7 @@ $comments = $comments_query->comments;
                                 </div>
                             <?php } ?>
                             <?php if ($post_type == 'hotel' && $tf_hotel_selected_template == "default" && strlen($c_content) > 200): ?>
-                                <div class="tf-hotel-show-more"><?php esc_html_e("Show more", "tourfic") ?></div>
+                                <div class="tf-hotel-show-more"><?php esc_html_e("Show more", "spa-hotel-toolkit") ?></div>
                             <?php endif; ?>
                         </div>
                 <?php

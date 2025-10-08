@@ -207,7 +207,7 @@ class Spa_Booking_Rator extends \Elementor\Widget_Base
                     <div class="sht-gauge-needle">
                         <img src="<?php echo esc_url($rator_handle); ?>"
                             alt="Rator Handle"
-                            style="transform: rotate(<?php echo $transform['rotate']; ?>deg) translate(<?php echo $transform['tx']; ?>px, <?php echo $transform['ty']; ?>px);">
+                            style="transform: rotate(<?php echo esc_attr($transform['rotate']); ?>deg) translate(<?php echo esc_attr($transform['tx']); ?>px, <?php echo esc_attr($transform['ty']); ?>px);">
                     </div>
                     <div class="sht-gauge-score">
                         <span class="sht-text"><?php echo esc_html($settings['rator_title']); ?></span>
@@ -224,7 +224,7 @@ class Spa_Booking_Rator extends \Elementor\Widget_Base
                         </div>
                         <div class="sht-review-item-content">
                             <div class="sht-review-progress-report">
-                                <span class="sht-review-label"><?php echo esc_html__($item['label'], 'spa-hotel-toolkit'); ?></span>
+                                <span class="sht-review-label"><?php echo esc_html($item['label']); ?></span>
                                 <div class="sht-review-score"><?php echo esc_html($item['score']); ?>/<?php echo esc_html($tf_settings_base); ?></div>
                             </div>
                             <div class="sht-review-bar">

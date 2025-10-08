@@ -26,6 +26,22 @@ $tf_hotel_arc_banner = ! empty($tf_template['hotel_archive_design_1_bannar'])
 	: '';
 
 $banner_style = $tf_hotel_arc_banner ? 'style="background-image: url(' . esc_url($tf_hotel_arc_banner) . ');"' : '';
+
+$args = array(
+    'post_type' => 'tf_hotel',
+    'post_status' => 'publish',
+    'posts_per_page' => -1,
+    'tax_query' => array(
+        array(
+            'taxonomy' => 'hotel_location',
+            'field' => 'slug',
+            'terms' => $taxonomy_slug,
+			'include_children' => false,
+        )
+    )
+);
+$hotels = new \WP_Query($args);
+
 ?>
 <div class="spa-hotel-archive-template">
 	<div class="tf-hotel-archive-banner" <?php echo $banner_style; ?>>

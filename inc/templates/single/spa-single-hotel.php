@@ -10,7 +10,7 @@ if (!Helper::tf_is_woo_active()) {
 ?>
 	<div class="tf-container">
 		<div class="tf-notice tf-notice-danger">
-			<?php esc_html_e('Please install and activate WooCommerce plugin to view hotel details.', 'tourfic'); ?>
+			<?php esc_html_e('Please install and activate WooCommerce plugin to view hotel details.', 'spa-hotel-toolkit'); ?>
 		</div>
 	</div>
 <?php

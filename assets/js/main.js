@@ -221,22 +221,6 @@
             }
         });
 
-        // $(document).on('submit', '.tf-archive-search #tf_hotel_aval_check', function (e) {
-        //     e.preventDefault();
-        //     e.stopPropagation();
-        //     var $this = $(this);
-        //     var data = $this.serialize();
-        //     var url = $this.attr('action');
-        //     $.ajax({
-        //         type: 'POST',
-        //         url: url,
-        //         data: data,
-        //         success: function (response) {
-        //             window.location.href = response;
-        //         }
-        //     });
-        // });
-
        let filter_xhr;
 
         // Get term IDs by field name
@@ -259,7 +243,20 @@
             const taxonomy = $('.tf-sidebar').find('.tf-archive-taxonomy').val();
             const term = $('.tf-sidebar').find('.tf-archive-slug').val();
 
+            const placeLocation = $('.tf-archive-search').find('#tf-search-hotel').val();
+            var dates = $('.tf-check-in-out-date').val();
 
+           
+
+            var datesArr = [];
+            if (dates) {
+                dates = dates.replace(' to ', ' - ');
+                datesArr = dates.split(' - ');
+            }
+
+            var checkin  = (datesArr[0] || '').trim().replaceAll('-', '/');
+            var checkout = (datesArr[1] || '').trim().replaceAll('-', '/');
+            console.log(checkin, checkout);
             const formData = new FormData();
             formData.append('action', 'sht_archive_filter');
             formData.append('_nonce', tf_params.nonce);
@@ -269,15 +266,20 @@
             formData.append('score', score);
             formData.append('taxonomy', taxonomy);
             formData.append('term', term);
-            
+            formData.append('placeLocation', placeLocation);
+            formData.append('checkin', checkin);
+            formData.append('checkout', checkout);
             formData.append('page', page);
+
+            if(mapCoordinates.length === 4){
+                formData.append('mapCoordinates', mapCoordinates.join(','));
+                formData.append('mapFilter', true);
+            }
 
             // Abort previous request if still running
             if (filter_xhr && filter_xhr.readyState !== 4) {
                 filter_xhr.abort();
             }
-
-            console.log('Sending filter AJAX:', Array.from(formData.entries()));
 
             filter_xhr = $.ajax({
                 type: 'POST',
@@ -288,26 +290,31 @@
                 beforeSend: () => {
                     $('.archive_ajax_result').block({
                         message: null,
-                        overlayCSS: { background: "#fff", opacity: 0.5 }
+                        overlayCSS: { background: "#fff", opacity: 0.7 }
                     });
                     $('#tf_ajax_searchresult_loader').show();
+
+                },
+                success: (data) => {
+                    if(data.success == true){
+                        $('.archive_ajax_result .sht-list-view .sht-hotels-content').html(data.data.posts.join('')); 
+                        $('.archive_ajax_result .sht-map-view .sht-hotels-content').html(data.data.posts.join(''));
+                        
+                    }else{
+                        $('.archive_ajax_result .sht-list-view').html('<p class="sht-no-results">' + data.data.message + '</p>');
+                        $('.archive_ajax_result .tf-map-posts-wrapper').html('<p class="sht-no-results">' + data.data.message + '</p>'); 
+                        $('.archive_ajax_result #map-datas').html(data.data.map); 
+                    }
+                    
                 },
                 complete: () => {
                     $('.archive_ajax_result').unblock();
                     $('#tf_ajax_searchresult_loader').hide();
+                    $('.tf-archive-search button[type="submit"]').removeClass('tf-btn-loading');
                 },
-                success: (data) => {
-                    console.log(data);
-                    if(data.success == true){
-                        $('.archive_ajax_result .sht-list-view').html(data.data.posts.join('')); // render returned HTML
-                        $('.archive_ajax_result .sht-map-view .sht-hotels-content').html(data.data.posts.join('')); // render returned HTML
-                    }else{
-                        console.log(data.data.message);
-                        $('.archive_ajax_result .sht-list-view').html('<p class="sht-no-results">' + data.data.message + '</p>');
-                        $('.archive_ajax_result .sht-map-view .sht-hotels-content').html('<p class="sht-no-results">' + data.data.message + '</p>'); 
-                    }
-                   
-                },
+                error: function() {
+                    if (typeof callback === 'function') callback();
+                }
             });
         };
 
@@ -321,6 +328,20 @@
             $('.sht-filter input[type="checkbox"]').prop('checked', false);
             $('.sht-filter li').removeClass('active');
             makeFilter();
+        });
+
+        // Trigger filter on form submit
+        $(document).on('submit', '.tf-archive-search #tf_hotel_aval_check', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+    
+            var $form = $(this);
+            var $submitBtn = $form.find('button[type="submit"]');
+
+            $submitBtn.addClass('tf-btn-loading')
+            if ($form.find('#tf-location').val() != '') {
+                makeFilter(1);
+            } 
         });
 
     });

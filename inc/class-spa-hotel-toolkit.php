@@ -33,6 +33,7 @@ class Sht_Hotel_Toolkit
         add_filter('wp_list_categories', [$this, 'sht_categories_list_filter']);
         add_filter('tourfic_add_review_button_text', [$this, 'sht_add_review_button_text']);
         add_filter('tf_rating_modal_header_content', [$this, 'sht_rating_modal_header_content']);
+        add_filter('tf_get_terms_dropdown_args', [$this, 'sht_get_terms_dropdown_args'], 10, 2);
 
         // filters for tourfic admin settings and metaboxes
         add_filter('tf_settings_sections', [$this, 'sht_tourfic_admin_setting_sections']);
@@ -42,6 +43,7 @@ class Sht_Hotel_Toolkit
         add_filter('tf_hotel_single_legacy_template', [$this, 'sht_hotel_single_legacy_template']);
         add_filter('tf_hotel_archive_legacy_template', [$this, 'sht_hotel_archive_legacy_template']);
         add_filter('tf_hotel_location_archive_legacy_template', [$this, 'sht_hotel_location_archive_legacy_template'], 10, 5);
+        add_filter('tf_search_result_legacy_template', [$this, 'sht_search_result_legacy_template']);
 
         // widget init  
         add_action('widgets_init', [$this, 'sht_widget_init'], 20);
@@ -51,7 +53,6 @@ class Sht_Hotel_Toolkit
 
         // Add custom archive filters
         include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/spa-archive-filters.php';
-
     }
 
 
@@ -163,6 +164,13 @@ class Sht_Hotel_Toolkit
         return ob_get_clean();
     }
 
+    public function sht_search_result_legacy_template()
+    {
+        ob_start();
+        include SHT_HOTEL_TOOLKIT_PATH . 'inc/templates/archive/spa-search-result.php';
+        return ob_get_clean();
+    }
+
     // Change "Add Review" button text
     public function sht_add_review_button_text($text)
     {
@@ -181,8 +189,8 @@ class Sht_Hotel_Toolkit
                 $new_field = array(
                     'id'       => 'hotel_archive_design_1_bannar',
                     'type'     => 'image',
-                    'label'    => esc_html__('Archive & Search Result Banner Image', 'tourfic'),
-                    'subtitle' => esc_html__('Upload Banner Image for this hotel archive template.', 'tourfic'),
+                    'label'    => esc_html__('Archive & Search Result Banner Image', 'spa-hotel-toolkit'),
+                    'subtitle' => esc_html__('Upload Banner Image for this hotel archive template.', 'spa-hotel-toolkit'),
                     'library'  => 'image',
                     'default'  => SHT_HOTEL_TOOLKIT_ASSETS . "images/archive-hero.png",
                     'dependency' => array('hotel-archive', '==', 'default'),
@@ -231,7 +239,7 @@ class Sht_Hotel_Toolkit
                         'id'       => 'faq-items',
                         'type'     => 'repeater',
                         'label'    => __('FAQ Items', 'spa-hotel-toolkit'),
-                        'button_title' => esc_html__('Add New', 'tourfic'),
+                        'button_title' => esc_html__('Add New', 'spa-hotel-toolkit'),
                         'subtitle' => __('Add multiple FAQ questions and answers', 'spa-hotel-toolkit'),
                         'fields'   => array(
                             array(
@@ -335,8 +343,8 @@ class Sht_Hotel_Toolkit
         $review_popup_title = ! empty(Helper::tfopt('review-popup-title')) ? sanitize_text_field(Helper::tfopt('review-popup-title')) : 'Leave your review';
         $review_popup_desc = ! empty(Helper::tfopt('review-popup-description')) ? sanitize_text_field(Helper::tfopt('review-popup-description')) : 'Your email address will not be published. Required fields are marked.';
 
-        $custom_content = '<h4>' . esc_html__($review_popup_title, 'spa-hotel-toolkit') . '</h4>';
-        $custom_content .= '<p>' . esc_html__($review_popup_desc, 'spa-hotel-toolkit') . '</p>';
+        $custom_content = '<h4>' . esc_html($review_popup_title) . '</h4>';
+        $custom_content .= '<p>' . esc_html($review_popup_desc) . '</p>';
         return $custom_content;
     }
 
@@ -624,5 +632,13 @@ class Sht_Hotel_Toolkit
             "show_in_graphql" => false,
         ];
         register_taxonomy("hotel_facilities", ["tf_hotel"], $args);
+    }
+
+    // Terms dropdown
+    public function sht_get_terms_dropdown_args($args, $taxonomy){
+        if ($taxonomy === 'hotel_location') {
+            $args['parent'] = 0; 
+        }
+        return $args;
     }
 }

@@ -51,17 +51,21 @@
     .sht-breadcrumb {
         padding-bottom: 0px;
         background: $sht-fill-foreground;
-        ul{
+
+        ul {
             @include justify-content(start);
         }
     }
+
     // location info
-    .sht-hotel-location-info{
+    .sht-hotel-location-info {
         background: $sht-fill-foreground;
-        h2{
+
+        h2 {
             padding-top: 24px;
         }
-        p{
+
+        p {
             padding-top: 24px;
         }
     }
@@ -70,6 +74,7 @@
     .tf-archive-details {
         background: $sht-fill-foreground;
         padding-top: 40px;
+
         .tf-archive-details-content {
             @include d-flex();
             gap: 32px;
@@ -80,7 +85,7 @@
                 height: 100%;
                 // position: sticky;
                 // top: 0;
-                
+
 
                 .tf-booking-sidebar {
                     padding: 16px;
@@ -254,6 +259,7 @@
 
             .tf-archive-hotels {
                 flex: 1;
+                position: relative;
 
                 .sht-archive-view {
                     @include d-flex();
@@ -281,11 +287,13 @@
                     }
                 }
 
-                .sht-hotels-content {
+                .sht-hotels-content,
+                .sht-archive-child-content {
+                    display: grid;
                     grid-template-columns: repeat(2, 1fr);
                     gap: 16px;
-                    display: none;
                     position: relative;
+
                     .sht-hotel-single-item {
                         .sht-hotel-item-content {
                             .sht-hotel-item-features {
@@ -296,25 +304,55 @@
                         }
                     }
 
+                }
+
+                .tf-archive-children-wrapper {
+                    @include d-flex();
+                    flex-direction: column;
+                    gap: 64px;
+                    margin-top: 64px;
+
+                    .tf-archive-children {
+                        .spa-heading-wrap {
+                            margin-bottom: 32px;
+                            @include d-flex();
+                            flex-direction: column;
+                            gap: 12px;
+                            text-align: left;
+
+                            .spa-title {
+                                margin: 0;
+                            }
+                            p{
+                                max-width: 500px;
+                            }
+                        }
+
+                        .sht-archive-child-content {
+                            display: grid;
+                        }
+                    }
+                }
+
+                .sht-no-results {
+                    margin-top: 50px;
+                    width: 100%;
+                    @include d-flex();
+                    @include align-items(center);
+                    @include justify-content(center);
+                }
+
+                .sht-list-view {
+                    display: none;
+
                     &.active {
                         display: grid;
-                    }
-                    .sht-no-results {
-                        position: absolute;
-                        left: 50%;
-                        transform: translatex(-50%);
-                        height: 200px;
-                        width: 100%;
-                        @include d-flex();
-                        @include align-items(center);
-                        @include justify-content(center);
                     }
                 }
 
                 .sht-map-view {
                     overflow: hidden;
                     display: none;
-
 
                     &.active {
                         display: grid;
@@ -327,6 +365,28 @@
                     .tf-map-view-inner {
                         .tf-mobile-list-btn {
                             display: none;
+
+                            @media #{$max1024} {
+
+                                .tf-mobile-map-btn,
+                                .tf-mobile-list-btn {
+                                    @include d-flex();
+                                    @include align-items(center);
+                                    gap: 8px;
+                                    padding: 8px;
+                                    border-radius: 4px;
+                                    background-color: $sht-color-primary;
+                                    color: $sht-color-white;
+                                    text-decoration: none;
+                                }
+
+                                .tf-mobile-list-btn {
+                                    position: fixed;
+                                    right: 16px;
+                                    top: 16px;
+                                    z-index: 99;
+                                }
+                            }
                         }
 
                         .tf-hotel-archive-map-wrap {
@@ -344,9 +404,9 @@
 
                             .sht-hotel-single-item {
 
-                                span:not(.amount,.amount>span),
+                                span:not(.amount, .amount>span),
                                 p,
-                                div{
+                                div {
                                     font-size: 17px;
                                     font-family: $sht-body-font;
                                     font-weight: 400;

@@ -170,6 +170,10 @@ a:focus {
             }
         }
     }
+
+    .tf-btn-loading:before {
+        margin-top: -5px;
+    }
 }
 
 // breadcrumb
@@ -202,3 +206,4 @@ a:focus {
         }
     }
 }
+

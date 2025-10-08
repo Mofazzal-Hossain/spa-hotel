@@ -32,19 +32,42 @@ function sht_archive_filter_ajax()
     $score      = !empty($_POST['score']) ? explode(',', sanitize_text_field($_POST['score'])) : [];
     $taxonomy = !empty($_POST['taxonomy']) ? sanitize_text_field($_POST['taxonomy']) : '';
     $term     = !empty($_POST['term']) ? sanitize_text_field($_POST['term']) : '';
+    $place_location = !empty($_POST['placeLocation']) ? sanitize_text_field($_POST['placeLocation']) : '';
+    $checkin     = !empty($_POST['checkin']) ? sanitize_text_field($_POST['checkin']) : '';
+    $checkout     = !empty($_POST['checkout']) ? sanitize_text_field($_POST['checkout']) : '';
 
+    //Map Template only
+    $mapFilter = !empty($_POST['mapFilter']) ? sanitize_text_field($_POST['mapFilter']) : false;
+    $mapCoordinates = !empty($_POST['mapCoordinates']) ? explode(',', sanitize_text_field($_POST['mapCoordinates'])) : [];
+    if (!empty($mapCoordinates) && count($mapCoordinates) === 4) {
+        list($minLat, $minLng, $maxLat, $maxLng) = $mapCoordinates;
+    }
 
     $tax_query = [];
 
     // taxonomy filter
-    if ($taxonomy != 'undefined' && $term != 'undefined') {
-        if ($taxonomy && $term) {
+    if (!empty($taxonomy) && $taxonomy != 'undefined' && !empty($term) && $term != 'undefined') {
+        if (!empty($place_location) && $place_location === $term) {
             $tax_query[] = [
                 'taxonomy' => $taxonomy,
                 'field'    => 'slug',
                 'terms'    => $term,
             ];
+        }else{
+            $tax_query[] = [
+                'taxonomy' => $taxonomy,
+                'field'    => 'slug',
+                'terms'    => '',
+                'include_children' => false,
+            ];
         }
+    } elseif (!empty($place_location)) {
+        $tax_query[] = [
+            'taxonomy' => 'hotel_location',
+            'field'    => 'slug',
+            'terms'    => $place_location,
+            'include_children' => false,
+        ];
     }
 
     // features filter
@@ -150,7 +173,6 @@ function sht_archive_filter_ajax()
         $args['tax_query'] = $tax_query;
     }
 
-
     $loop = new WP_Query($args);
     $total_posts = $loop->found_posts;
 
@@ -160,6 +182,7 @@ function sht_archive_filter_ajax()
         while ($loop->have_posts()) {
             $loop->the_post();
             $post_id = get_the_ID();
+
             $meta = get_post_meta(get_the_ID(), 'tf_hotels_opt', true);
 
             $count++;
@@ -209,6 +232,33 @@ function sht_archive_filter_ajax()
             } else {
                 $price_multi_text = 'day';
             }
+
+
+            $rooms_meta = [];
+            if (! empty($rooms)) {
+                foreach ($rooms as $single_room) {
+                    $rooms_meta[$single_room->ID] = get_post_meta($single_room->ID, 'tf_room_opt', true);
+                }
+            }
+            $avil_by_date = array_column($rooms_meta, 'avil_by_date');
+            $has_availability_control = in_array('1', $avil_by_date, true);
+            if ($has_availability_control) {
+                $availability_dates = array_column($rooms_meta, 'avail_date');
+
+                $availability = [];
+                foreach ((array)$availability_dates as $av) {
+                    if (!empty($av)) {
+                        $decoded = json_decode($av, true);
+                        if (is_array($decoded)) {
+                            $availability = array_merge($availability, $decoded);
+                        }
+                    }
+                }
+                if (!filter_room_available($checkin, $checkout, $availability)) {
+                    continue;
+                }
+            }
+
             $min_price_arr = Pricing::instance(get_the_ID())->get_min_price();
             $min_sale_price = !empty($min_price_arr['min_sale_price']) ? $min_price_arr['min_sale_price'] : 0;
             $min_regular_price = !empty($min_price_arr['min_regular_price']) ? $min_price_arr['min_regular_price'] : 0;
@@ -222,6 +272,23 @@ function sht_archive_filter_ajax()
             }
 
             $rating_badge = sht_sparator_rating_badge($post_id);
+            if (!empty($map)) {
+                $lat = $map['latitude'];
+                $lng = $map['longitude'];
+                ob_start();
+
+                include SHT_HOTEL_TOOLKIT_PATH . 'inc/templates/archive/template-parts/single-item.php';
+                $infoWindowtext = ob_get_clean();
+
+                $locations[$count] = [
+                    'id' => get_the_ID(),
+                    'url'      => get_the_permalink(),
+                    'lat' => (float)$lat,
+                    'lng' => (float)$lng,
+                    'price' => base64_encode($price_html),
+                    'content' => base64_encode($infoWindowtext)
+                ];
+            }
 
             // Capture template HTML
             ob_start();
@@ -229,7 +296,6 @@ function sht_archive_filter_ajax()
             $posts_html[] = ob_get_clean();
         }
         wp_reset_postdata();
-        // error_log(print_r($posts_html, true));
         wp_send_json_success([
             'posts' => $posts_html,
             'count' => $total_posts,
@@ -237,4 +303,33 @@ function sht_archive_filter_ajax()
     } else {
         wp_send_json_error(['message' => 'No hotels found']);
     }
+}
+
+
+function get_filter_date_range($start, $end)
+{
+    $dates = [];
+    $current = strtotime($start);
+    $endTime = strtotime($end);
+
+    while ($current <= $endTime) {
+        $dates[] = date('Y/m/d', $current);
+        $current = strtotime('+1 day', $current);
+    }
+    return $dates;
+}
+
+function filter_room_available($checkin, $checkout, $availability)
+{
+    if (empty($checkin) || empty($checkout) || empty($availability)) {
+        return false;
+    }
+    $dates = get_filter_date_range($checkin, $checkout);
+    foreach ($dates as $date) {
+        if (empty($availability[$date]) || $availability[$date]['status'] !== 'available') {
+            return false;
+        }
+    }
+
+    return true;
 }

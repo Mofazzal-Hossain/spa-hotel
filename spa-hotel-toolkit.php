@@ -7,6 +7,7 @@
  * Author:      Themefic
  * Author URI:  https://themefic.com/
  * Version:     1.0.0
+ * License:     GPL2
  * Text Domain: spa-hotel-toolkit
  */
 

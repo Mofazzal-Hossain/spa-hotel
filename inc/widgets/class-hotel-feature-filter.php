@@ -51,7 +51,7 @@ class Sht_Hotel_Feature_Filter extends \WP_Widget
                     $checked = in_array($slug, $selected, true) ? 'checked' : '';
                     echo '<li class="sht-filter-item">
                         <label>
-                            <input type="checkbox" name="sht_features[]" value="' . esc_attr($id) . '" ' . $checked . ' />
+                            <input type="checkbox" name="sht_features[]" value="' . esc_attr($id) . '" ' . esc_attr($checked) . ' />
                             <span class="sht-checkmark"></span> ' . esc_html($name) . '
                         </label>
                     </li>';
