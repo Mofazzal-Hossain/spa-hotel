@@ -6,7 +6,7 @@ use \Tourfic\Classes\Helper;
 use \Tourfic\Classes\Hotel\Pricing;
 
 ?>
-<div class="sht-hotel-single-item">
+<div class="sht-hotel-single-item" data-id="<?php echo esc_attr(get_the_ID()); ?>">
     <div class="sht-rator-badge <?php echo esc_attr($rating_badge['class']); ?>">
         <?php echo esc_html($rating_badge['text']); ?>
     </div>

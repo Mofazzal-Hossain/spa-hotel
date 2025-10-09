@@ -167,7 +167,6 @@
 
         /* see less checkbox filter started */
         $('.tf-booking-sidebar a.see-less').on('click', function (e) {
-            console.log('clicked');
             var $this = $(this);
             e.preventDefault();
             $this.parent('.sht-filter').find('.sht-filter-item').filter(function (index) {
@@ -213,13 +212,211 @@
 
             // Toggle active class on the related sections
             if (isList) {
-                $('.sht-list-view').addClass('active');
-                $('.sht-map-view').removeClass('active');
+                $('.sht-hotel-view').addClass('list-view');
+                $('.sht-hotel-view').removeClass('map-view');
             } else if (isMap) {
-                $('.sht-map-view').addClass('active');
-                $('.sht-list-view').removeClass('active');
+                $('.sht-hotel-view').addClass('map-view');
+                $('.sht-hotel-view').removeClass('list-view');
             }
         });
+
+        
+        // google map
+        var zoomLvl = 5;
+        var zoomChangeEnabled = false;
+        var centerLvl = new google.maps.LatLng(23.8697847, 90.4219536);
+        var markersById = {};
+        var markers = [];
+        var mapChanged = false;
+        var hotelMap;
+
+        const spaGoogleMapInit = (mapLocations, mapLat = 23.8697847, mapLng = 90.4219536) => {
+            // Clear existing markers
+            clearMarkers();
+
+            var locations = mapLocations ? JSON.parse(mapLocations) : [];
+
+            if(!hotelMap){
+                hotelMap = new google.maps.Map(document.getElementById("spa-hotel-archive-map"), {
+                    zoom: zoomLvl,
+                    minZoom: 3,
+                    maxZoom: 18,
+                    center: new google.maps.LatLng(mapLat, mapLng),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    styles: [
+                        {elementType: 'labels.text.fill', stylers: [{color: '#44348F'}]},
+                    ],
+                    fullscreenControl: false
+                });
+            }
+
+            var infowindow = new google.maps.InfoWindow({
+                maxWidth: 262,
+                disableAutoPan: true,
+            });
+
+            var bounds = new google.maps.LatLngBounds();
+            locations.map(function (location, i) {
+                var marker = new MarkerWithLabel({
+                    position: new google.maps.LatLng(location['lat'], location['lng']),
+                    map: hotelMap,
+                    icon: {
+                        url: document.getElementById('map-marker').dataset.marker,
+                        scaledSize: new google.maps.Size(sht_params.map_marker_width, sht_params.map_marker_height),
+                    },
+                    labelContent: '<div class="tf_price_inner" data-post-id="' + location['id'] + '">' + window.atob(location['price']) + '</div>',
+                    labelAnchor: new google.maps.Point(0, 0),
+                    labelClass: "tf_map_price",
+                });
+
+                markersById[location['id']] = marker;
+                markers.push(marker);
+                bounds.extend(marker.position);
+
+                // Define an OverlayView to use the projection for pixel calculation
+                const overlay = new google.maps.OverlayView();
+                overlay.draw = function () {};
+                overlay.setMap(hotelMap);
+
+                google.maps.event.addListener(marker, 'mouseover', function () {
+                    infowindow.setContent(window.atob(location['content']));
+
+                    // Convert LatLng to pixel coordinates
+                    const markerPosition = marker.getPosition();
+                    const markerProjection = overlay.getProjection();
+                    const markerPixel = markerProjection.fromLatLngToDivPixel(markerPosition);
+
+                    // Infowindow dimensions
+                    const infoWindowHeight = 265;
+                    const infoWindowWidth = 262;
+
+                    // Check each edge
+                    const isNearLeftEdge = markerPixel.x <= -120;
+                    const isNearRightEdge = markerPixel.x >= 120;
+                    const isNearTopEdge = (markerPixel.y - (infoWindowHeight+40)) <= -infoWindowHeight;
+
+                    let anchorX = 0.5;
+                    let anchorY = 0;
+
+                    if (isNearLeftEdge) {
+                        anchorX = 0.9;
+                    } else if (isNearRightEdge) {
+                        anchorX = 0.1;
+                    }
+
+                    if (isNearTopEdge) {
+                        anchorY = infoWindowHeight+90
+                    }
+
+                    infowindow.setOptions({
+                        pixelOffset: new google.maps.Size((anchorX - 0.5) * infoWindowWidth, anchorY)
+                    });
+
+                    infowindow.open(hotelMap, marker);
+                });
+
+                // Hide the infowindow on mouse leave
+                google.maps.event.addListener(marker, 'mouseout', function () {
+                    infowindow.close();
+                });
+
+                google.maps.event.addListener(marker, 'click', function () {
+                    window.open(location?.url, '_blank')
+                });
+            });
+
+            // Trigger filter on map drag
+            google.maps.event.addListener(hotelMap, "dragend", function () {
+                zoomLvl = hotelMap.getZoom();
+                centerLvl = hotelMap.getCenter();
+                mapChanged = true;
+
+                filterVisibleHotels(hotelMap);
+            });
+
+            google.maps.event.addListener(hotelMap, "zoom_changed", function () {
+                if (zoomChangeEnabled) return;
+
+                zoomLvl = hotelMap.getZoom();
+                centerLvl = hotelMap.getCenter();
+                mapChanged = true;
+
+                filterVisibleHotels(hotelMap);
+
+            });
+
+            var listener = google.maps.event.addListener(hotelMap, "idle", function() {
+                zoomChangeEnabled = true;
+                if (!mapChanged) {
+                    hotelMap.fitBounds(bounds);
+                    centerLvl = bounds.getCenter();
+                    hotelMap.setCenter(centerLvl);
+
+                } else {
+                    hotelMap.setZoom(zoomLvl);
+                    hotelMap.setCenter({lat: centerLvl.lat(), lng: centerLvl.lng()});
+                    google.maps.event.removeListener(listener);
+                }
+                zoomChangeEnabled = false;
+            });
+        }
+
+        function filterVisibleHotels(map) {
+            var bounds = map.getBounds();
+            
+            if (bounds) {
+                var sw = bounds.getSouthWest();
+                var ne = bounds.getNorthEast();
+            }
+        
+            spaMakeFilter('', [sw.lat(), sw.lng(), ne.lat(), ne.lng()]);
+        }
+
+        function clearMarkers() {
+            markers.forEach(marker => marker.setMap(null)); // Remove each marker from the map
+            markers = []; // Clear the array to prevent duplication
+        }
+
+        // GOOGLE MAP INITIALIZE
+        var mapLocations = $('#map-datas').html();
+        if ($('#map-datas').length && mapLocations.length) {
+            spaGoogleMapInit(mapLocations);
+        }
+
+         /*
+        * Hotel hover effect on map marker
+        * */
+        $(document).on('mouseover', '.spa-hotel-archive-template .sht-hotel-single-item', function () {
+            let id = $(this).data('id');
+            $('.tf_map_price .tf_price_inner[data-post-id="' + id + '"]').addClass('active');
+
+            if (markersById[id]) {
+                markersById[id].setAnimation(google.maps.Animation.BOUNCE);
+            }
+        });
+        $(document).on('mouseleave', '.spa-hotel-archive-template .sht-hotel-single-item', function () {
+            let id = $(this).data('id');
+            $('.tf_map_price .tf_price_inner[data-post-id="' + id + '"]').removeClass('active');
+
+            if (markersById[id]) {
+                markersById[id].setAnimation(null);
+            }
+        });
+
+        /*
+        * Map toggle btn for mobile
+        */
+        $(document).on('click', '.spa-hotel-archive-template .tf-mobile-map-btn, .tf-archive-listing__three .tf-mobile-map-btn', function (e) {
+            e.preventDefault();
+            $('.spa-hotel-archive-template .tf-details-right').css('display', 'block');
+            $('.tf-archive-listing__three .tf-details-right').css('display', 'block');
+        });
+        $(document).on('click', '.spa-hotel-archive-template .tf-mobile-list-btn, .tf-archive-listing__three .tf-mobile-list-btn', function (e) {
+            e.preventDefault();
+            $('.spa-hotel-archive-template .tf-details-right').css('display', 'none');
+            $('.tf-archive-listing__three .tf-details-right').css('display', 'none');
+        });
+
 
        let filter_xhr;
 
@@ -234,7 +431,7 @@
             return termIds.join();
         };
 
-        const makeFilter = (page = 1, mapCoordinates = []) => {
+        const spaMakeFilter = (page = 1, mapCoordinates = []) => {
             const features = termIdsByFieldName('sht_features');
             const facilities = termIdsByFieldName('sht_facilities');
             const ratings = termIdsByFieldName('ratings');
@@ -246,8 +443,6 @@
             const placeLocation = $('.tf-archive-search').find('#tf-search-hotel').val();
             var dates = $('.tf-check-in-out-date').val();
 
-           
-
             var datesArr = [];
             if (dates) {
                 dates = dates.replace(' to ', ' - ');
@@ -256,10 +451,9 @@
 
             var checkin  = (datesArr[0] || '').trim().replaceAll('-', '/');
             var checkout = (datesArr[1] || '').trim().replaceAll('-', '/');
-            console.log(checkin, checkout);
             const formData = new FormData();
             formData.append('action', 'sht_archive_filter');
-            formData.append('_nonce', tf_params.nonce);
+            formData.append('_nonce', sht_params.nonce);
             formData.append('features', features);
             formData.append('facilities', facilities);
             formData.append('ratings', ratings);
@@ -283,12 +477,12 @@
 
             filter_xhr = $.ajax({
                 type: 'POST',
-                url: tf_params.ajax_url,
+                url: sht_params.ajax_url,
                 data: formData,
                 processData: false,
                 contentType: false,
                 beforeSend: () => {
-                    $('.archive_ajax_result').block({
+                    $('.tf-archive-hotels').block({
                         message: null,
                         overlayCSS: { background: "#fff", opacity: 0.7 }
                     });
@@ -296,19 +490,25 @@
 
                 },
                 success: (data) => {
-                    if(data.success == true){
-                        $('.archive_ajax_result .sht-list-view .sht-hotels-content').html(data.data.posts.join('')); 
-                        $('.archive_ajax_result .sht-map-view .sht-hotels-content').html(data.data.posts.join(''));
-                        
-                    }else{
-                        $('.archive_ajax_result .sht-list-view').html('<p class="sht-no-results">' + data.data.message + '</p>');
-                        $('.archive_ajax_result .tf-map-posts-wrapper').html('<p class="sht-no-results">' + data.data.message + '</p>'); 
-                        $('.archive_ajax_result #map-datas').html(data.data.map); 
+                    let locations = data.data.locations;
+                    console.log(locations);
+                    if (Array.isArray(data.data.posts) && data.data.posts.length > 0) {
+                        $('.tf-archive-hotels .sht-hotel-content-inner').html(
+                            '<div class="sht-hotels-content">' + data.data.posts.join('') + '</div>'
+                        );
+                        $('.tf-archive-hotels .sht-no-result').hide();
+                    } else {
+                        $('.tf-archive-hotels .sht-hotel-content-inner').html('');
+                        $('.tf-archive-hotels .sht-no-result').show();
+                    }
+
+                    if(Array.isArray(locations) && locations.length > 0){
+                        spaGoogleMapInit(locations);
                     }
                     
                 },
                 complete: () => {
-                    $('.archive_ajax_result').unblock();
+                    $('.tf-archive-hotels').unblock();
                     $('#tf_ajax_searchresult_loader').hide();
                     $('.tf-archive-search button[type="submit"]').removeClass('tf-btn-loading');
                 },
@@ -320,28 +520,60 @@
 
         // Trigger filter on checkbox change
         $(document).on('change', '.sht-filter input[type="checkbox"]', function () {
-            makeFilter();
+            spaMakeFilter();
         });
 
         $(document).on('click', '.tf-sidebar .sht-sidebar-reset', function (e) {
             e.preventDefault();
             $('.sht-filter input[type="checkbox"]').prop('checked', false);
             $('.sht-filter li').removeClass('active');
-            makeFilter();
+            spaMakeFilter();
         });
 
         // Trigger filter on form submit
         $(document).on('submit', '.tf-archive-search #tf_hotel_aval_check', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-    
             var $form = $(this);
             var $submitBtn = $form.find('button[type="submit"]');
 
             $submitBtn.addClass('tf-btn-loading')
             if ($form.find('#tf-location').val() != '') {
-                makeFilter(1);
+                spaMakeFilter();
             } 
+        });
+
+
+        new Swiper(".sht-location-video-slider", {
+            effect: "coverflow",
+            slidesPerView: 2.99,
+            centeredSlides: true,
+            lazy: true,
+            loopAddBlankSlides: 1,
+            loopPreventsSliding:false,
+            spaceBetween: 17,
+            coverflowEffect: {
+                rotate: -8,
+                stretch: 0,
+                depth: 50,
+                modifier: 2.99,
+                slideShadows: false,
+            },
+            speed: 2500,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            loop: true,
+            pagination: {
+                el: ".sht-location-video-slider .sht-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".sht-location-video-slider .sht-next",
+                prevEl: ".sht-location-video-slider .sht-prev",
+            },
+           
         });
 
     });

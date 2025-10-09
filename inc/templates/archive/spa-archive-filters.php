@@ -13,8 +13,9 @@ add_action('wp_ajax_nopriv_sht_archive_filter', 'sht_archive_filter_ajax');
 function sht_archive_filter_ajax()
 {
 
+
     // Check nonce
-    if (empty($_POST['_nonce']) || ! wp_verify_nonce(sanitize_text_field($_POST['_nonce']), 'tf_ajax_nonce')) {
+    if (empty($_POST['_nonce']) || ! wp_verify_nonce(sanitize_text_field($_POST['_nonce']), 'sht_ajax_nonce')) {
         wp_send_json_error(['message' => 'Invalid nonce']);
     }
 
@@ -24,6 +25,7 @@ function sht_archive_filter_ajax()
         'post_status'    => 'publish',
         'posts_per_page' => -1,
     ];
+
 
     // Get filters
     $features   = !empty($_POST['features']) ? explode(',', sanitize_text_field($_POST['features'])) : [];
@@ -47,26 +49,24 @@ function sht_archive_filter_ajax()
 
     // taxonomy filter
     if (!empty($taxonomy) && $taxonomy != 'undefined' && !empty($term) && $term != 'undefined') {
-        if (!empty($place_location) && $place_location === $term) {
+        if (!empty($place_location) && $place_location == $term) {
             $tax_query[] = [
                 'taxonomy' => $taxonomy,
                 'field'    => 'slug',
-                'terms'    => $term,
+                'terms'    => [$term],
             ];
-        }else{
+        } else {
             $tax_query[] = [
                 'taxonomy' => $taxonomy,
                 'field'    => 'slug',
-                'terms'    => '',
-                'include_children' => false,
+                'terms'    => [],
             ];
         }
     } elseif (!empty($place_location)) {
         $tax_query[] = [
             'taxonomy' => 'hotel_location',
             'field'    => 'slug',
-            'terms'    => $place_location,
-            'include_children' => false,
+            'terms'    => [$place_location],
         ];
     }
 
@@ -90,14 +90,6 @@ function sht_archive_filter_ajax()
             'operator' => 'IN',
         ];
     }
-
-    // WP_Query args
-    $args = [
-        'post_type'      => 'tf_hotel',
-        'post_status'    => 'publish',
-        'posts_per_page' => -1,
-    ];
-
 
     if (!empty($score) || !empty($ratings)) {
         $filtered_ids = [];
@@ -179,6 +171,7 @@ function sht_archive_filter_ajax()
     if ($loop->have_posts()) {
         $posts_html = [];
         $count = 0;
+        $locations = [];
         while ($loop->have_posts()) {
             $loop->the_post();
             $post_id = get_the_ID();
@@ -233,7 +226,6 @@ function sht_archive_filter_ajax()
                 $price_multi_text = 'day';
             }
 
-
             $rooms_meta = [];
             if (! empty($rooms)) {
                 foreach ($rooms as $single_room) {
@@ -272,20 +264,26 @@ function sht_archive_filter_ajax()
             }
 
             $rating_badge = sht_sparator_rating_badge($post_id);
-            if (!empty($map)) {
+            if (! empty($map)) {
                 $lat = $map['latitude'];
                 $lng = $map['longitude'];
-                ob_start();
 
+
+                // Filter based on the map coordinates provided in the POST request
+                if (!empty($mapCoordinates) && ($lat < $minLat || $lat > $maxLat || $lng < $minLng || $lng > $maxLng)) {
+                    $count--;
+                    continue;
+                }
+                ob_start();
                 include SHT_HOTEL_TOOLKIT_PATH . 'inc/templates/archive/template-parts/single-item.php';
                 $infoWindowtext = ob_get_clean();
 
                 $locations[$count] = [
-                    'id' => get_the_ID(),
+                    'id'      => get_the_ID(),
                     'url'      => get_the_permalink(),
-                    'lat' => (float)$lat,
-                    'lng' => (float)$lng,
-                    'price' => base64_encode($price_html),
+                    'lat'     => (float) $lat,
+                    'lng'     => (float) $lng,
+                    'price'   => base64_encode($price_html),
                     'content' => base64_encode($infoWindowtext)
                 ];
             }
@@ -296,9 +294,12 @@ function sht_archive_filter_ajax()
             $posts_html[] = ob_get_clean();
         }
         wp_reset_postdata();
+
+        $location_data = array_filter($locations) ? wp_json_encode(array_values($locations)) : wp_json_encode([]);
         wp_send_json_success([
             'posts' => $posts_html,
             'count' => $total_posts,
+            'locations' => $location_data,
         ]);
     } else {
         wp_send_json_error(['message' => 'No hotels found']);

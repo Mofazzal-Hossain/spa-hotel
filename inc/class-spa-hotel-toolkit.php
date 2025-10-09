@@ -63,6 +63,12 @@ class Sht_Hotel_Toolkit
         wp_enqueue_style('sht-swiper-css', '//cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css', array(), SHT_HOTEL_TOOLKIT_VERSION, 'all');
         wp_enqueue_script('sht-swiper-js', '//cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js', array('jquery'), SHT_HOTEL_TOOLKIT_VERSION, true);
         wp_enqueue_script('sht-main-js', SHT_HOTEL_TOOLKIT_URL . 'assets/js/main.js', array('jquery'), time(), true);
+        wp_localize_script('sht-main-js', 'sht_params', array(
+            'nonce'            => wp_create_nonce('sht_ajax_nonce'),
+            'ajax_url'               => admin_url( 'admin-ajax.php' ),
+            'map_marker_width' => !empty(Helper::tfopt('map_marker_width')) ? Helper::tfopt('map_marker_width') : '35',
+            'map_marker_height' => !empty(Helper::tfopt('map_marker_height')) ? Helper::tfopt('map_marker_height') : '45',
+        ));
     }
 
     // Add custom category for Elementor widgets
@@ -635,9 +641,10 @@ class Sht_Hotel_Toolkit
     }
 
     // Terms dropdown
-    public function sht_get_terms_dropdown_args($args, $taxonomy){
+    public function sht_get_terms_dropdown_args($args, $taxonomy)
+    {
         if ($taxonomy === 'hotel_location') {
-            $args['parent'] = 0; 
+            $args['parent'] = 0;
         }
         return $args;
     }

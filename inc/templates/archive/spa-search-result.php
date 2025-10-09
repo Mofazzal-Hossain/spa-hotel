@@ -22,13 +22,7 @@ $tf_hotel_arc_banner = ! empty($tf_template['hotel_archive_design_1_bannar'])
 
 $banner_style = $tf_hotel_arc_banner ? 'style="background-image: url(' . esc_url($tf_hotel_arc_banner) . ');"' : '';
 
-$place = ! empty($_GET['place-name']) ? $_GET['place-name'] : '';
-
-$dates = ! empty($_GET['check-in-out-date']) ? $_GET['check-in-out-date'] : '';
-$split_dates = explode(' - ', $dates);
-
-$checkin = isset($split_dates[0]) ? $split_dates[0] : '';
-$checkout = isset($split_dates[1]) ? $split_dates[1] : '';
+$place = ! empty($_GET['place']) ? $_GET['place'] : '';
 
 $args = array(
     'post_type' => 'tf_hotel',
@@ -38,7 +32,8 @@ $args = array(
         array(
             'taxonomy' => 'hotel_location',
             'field' => 'slug',
-            'terms' => $place
+            'terms' => $place,
+            'include_children' => false,
         )
     )
 );

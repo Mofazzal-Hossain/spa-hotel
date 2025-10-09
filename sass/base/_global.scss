@@ -163,7 +163,7 @@ a:focus {
                 width: 6px;
                 height: 6px;
                 background: $sht-primary-faint;
-
+                cursor: pointer;
                 &.swiper-pagination-bullet-active {
                     background: $sht-color-dark;
                 }
