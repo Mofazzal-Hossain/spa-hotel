@@ -287,8 +287,8 @@
                     const markerPixel = markerProjection.fromLatLngToDivPixel(markerPosition);
 
                     // Infowindow dimensions
-                    const infoWindowHeight = 265;
-                    const infoWindowWidth = 262;
+                    const infoWindowHeight = 646;
+                    const infoWindowWidth = 480;
 
                     // Check each edge
                     const isNearLeftEdge = markerPixel.x <= -120;
@@ -490,8 +490,6 @@
 
                 },
                 success: (data) => {
-                    let locations = data.data.locations;
-                    console.log(locations);
                     if (Array.isArray(data.data.posts) && data.data.posts.length > 0) {
                         $('.tf-archive-hotels .sht-hotel-content-inner').html(
                             '<div class="sht-hotels-content">' + data.data.posts.join('') + '</div>'
@@ -501,10 +499,8 @@
                         $('.tf-archive-hotels .sht-hotel-content-inner').html('');
                         $('.tf-archive-hotels .sht-no-result').show();
                     }
-
-                    if(Array.isArray(locations) && locations.length > 0){
-                        spaGoogleMapInit(locations);
-                    }
+                    let locations = data.data.locations;
+                    spaGoogleMapInit(locations);
                     
                 },
                 complete: () => {
@@ -539,7 +535,7 @@
 
             $submitBtn.addClass('tf-btn-loading')
             if ($form.find('#tf-location').val() != '') {
-                spaMakeFilter();
+               spaMakeFilter();
             } 
         });
 

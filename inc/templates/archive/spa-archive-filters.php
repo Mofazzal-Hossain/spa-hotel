@@ -45,6 +45,9 @@ function sht_archive_filter_ajax()
         list($minLat, $minLng, $maxLat, $maxLng) = $mapCoordinates;
     }
 
+    
+   
+
     $tax_query = [];
 
     // taxonomy filter
@@ -294,8 +297,11 @@ function sht_archive_filter_ajax()
             $posts_html[] = ob_get_clean();
         }
         wp_reset_postdata();
+        ?>
 
+        <?php
         $location_data = array_filter($locations) ? wp_json_encode(array_values($locations)) : wp_json_encode([]);
+
         wp_send_json_success([
             'posts' => $posts_html,
             'count' => $total_posts,
