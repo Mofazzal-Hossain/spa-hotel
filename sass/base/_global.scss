@@ -158,13 +158,19 @@ a:focus {
         .sht-pagination {
             width: fit-content;
             line-height: 0;
-
-            .swiper-pagination-bullet {
+            
+            .swiper-pagination-bullet,
+            .sht-pagination-bullet{
                 width: 6px;
                 height: 6px;
+                margin: 0 4px;
                 background: $sht-primary-faint;
                 cursor: pointer;
-                &.swiper-pagination-bullet-active {
+                display: inline-block;
+                @include bd-radius(50%);
+
+                &.swiper-pagination-bullet-active,
+                &.sht-pagination-bullet-active {
                     background: $sht-color-dark;
                 }
             }
@@ -174,6 +180,21 @@ a:focus {
     .tf-btn-loading:before {
         margin-top: -5px;
     }
+
+    .fancybox-container {
+        z-index: 99999;
+        .fancybox-toolbar {
+            .fancybox-button {
+                background-color: rgba(30, 30, 30, .6);
+                padding: 10px;
+
+                path {
+                    fill: rgb(255, 251, 245);
+                }
+            }
+        }
+    }
+
 }
 
 // breadcrumb
@@ -206,4 +227,3 @@ a:focus {
         }
     }
 }
-

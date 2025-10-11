@@ -540,38 +540,70 @@
         });
 
 
-        new Swiper(".sht-location-video-slider", {
-            effect: "coverflow",
-            slidesPerView: 2.99,
-            centeredSlides: true,
-            lazy: true,
-            loopAddBlankSlides: 1,
-            loopPreventsSliding:false,
-            spaceBetween: 17,
-            coverflowEffect: {
-                rotate: -8,
-                stretch: 0,
-                depth: 50,
-                modifier: 2.99,
-                slideShadows: false,
-            },
-            speed: 2500,
-            autoplay: {
-                delay: 2500,
-                disableOnInteraction: false,
-            },
-            loop: true,
-            pagination: {
-                el: ".sht-location-video-slider .sht-pagination",
-                clickable: true,
-            },
-            navigation: {
-                nextEl: ".sht-location-video-slider .sht-next",
-                prevEl: ".sht-location-video-slider .sht-prev",
-            },
-           
-        });
-
     });
 })(jQuery);
 
+
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     const slides = document.querySelectorAll('.sht-location-video-item');
+//     const prevBtn = document.querySelector('.sht-location-video-slider .sht-prev');
+//     const nextBtn = document.querySelector('.sht-location-video-slider .sht-next');
+//     const pagination = document.querySelector('.sht-location-video-slider .sht-pagination');
+
+//     let currentIndex = 0; 
+//     const totalSlides = slides.length;
+
+//     for (let i = 0; i < totalSlides; i++) {
+//         const bullet = document.createElement('span');
+//         bullet.classList.add('sht-pagination-bullet');
+//         if (i === currentIndex) bullet.classList.add('sht-pagination-bullet-active');
+//         bullet.addEventListener('click', () => goToSlide(i));
+//         pagination.appendChild(bullet);
+//     }
+//     const bullets = document.querySelectorAll('.sht-pagination-bullet');
+
+//     updateSlider();
+
+//     nextBtn.addEventListener('click', () => {
+//         currentIndex = (currentIndex + 1) % totalSlides;
+//         updateSlider();
+//     });
+
+//     prevBtn.addEventListener('click', () => {
+//         currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+//         updateSlider();
+//     });
+
+//     function goToSlide(index) {
+//         currentIndex = index;
+//         updateSlider();
+//     }
+
+//     function updateSlider() {
+//         const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+//         const nextIndex = (currentIndex + 1) % totalSlides;
+
+//         slides.forEach((slide, index) => {
+//             slide.classList.remove('left-slide', 'active-slide', 'right-slide');
+//             slide.style.opacity = '';
+//             slide.style.width = '';
+//             slide.style.zIndex = '';
+
+//             if (index === currentIndex) slide.classList.add('active-slide');
+//             else if (index === (currentIndex + 1) % totalSlides) slide.classList.add('right-slide');
+//             else if (index === (currentIndex - 1 + totalSlides) % totalSlides) slide.classList.add('left-slide');
+//             else {
+//                 slide.style.opacity = '0';
+//                 slide.style.width = '0';
+//                 slide.style.zIndex = '0';
+//             }
+//         });
+
+//         bullets.forEach((bullet, index) => {
+//             bullet.classList.toggle('sht-pagination-bullet-active', index === currentIndex);
+//         });
+//     }
+
+
+// });

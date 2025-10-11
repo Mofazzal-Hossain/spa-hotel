@@ -29,8 +29,8 @@ $location_videos = !empty(Helper::tf_data_types($videos)) ? Helper::tf_data_type
                 </h2>
             <?php endif; ?>
         </div>
-        <div class="sht-location-video-slider swiper">
-            <div class="sht-location-video-content swiper-wrapper">
+        <div class="sht-location-video-slider">
+            <div class="sht-location-video-content">
                 <?php foreach ($location_videos as $key => $video):
 
                     $video_url = ! empty($video['video-url']) ? $video['video-url'] : '#';
@@ -38,7 +38,7 @@ $location_videos = !empty(Helper::tf_data_types($videos)) ? Helper::tf_data_type
                     $video_title = ! empty($video['video-title']) ? $video['video-title'] : '';
 
                 ?>
-                    <div class="sht-location-video-item swiper-slide">
+                    <div class="sht-location-video-item">
                         <a href="<?php echo esc_url($video_url); ?>" data-fancybox="location-videos" data-caption="<?php echo esc_attr($video_title); ?>">
                             <?php if (!empty($video_thumbnail)): ?>
                                 <div class="sht-video-thumbnail">
