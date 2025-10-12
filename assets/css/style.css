@@ -263,6 +263,16 @@ a:focus {
   color: #7C7C7C;
 }
 
+.tf-testimonial-wrapper,
+.tf-faq-wrapper,
+.tf-video-wrapper,
+.tf-archive-latest-posts,
+.tf-archive-details,
+.sht-hotel-location-info {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
 .sht-btn {
   background: #D4A574;
   color: #FAF7F2;
@@ -1805,6 +1815,8 @@ a:focus {
   -webkit-justify-content: center;
   justify-content: center;
   flex-direction: column;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 .spa-hotel-archive-template .tf-hotel-archive-banner::after {
   content: "";
@@ -1830,9 +1842,16 @@ a:focus {
   transform: translate(-50%, -50%);
   min-width: 966px;
 }
+@media (max-width: 1024px) {
+  .spa-hotel-archive-template .tf-hotel-archive-banner .tf-spa-hero-search {
+    min-width: 100%;
+  }
+}
 .spa-hotel-archive-template .sht-breadcrumb {
   padding-bottom: 0px;
   background: #FFFBF5;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 .spa-hotel-archive-template .sht-breadcrumb ul {
   -webkit-box-pack: start;
@@ -2233,9 +2252,21 @@ a:focus {
   box-shadow: 0px 4px 30px 0px rgba(255, 237, 225, 0.4);
   cursor: pointer;
 }
-.spa-hotel-archive-template .tf-archive-details .tf-archive-details-content .tf-archive-hotels .tf_map_price .tf_price_inner:hover, .spa-hotel-archive-template .tf-archive-details .tf-archive-details-content .tf-archive-hotels .tf_map_price .tf_price_inner.active {
-  background: #D4A574;
-  color: #FFFFFF;
+.spa-hotel-archive-template .tf-archive-details .tf-archive-details-content .custom-info-window {
+  position: relative;
+}
+.spa-hotel-archive-template .tf-archive-details .tf-archive-details-content .custom-info-window .info-close-btn {
+  position: absolute;
+  padding: 0;
+  font-size: 15px;
+  z-index: 99;
+  right: 6px;
+  top: 6px;
+  color: #D4A574;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #FAF7F2;
 }
 .spa-hotel-archive-template .tf-archive-latest-posts {
   background: #FAF8F4;
@@ -2903,6 +2934,7 @@ a:focus {
   box-shadow: 0 4px 6px 0 rgba(94, 49, 1, 0.04);
   position: relative;
   box-sizing: border-box;
+  visibility: visible;
 }
 .sht-hotel-single-item .sht-rator-badge {
   position: absolute;

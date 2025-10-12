@@ -279,7 +279,14 @@
                 overlay.setMap(hotelMap);
 
                 google.maps.event.addListener(marker, 'mouseover', function () {
-                    infowindow.setContent(window.atob(location['content']));
+                    const infoContent = `<div class="custom-info-window">
+                            <button class="info-close-btn" type="button"><i class="fa-solid fa-xmark"></i></button>
+                            <div class="info-content-inner">
+                                ${window.atob(location['content'])}
+                            </div>
+                        </div>
+                    `;
+                    infowindow.setContent(infoContent);
 
                     // Convert LatLng to pixel coordinates
                     const markerPosition = marker.getPosition();
@@ -313,6 +320,17 @@
                     });
 
                     infowindow.open(hotelMap, marker);
+
+                    google.maps.event.addListenerOnce(infowindow, 'domready', function() {
+                        const closeBtn = document.querySelector('.info-close-btn');
+                        if (closeBtn) {
+                            closeBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                infowindow.close();
+                            });
+                        }
+                    });
+
                 });
 
                 // Hide the infowindow on mouse leave
@@ -324,6 +342,8 @@
                     window.open(location?.url, '_blank')
                 });
             });
+
+           
 
             // Trigger filter on map drag
             google.maps.event.addListener(hotelMap, "dragend", function () {
@@ -344,6 +364,7 @@
                 filterVisibleHotels(hotelMap);
 
             });
+          
 
             var listener = google.maps.event.addListener(hotelMap, "idle", function() {
                 zoomChangeEnabled = true;
@@ -545,65 +566,65 @@
 
 
 
-// document.addEventListener('DOMContentLoaded', function() {
-//     const slides = document.querySelectorAll('.sht-location-video-item');
-//     const prevBtn = document.querySelector('.sht-location-video-slider .sht-prev');
-//     const nextBtn = document.querySelector('.sht-location-video-slider .sht-next');
-//     const pagination = document.querySelector('.sht-location-video-slider .sht-pagination');
+document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.sht-location-video-item');
+    const prevBtn = document.querySelector('.sht-location-video-slider .sht-prev');
+    const nextBtn = document.querySelector('.sht-location-video-slider .sht-next');
+    const pagination = document.querySelector('.sht-location-video-slider .sht-pagination');
 
-//     let currentIndex = 0; 
-//     const totalSlides = slides.length;
+    let currentIndex = 0; 
+    const totalSlides = slides.length;
 
-//     for (let i = 0; i < totalSlides; i++) {
-//         const bullet = document.createElement('span');
-//         bullet.classList.add('sht-pagination-bullet');
-//         if (i === currentIndex) bullet.classList.add('sht-pagination-bullet-active');
-//         bullet.addEventListener('click', () => goToSlide(i));
-//         pagination.appendChild(bullet);
-//     }
-//     const bullets = document.querySelectorAll('.sht-pagination-bullet');
+    for (let i = 0; i < totalSlides; i++) {
+        const bullet = document.createElement('span');
+        bullet.classList.add('sht-pagination-bullet');
+        if (i === currentIndex) bullet.classList.add('sht-pagination-bullet-active');
+        bullet.addEventListener('click', () => goToSlide(i));
+        pagination.appendChild(bullet);
+    }
+    const bullets = document.querySelectorAll('.sht-pagination-bullet');
 
-//     updateSlider();
+    updateSlider();
 
-//     nextBtn.addEventListener('click', () => {
-//         currentIndex = (currentIndex + 1) % totalSlides;
-//         updateSlider();
-//     });
+    nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateSlider();
+    });
 
-//     prevBtn.addEventListener('click', () => {
-//         currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-//         updateSlider();
-//     });
+    prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateSlider();
+    });
 
-//     function goToSlide(index) {
-//         currentIndex = index;
-//         updateSlider();
-//     }
+    function goToSlide(index) {
+        currentIndex = index;
+        updateSlider();
+    }
 
-//     function updateSlider() {
-//         const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-//         const nextIndex = (currentIndex + 1) % totalSlides;
+    function updateSlider() {
+        const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        const nextIndex = (currentIndex + 1) % totalSlides;
 
-//         slides.forEach((slide, index) => {
-//             slide.classList.remove('left-slide', 'active-slide', 'right-slide');
-//             slide.style.opacity = '';
-//             slide.style.width = '';
-//             slide.style.zIndex = '';
+        slides.forEach((slide, index) => {
+            slide.classList.remove('left-slide', 'active-slide', 'right-slide');
+            slide.style.opacity = '';
+            slide.style.width = '';
+            slide.style.zIndex = '';
 
-//             if (index === currentIndex) slide.classList.add('active-slide');
-//             else if (index === (currentIndex + 1) % totalSlides) slide.classList.add('right-slide');
-//             else if (index === (currentIndex - 1 + totalSlides) % totalSlides) slide.classList.add('left-slide');
-//             else {
-//                 slide.style.opacity = '0';
-//                 slide.style.width = '0';
-//                 slide.style.zIndex = '0';
-//             }
-//         });
+            if (index === currentIndex) slide.classList.add('active-slide');
+            else if (index === (currentIndex + 1) % totalSlides) slide.classList.add('right-slide');
+            else if (index === (currentIndex - 1 + totalSlides) % totalSlides) slide.classList.add('left-slide');
+            else {
+                slide.style.opacity = '0';
+                slide.style.width = '0';
+                slide.style.zIndex = '0';
+            }
+        });
 
-//         bullets.forEach((bullet, index) => {
-//             bullet.classList.toggle('sht-pagination-bullet-active', index === currentIndex);
-//         });
-//     }
+        bullets.forEach((bullet, index) => {
+            bullet.classList.toggle('sht-pagination-bullet-active', index === currentIndex);
+        });
+    }
 
 
-// });
+});

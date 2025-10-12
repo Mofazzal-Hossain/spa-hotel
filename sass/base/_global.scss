@@ -227,3 +227,14 @@ a:focus {
         }
     }
 }
+
+// section padding left right
+.tf-testimonial-wrapper,
+.tf-faq-wrapper,
+.tf-video-wrapper,
+.tf-archive-latest-posts,
+.tf-archive-details,
+.sht-hotel-location-info {
+    padding-left: 16px;
+    padding-right: 16px;
+}
