@@ -11,10 +11,13 @@ $tf_hotel_arc_banner = ! empty($tf_template['hotel_archive_design_1_bannar'])
     ? $tf_template['hotel_archive_design_1_bannar']
     : '';
 
-$banner_style = $tf_hotel_arc_banner ? 'style="background-image: url(' . esc_url($tf_hotel_arc_banner) . ');"' : '';
 ?>
 
-<div class="tf-hotel-archive-banner" <?php echo $banner_style; ?>>
+<?php if (! empty($tf_hotel_arc_banner)) : ?>
+	<div class="tf-hotel-archive-banner" style="background-image: url('<?php echo esc_url($tf_hotel_arc_banner); ?>');">
+<?php else : ?>
+	<div class="tf-hotel-archive-banner">
+<?php endif; ?>
     <div class="tf-container">
         <div class="tf-banner-content">
             <h1><?php echo esc_html__('Hotels', 'spa-hotel-toolkit'); ?></h1>

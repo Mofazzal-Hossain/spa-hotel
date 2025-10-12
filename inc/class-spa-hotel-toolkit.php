@@ -59,10 +59,10 @@ class Sht_Hotel_Toolkit
     // Enqueue frontend scripts and styles
     public function sht_enqueue_scripts()
     {
-        wp_enqueue_style('sht-style-min-css', SHT_HOTEL_TOOLKIT_URL . 'assets/css/style.min.css', array(), time(), 'all');
+        wp_enqueue_style('sht-style-min-css', SHT_HOTEL_TOOLKIT_URL . 'assets/css/style.min.css', array(), SHT_HOTEL_TOOLKIT_VERSION, 'all');
         wp_enqueue_style('sht-swiper-css', '//cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css', array(), SHT_HOTEL_TOOLKIT_VERSION, 'all');
         wp_enqueue_script('sht-swiper-js', '//cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js', array('jquery'), SHT_HOTEL_TOOLKIT_VERSION, true);
-        wp_enqueue_script('sht-main-js', SHT_HOTEL_TOOLKIT_URL . 'assets/js/main.js', array('jquery'), time(), true);
+        wp_enqueue_script('sht-main-js', SHT_HOTEL_TOOLKIT_URL . 'assets/js/main.js', array('jquery'), SHT_HOTEL_TOOLKIT_VERSION, true);
         wp_localize_script('sht-main-js', 'sht_params', array(
             'nonce'            => wp_create_nonce('sht_ajax_nonce'),
             'ajax_url'               => admin_url( 'admin-ajax.php' ),
@@ -123,7 +123,7 @@ class Sht_Hotel_Toolkit
 
         $atts = shortcode_atts(array('wpm' => 200,), $atts, 'reading_time');
         $content = get_post_field('post_content', $post->ID);
-        $word_count = str_word_count(strip_tags($content));
+        $word_count = str_word_count( wp_strip_all_tags( $content ) );
         $minutes = ceil($word_count / $atts['wpm']);
         return $minutes . ' min read';
     }
@@ -131,7 +131,7 @@ class Sht_Hotel_Toolkit
     // Shortcode to get current year
     public function sht_current_year()
     {
-        return date('Y');
+        return gmdate( 'Y' );
     }
 
     // Add custom body class

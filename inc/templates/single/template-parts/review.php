@@ -32,7 +32,7 @@ use \Tourfic\Classes\Helper;
                         $c_avatar      = get_avatar($comment, '56');
                         $c_author_name = $comment->comment_author;
                         $c_date        = $comment->comment_date;
-                        $review_date = date('d M, Y', strtotime($c_date));
+                        $review_date = gmdate('d M, Y', strtotime($c_date));
                         $c_content     = $comment->comment_content;
                         global $post_type;
                 ?>

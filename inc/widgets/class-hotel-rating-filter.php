@@ -24,7 +24,7 @@ class Sht_Rating_Filter_Widget extends \WP_Widget
 
         // Show only for hotels
         if (is_admin() || $posttype === 'tf_hotel') {
-            echo $args['before_widget'];
+            echo wp_kses_post( $args['before_widget'] );
 
             $title = !empty($instance['title']) ? $instance['title'] : esc_html__('Spa Hotel Facilities:', 'spa-hotel-toolkit');
 
@@ -46,7 +46,7 @@ class Sht_Rating_Filter_Widget extends \WP_Widget
                 echo '<input type="checkbox" name="ratings[]" value="' . esc_attr($rating) . '">  <span class="sht-checkmark"></span>';
 
                 // Show stars for all bases
-                echo $this->get_stars($rating, $tf_settings_base);
+                echo wp_kses_post( $this->get_stars( $rating, $tf_settings_base ) );
 
                 echo '</label>';
                 echo '</li>';
@@ -56,7 +56,7 @@ class Sht_Rating_Filter_Widget extends \WP_Widget
             echo '<li class="sht-filter-item"><label><input type="checkbox" name="ratings[]" value="no-rating">  <span class="sht-checkmark"></span>' . esc_html__('No rating', 'spa-hotel-toolkit') . '</label></li>';
             echo '</ul></div>';
 
-            echo $args['after_widget'];
+            echo wp_kses_post( $args['after_widget'] );
         }
     }
 

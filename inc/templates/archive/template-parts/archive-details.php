@@ -426,7 +426,7 @@ function get_date_range($start, $end)
     $endTime = strtotime($end);
 
     while ($current <= $endTime) {
-        $dates[] = date('Y/m/d', $current);
+        $dates[] = gmdate('Y/m/d', $current);
         $current = strtotime('+1 day', $current);
     }
     return $dates;

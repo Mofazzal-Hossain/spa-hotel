@@ -25,87 +25,92 @@ $tf_hotel_arc_banner = ! empty($tf_template['hotel_archive_design_1_bannar'])
 	? $tf_template['hotel_archive_design_1_bannar']
 	: '';
 
-$banner_style = $tf_hotel_arc_banner ? 'style="background-image: url(' . esc_url($tf_hotel_arc_banner) . ');"' : '';
+
 
 $args = array(
-    'post_type' => 'tf_hotel',
-    'post_status' => 'publish',
-    'posts_per_page' => -1,
-    'tax_query' => array(
-        array(
-            'taxonomy' => 'hotel_location',
-            'field' => 'slug',
-            'terms' => $taxonomy_slug,
+	'post_type' => 'tf_hotel',
+	'post_status' => 'publish',
+	'posts_per_page' => -1,
+	'tax_query' => array(
+		array(
+			'taxonomy' => 'hotel_location',
+			'field' => 'slug',
+			'terms' => $taxonomy_slug,
 			'include_children' => false,
-        )
-    )
+		)
+	)
 );
 $hotels = new \WP_Query($args);
 
 ?>
 <div class="spa-hotel-archive-template">
-	<div class="tf-hotel-archive-banner" <?php echo $banner_style; ?>>
-		<div class="tf-container">
-			<div class="tf-banner-content">
-				<h1>
-					<?php echo esc_html__('Best Spa Hotels in', 'spa-hotel-toolkit'); ?>
-					<br>
-					<?php echo esc_html($term->name); ?>
-				</h1>
-			</div>
-			<div class="tf-spa-hero-search tf-archive-search">
-				<?php echo do_shortcode("[tf_search_form type='hotel' fullwidth='true' classes='tf-hero-search-form' advanced='disabled' design='4']"); ?>
-			</div>
+	<?php if (! empty($tf_hotel_arc_banner)) : ?>
+		<div class="tf-hotel-archive-banner"
+			style="background-image: url('<?php echo esc_url($tf_hotel_arc_banner); ?>');">
+	<?php else : ?>
+		<div class="tf-hotel-archive-banner">
+	<?php endif; ?>
+	<div class="tf-container">
+		<div class="tf-banner-content">
+			<h1>
+				<?php echo esc_html__('Best Spa Hotels in', 'spa-hotel-toolkit'); ?>
+				<br>
+				<?php echo esc_html($term->name); ?>
+			</h1>
+		</div>
+		<div class="tf-spa-hero-search tf-archive-search">
+			<?php echo do_shortcode("[tf_search_form type='hotel' fullwidth='true' classes='tf-hero-search-form' advanced='disabled' design='4']"); ?>
 		</div>
 	</div>
+</div>
 
-	<!-- Breadcrumb -->
-	<div class="sht-breadcrumb sht-sec-space">
-		<div class="tf-container">
-			<ul>
-				<li>
-					<a href="<?php echo esc_url(home_url('/')); ?>">
-						<?php echo esc_html__('Home', 'spa-hotel-toolkit'); ?>
-						<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
-							<path d="M8 15.5L13 10.5L8 5.5" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-						</svg>
-					</a>
-				</li>
-				<li>
-					<a href="<?php echo esc_url(home_url('/hotels')); ?>">
-						<?php echo esc_html__('Hotels', 'spa-hotel-toolkit'); ?>
-						<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
-							<path d="M8 15.5L13 10.5L8 5.5" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-						</svg>
-					</a>
-				</li>
-				<li>
-					<span><?php echo esc_html($term->name); ?></span>
-				</li>
-			</ul>
-		</div>
-	</div>
-
-	<!-- location info -->
-	<div class="sht-hotel-location-info">
-		<div class="tf-container">
-			<h2>
-				<?php echo esc_html__('Top Spa Hotels in', 'spa-hotel-toolkit'); ?>
+<!-- Breadcrumb -->
+<div class="sht-breadcrumb sht-sec-space">
+	<div class="tf-container">
+		<ul>
+			<li>
+				<a href="<?php echo esc_url(home_url('/')); ?>">
+					<?php echo esc_html__('Home', 'spa-hotel-toolkit'); ?>
+					<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
+						<path d="M8 15.5L13 10.5L8 5.5" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+					</svg>
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo esc_url(home_url('/hotels')); ?>">
+					<?php echo esc_html__('Hotels', 'spa-hotel-toolkit'); ?>
+					<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
+						<path d="M8 15.5L13 10.5L8 5.5" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+					</svg>
+				</a>
+			</li>
+			<li>
 				<span><?php echo esc_html($term->name); ?></span>
-			</h2>
-			<?php if (!empty($term->description)): ?>
-				<p><?php echo esc_html($term->description); ?></p>
-			<?php endif; ?>
-		</div>
+			</li>
+		</ul>
 	</div>
+</div>
+
+<!-- location info -->
+<div class="sht-hotel-location-info">
+	<div class="tf-container">
+		<h2>
+			<?php echo esc_html__('Top Spa Hotels in', 'spa-hotel-toolkit'); ?>
+			<span><?php echo esc_html($term->name); ?></span>
+		</h2>
+		<?php if (!empty($term->description)): ?>
+			<p><?php echo esc_html($term->description); ?></p>
+		<?php endif; ?>
+	</div>
+</div>
 
 
-	<?php
-	// archive hotel template
-	include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/archive-details.php';
-	include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/latest-posts.php';
-	include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/reviews.php';
-	include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/video.php';
-	include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/faq.php';
-	?>
+<?php
+// archive hotel template
+include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/archive-details.php';
+include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/latest-posts.php';
+include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/reviews.php';
+include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/video.php';
+include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/faq.php';
+?>
 </div>
