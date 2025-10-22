@@ -158,7 +158,7 @@
             var $this = $(this);
             e.preventDefault();
             $this.parent('.sht-filter').find('.sht-filter-item').filter(function (index) {
-                return index > 10;
+                return index > 12;
             }).removeClass("hidden");
             $this.hide();
 
@@ -170,7 +170,7 @@
             var $this = $(this);
             e.preventDefault();
             $this.parent('.sht-filter').find('.sht-filter-item').filter(function (index) {
-                return index > 10;
+                return index > 12;
             }).addClass("hidden");
             $this.hide();
             $this.parent('.sht-filter').find('.see-more').css('display', 'block');
@@ -179,12 +179,12 @@
         $('.tf-booking-sidebar .sht-filter').each(function () {
             var len = $(this).find('ul').children().length;
             $(this).find('.see-more').hide();
-            if (len > 10) {
+            if (len > 12) {
                 $(this).find('.see-more').css('display', 'block');
             }
             //hide items if crossed showing limit
             $(this).find('.sht-filter-item').filter(function (index) {
-                return index > 10;
+                return index > 12;
             }).addClass("hidden");
 
         });
@@ -586,15 +586,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateSlider();
 
-    nextBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % totalSlides;
-        updateSlider();
-    });
+    if (nextBtn) {
+	  nextBtn.addEventListener('click', () => {
+		currentIndex = (currentIndex + 1) % totalSlides;
+		updateSlider();
+	  });
+	}
 
-    prevBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-        updateSlider();
-    });
+	if (prevBtn) {
+	  prevBtn.addEventListener('click', () => {
+		currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+		updateSlider();
+	  });
+	}
 
     function goToSlide(index) {
         currentIndex = index;

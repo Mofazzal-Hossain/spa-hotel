@@ -37,6 +37,8 @@ class Sht_Hotel_Feature_Filter extends \WP_Widget
             $terms = get_terms(array(
                 'taxonomy'   => 'hotel_feature',
                 'hide_empty' => false,
+                'orderby'    => 'term_id',
+    			'order'      => 'ASC',
             ));
 
             // Get selected features from URL

@@ -3,8 +3,8 @@
 defined('ABSPATH') || exit;
 
 
-// $hotel_meta = get_post_meta($post_id, 'tf_hotels_opt', true);
-// $sec_title = ! empty($hotel_meta['feeds-sec-title']) ? $hotel_meta['feeds-sec-title'] : esc_html__('Guest Experiences', 'spa-hotel-toolkit');
+$hotel_meta = get_post_meta($post_id, 'tf_hotels_opt', true);
+$sec_title = ! empty($hotel_meta['feeds-sec-title']) ? $hotel_meta['feeds-sec-title'] : esc_html__('Guest Experiences', 'spa-hotel-toolkit');
 // $accountId = ! empty($hotel_meta['feeds-account-id']) ? $hotel_meta['feeds-account-id'] : '';
 // $accessToken = ! empty($hotel_meta['feeds-access-token']) ? $hotel_meta['feeds-access-token'] : '';
 
