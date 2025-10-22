@@ -89,7 +89,7 @@ if ($current_term && isset($current_term->term_id)) {
                                         </svg>
                                         <span><?php echo esc_html__('List view', 'spa-hotel-toolkit') ?></span>
                                     </a>
-                                    <div id="map-marker" data-marker="<?php echo esc_url(TF_ASSETS_URL . 'app/images/cluster-marker.png'); ?>"></div>
+                                    <div id="map-marker" data-marker="<?php echo esc_url(SHT_HOTEL_TOOLKIT_ASSETS . 'images/cluster-marker.png'); ?>"></div>
                                     <div class="tf-hotel-archive-map-wrap">
                                         <div id="spa-hotel-archive-map"></div>
                                     </div>

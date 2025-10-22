@@ -449,7 +449,7 @@
                                     min-width: 480px !important;
                                     border-radius: 16px !important;
                                     padding: 0;
-                                    overflow: visible;
+                                    overflow: visible!important;
                                 }
 
                                 .gm-style-iw-d {
@@ -468,8 +468,6 @@
                         }
                     }
                 }
-
-
 
                 .tf_map_price {
                     .tf_price_inner {

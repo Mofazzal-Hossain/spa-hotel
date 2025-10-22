@@ -2228,7 +2228,7 @@ a:focus {
   min-width: 480px !important;
   border-radius: 16px !important;
   padding: 0;
-  overflow: visible;
+  overflow: visible !important;
 }
 .spa-hotel-archive-template .tf-archive-details .tf-archive-details-content .tf-archive-hotels .sht-hotel-view.map-view .sht-map-wrapper .gm-style .gm-style-iw-d {
   overflow: visible !important;
