@@ -1,4 +1,4 @@
-(function($){
+;(function($){
     $(document).ready(function(){
         new Swiper(".sht-hotels-slider", {
             slidesPerView: 2.4,

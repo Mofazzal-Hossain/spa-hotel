@@ -58,7 +58,7 @@ $hotels = new \WP_Query($args);
 				<?php echo esc_html($term->name); ?>
 			</h1>
 		</div>
-		<div class="tf-spa-hero-search tf-archive-search">
+		<div class="tf-spa-hero-search">
 			<?php echo do_shortcode("[tf_search_form type='hotel' fullwidth='true' classes='tf-hero-search-form' advanced='disabled' design='4']"); ?>
 		</div>
 	</div>

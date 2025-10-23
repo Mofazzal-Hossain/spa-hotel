@@ -11,13 +11,18 @@
         gap: 24px;
         max-width: 880px;
         margin: 0 auto;
-
+        @media (max-width: 768px) {
+            gap: 16px;
+        }
         .tf-faq-item {
             padding: 24px;
             border: 1px solid $sht-border-faint;
             background: $sht-fill-background;
             @include bd-radius(16px);
 
+            @media (max-width: 768px) {
+                padding: 16px;
+            }
 
             .tf-faq-item-title {
                 padding: 0;
@@ -25,6 +30,7 @@
                 color: $sht-color-heading;
                 font-weight: 700;
                 @include d-flex();
+                flex-wrap: nowrap;
                 @include align-items(center);
                 gap: 8px;
                 cursor: pointer;

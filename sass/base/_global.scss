@@ -158,9 +158,9 @@ a:focus {
         .sht-pagination {
             width: fit-content;
             line-height: 0;
-            
+
             .swiper-pagination-bullet,
-            .sht-pagination-bullet{
+            .sht-pagination-bullet {
                 width: 6px;
                 height: 6px;
                 margin: 0 4px;
@@ -183,6 +183,7 @@ a:focus {
 
     .fancybox-container {
         z-index: 99999;
+
         .fancybox-toolbar {
             .fancybox-button {
                 background-color: rgba(30, 30, 30, .6);
@@ -204,6 +205,7 @@ a:focus {
         @include d-flex();
         @include align-items(center);
         @include justify-content(center);
+        flex-wrap: nowrap;
 
         li {
             font-size: 14px;
@@ -223,6 +225,15 @@ a:focus {
 
             span {
                 color: $sht-text-faint;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            &:last-child{
+                @media #{$max575}{
+                    flex: 1;
+                }
             }
         }
     }
@@ -230,7 +241,6 @@ a:focus {
 
 // section padding left right
 .tf-testimonial-wrapper,
-.tf-faq-wrapper,
 .tf-video-wrapper,
 .tf-archive-latest-posts,
 .tf-archive-details,

@@ -137,6 +137,7 @@
                 li {
                     @include d-flex();
                     @include align-items(center);
+                    flex-wrap: nowrap;
                     gap: 8px;
                     color: $sht-color-text;
                     font-size: 14px;
@@ -152,6 +153,12 @@
                         path {
                             stroke: $sht-color-primary;
                         }
+                    }
+                    span{
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
                     }
                 }
             }
