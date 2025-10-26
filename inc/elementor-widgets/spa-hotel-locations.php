@@ -168,6 +168,7 @@ class Spa_Hotel_Locations extends \Elementor\Widget_Base
             'order'      => $settings['post_order'],
             'number'     => $settings['post_items'],
             'hide_empty' => true,
+            'parent'     => 0
         ));
 
 
