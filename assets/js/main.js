@@ -128,21 +128,21 @@
                 {
                     breakpoint: 1200,
                     settings: {
-                        slidesToShow: 2,
+                        slidesToShow: 3,
                         slidesToScroll: 1,
                         spaceBetween: 32,
                     },
                 },
                 {
-                    breakpoint: 768,
+                    breakpoint: 992,
                     settings: {
-                        slidesToShow: 1.1,
+                        slidesToShow: 2,
                         slidesToScroll: 1,
-                        spaceBetween: 16,
+                        spaceBetween: 0,
                     },
                 },
                 {
-                    breakpoint: 480,
+                    breakpoint: 575,
                     settings: {
                         slidesToShow: 1,
                         slidesToScroll: 1,
@@ -538,6 +538,10 @@
         // Trigger filter on checkbox change
         $(document).on('change', '.sht-filter input[type="checkbox"]', function () {
             spaMakeFilter();
+            setTimeout(() => {
+                $('.tf-sidebar').removeClass('active');
+                $('.mobile-sidebar-overlay').removeClass('active');
+            }, 500);
         });
 
         $(document).on('click', '.tf-sidebar .sht-sidebar-reset', function (e) {
@@ -545,6 +549,11 @@
             $('.sht-filter input[type="checkbox"]').prop('checked', false);
             $('.sht-filter li').removeClass('active');
             spaMakeFilter();
+
+            setTimeout(() => {
+                $('.tf-sidebar').removeClass('active');
+                $('.mobile-sidebar-overlay').removeClass('active');
+            }, 500);
         });
 
         // Trigger filter on form submit
@@ -558,6 +567,29 @@
             if ($form.find('#tf-location').val() != '') {
                spaMakeFilter();
             } 
+        });
+
+        const $openBtn = $('#openMobileSidebar');
+        const $closeBtn = $('#closeMobileSidebar');
+        const $sidebar = $('.tf-sidebar');
+        const $overlay = $('.mobile-sidebar-overlay');
+
+        // Open sidebar
+        $openBtn.on('click', function() {
+            $sidebar.addClass('active');
+            $overlay.addClass('active');
+        });
+
+        // Close sidebar on close button click
+        $closeBtn.on('click', function() {
+            $sidebar.removeClass('active');
+            $overlay.removeClass('active');
+        });
+
+        // Close sidebar on overlay click
+        $overlay.on('click', function() {
+            $sidebar.removeClass('active');
+            $overlay.removeClass('active');
         });
 
 

@@ -32,7 +32,9 @@ if ($current_term && isset($current_term->term_id)) {
 <div class="tf-archive-details sht-sec-space">
     <div class="tf-container">
         <div class="tf-archive-details-content">
+            <div class="mobile-sidebar-overlay"></div>
             <div class="tf-sidebar">
+                <button id="closeMobileSidebar" class="close-btn"><i class="ri-close-large-line"></i></button>
                 <?php if (is_active_sidebar('tf_archive_booking_sidebar')) { ?>
                     <div id="tf__booking_sidebar" class="tf-booking-sidebar">
                         <div class="tf-filter-title">
@@ -56,6 +58,14 @@ if ($current_term && isset($current_term->term_id)) {
                 <div class="sht-archive-view">
                     <button class="list-view active"><?php echo esc_html__('List ', 'spa-hotel-toolkit'); ?></button>
                     <button class="map-view"><?php echo esc_html__('Map ', 'spa-hotel-toolkit'); ?></button>
+                </div>
+                <div class="mobile-filter-sidebar">
+                    <button id="openMobileSidebar">
+                        <span><?php echo esc_html__('Filter', 'spa-hotel-toolkit'); ?></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M3.33325 4.16675H16.6666M3.33325 10.0001H16.6666M3.33325 15.8334H16.6666" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
                 </div>
                 <div class="sht-hotel-view list-view">
                     <!-- map wrapper -->

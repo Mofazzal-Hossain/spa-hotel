@@ -49,6 +49,9 @@ a:focus {
 
     .spa-title {
         margin: 16px 0 32px;
+        @media #{$max768} {
+            margin: 16px 0;
+        }
     }
 }
 
