@@ -564,39 +564,39 @@ class Sht_Hotel_Toolkit
                     'label'   => __('Section Title', 'spa-hotel-toolkit'),
                     'default' => __('Guest Experiences', 'spa-hotel-toolkit'),
                 ),
-                // array(
-                //     'id'      => 'feeds-account-id',
-                //     'type'    => 'text',
-                //     'label'   => __('Account ID', 'spa-hotel-toolkit'),
-                //     'placeholder' => __('Add your account ID', 'spa-hotel-toolkit'),
-                // ),
-                // array(
-                //     'id'      => 'feeds-username',
-                //     'type'    => 'text',
-                //     'label'   => __('Username', 'spa-hotel-toolkit'),
-                //     'placeholder' => __('Add your username', 'spa-hotel-toolkit'),
-                // ),
-                // array(
-                //     'id'      => 'feeds-access-token',
-                //     'type'    => 'text',
-                //     'label'   => __('Access Token', 'spa-hotel-toolkit'),
-                //     'placeholder' => __('Add your access token', 'spa-hotel-toolkit'),
-                // ),
                 array(
-                    'id'      => 'instagram-posts',
-                    'type'         => 'repeater',
-                    'label' => esc_html__('Insert / Create Instagram Posts', 'spa-hotel-toolkit'),
-                    'button_title' => esc_html__('Add New', 'spa-hotel-toolkit'),
-                    'class'        => 'tf-field-class',
-                    'fields'       => array(
-                        array(
-                            'id'          => 'instagram-post-url',
-                            'type'        => 'text',
-                            'label'       => esc_html__('Post URL', 'spa-hotel-toolkit'),
-                            'placeholder' => esc_html__('Add post URL', 'spa-hotel-toolkit'),
-                        ),
-                    ),
+                    'id'      => 'feeds-account-id',
+                    'type'    => 'text',
+                    'label'   => __('Account ID', 'spa-hotel-toolkit'),
+                    'placeholder' => __('Add your account ID', 'spa-hotel-toolkit'),
                 ),
+                array(
+                    'id'      => 'feeds-username',
+                    'type'    => 'text',
+                    'label'   => __('Username', 'spa-hotel-toolkit'),
+                    'placeholder' => __('Add your username', 'spa-hotel-toolkit'),
+                ),
+                array(
+                    'id'      => 'feeds-access-token',
+                    'type'    => 'text',
+                    'label'   => __('Access Token', 'spa-hotel-toolkit'),
+                    'placeholder' => __('Add your access token', 'spa-hotel-toolkit'),
+                ),
+                // array(
+                //     'id'      => 'instagram-posts',
+                //     'type'         => 'repeater',
+                //     'label' => esc_html__('Insert / Create Instagram Posts', 'spa-hotel-toolkit'),
+                //     'button_title' => esc_html__('Add New', 'spa-hotel-toolkit'),
+                //     'class'        => 'tf-field-class',
+                //     'fields'       => array(
+                //         array(
+                //             'id'          => 'instagram-post-url',
+                //             'type'        => 'text',
+                //             'label'       => esc_html__('Post URL', 'spa-hotel-toolkit'),
+                //             'placeholder' => esc_html__('Add post URL', 'spa-hotel-toolkit'),
+                //         ),
+                //     ),
+                // ),
             ),
         );
 

@@ -2002,6 +2002,9 @@ a:focus {
   width: 20px;
   height: 20px;
   aspect-ratio: 1/1;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
 }
 .spa-hotel .spa-single-details .tf-container .tf-insta-post-wrap .tf-insta-post .tf-insta-post-top .insta-user-info a {
   color: #FFFFFF;
@@ -2010,6 +2013,10 @@ a:focus {
   margin: 8px 0;
   font-weight: 600;
   color: #1a1a1a;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .spa-hotel .spa-single-details .tf-container .tf-insta-post-wrap .tf-insta-post .tf-insta-post-bottom .tf-post-title:hover {
   color: #D4A574;
@@ -2118,6 +2125,19 @@ a:focus {
   .spa-related-hotels {
     padding: 40px 0;
   }
+}
+
+iframe {
+  min-width: 100% !important;
+}
+
+.EmbeddedMediaImage {
+  max-height: 282px !important;
+  min-height: 282px !important;
+}
+
+.EmbedFrame {
+  padding-bottom: 100% !important;
 }
 
 .spa-hotel-archive-template .tf-container {

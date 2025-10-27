@@ -598,6 +598,7 @@
                                         row-gap: 16px;
                                         column-gap: 30px;
                                         margin: 32px 0;
+
                                         @media #{$max991} {
                                             grid-template-columns: repeat(2, 1fr);
                                         }
@@ -636,6 +637,7 @@
                                                     &::before {
                                                         font-size: 19px;
                                                         color: $sht-semantic-gold;
+
                                                         @media #{$max768} {
                                                             font-size: 16px;
                                                         }
@@ -870,6 +872,8 @@
                         flex-basis: 100%;
                     }
 
+
+
                     .tf-insta-post-top {
                         position: relative;
                         @include bd-radius(8px);
@@ -933,6 +937,7 @@
                                 width: 20px;
                                 height: 20px;
                                 aspect-ratio: 1/1;
+                                @include bd-radius(50%);
 
                             }
 
@@ -947,6 +952,10 @@
                             margin: 8px 0;
                             font-weight: 600;
                             color: $sht-color-heading;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 1;
+                            -webkit-box-orient: vertical;
+                            overflow: hidden;
 
                             &:hover {
                                 color: $sht-color-primary;
@@ -1039,4 +1048,17 @@
     @media #{$max768} {
         padding: 40px 0;
     }
+}
+
+iframe {
+    min-width: 100% !important;
+}
+
+.EmbeddedMediaImage {
+    max-height: 282px !important;
+    min-height: 282px !important;
+}
+
+.EmbedFrame {
+    padding-bottom: 100% !important;
 }
