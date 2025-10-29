@@ -466,7 +466,6 @@
 
             // descriptions
             .tf-single-description {
-
                 .tf-see-description,
                 .tf-see-less-description {
                     cursor: pointer;
@@ -847,142 +846,36 @@
             }
 
             // feeds
-            .tf-insta-post-wrap {
-                @include d-flex();
-                @include align-items(center);
-                @include justify-content(center);
-                gap: 32px;
-
-                @media #{$max768} {
-                    gap: 16px;
-                }
-
-                .tf-insta-post {
-                    flex-basis: calc(25% - 24px);
-
-                    @media #{$max991} {
-                        flex-basis: calc(33.33% - 24px);
-                    }
+            .tf-insta-feeds {
+                overflow: hidden;
+                .tf-insta-post-wrap {
+                    @include d-flex();
+                    @include justify-content(center);
+                    gap: 32px;
 
                     @media #{$max768} {
-                        flex-basis: calc(50% - 8px);
+                        gap: 16px;
                     }
 
-                    @media #{$max575} {
-                        flex-basis: 100%;
-                    }
-
-
-
-                    .tf-insta-post-top {
-                        position: relative;
-                        @include bd-radius(8px);
-                        z-index: 1;
-                        min-height: 350px;
-                        max-height: 350px;
-                        overflow: hidden;
-
-                        @media #{$max1024} {
-                            min-height: 280px;
-                            max-height: 280px;
-                        }
+                    .tf-insta-post {
+                        flex-basis: calc(25% - 24px);
 
                         @media #{$max991} {
-                            min-height: 260px;
-                            max-height: 260px;
+                            flex-basis: calc(33.33% - 24px);
+                        }
+
+                        @media #{$max768} {
+                            flex-basis: calc(50% - 8px);
                         }
 
                         @media #{$max575} {
-                            min-height: 250px;
-                            max-height: 250px;
-                        }
-
-                        &::after {
-                            content: '';
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            width: 100%;
-                            height: 100%;
-                            inset: 0;
-                            border-radius: 8px;
-                            background: linear-gradient(180deg, rgba(250, 247, 242, 0.00) 0%, rgba(48, 40, 26, 0.50) 100%);
-                            z-index: -1;
-                        }
-
-                        .insta-icon {
-                            position: absolute;
-                            left: 16px;
-                            top: 16px;
-                        }
-
-                        .tf-insta-feed-image {
-                            width: 100%;
-                            height: 100%;
-                            @include bd-radius(8px);
-                            position: absolute;
-                            z-index: -1;
-                            object-fit: cover;
-                        }
-
-                        .insta-user-info {
-                            position: absolute;
-                            left: 16px;
-                            bottom: 16px;
-                            @include d-flex();
-                            @include align-items(center);
-                            gap: 4px;
-
-                            img {
-                                width: 20px;
-                                height: 20px;
-                                aspect-ratio: 1/1;
-                                @include bd-radius(50%);
-
-                            }
-
-                            a {
-                                color: $sht-color-white;
-                            }
+                            flex-basis: 100%;
                         }
                     }
 
-                    .tf-insta-post-bottom {
-                        .tf-post-title {
-                            margin: 8px 0;
-                            font-weight: 600;
-                            color: $sht-color-heading;
-                            display: -webkit-box;
-                            -webkit-line-clamp: 1;
-                            -webkit-box-orient: vertical;
-                            overflow: hidden;
-
-                            &:hover {
-                                color: $sht-color-primary;
-                            }
-                        }
-
-                        .tf-post-meta {
-                            ul {
-                                @include d-flex();
-                                @include align-items(center);
-                                gap: 16px;
-
-                                li {
-                                    @include d-flex();
-                                    @include align-items(center);
-                                    gap: 3px;
-
-                                    .icon {
-                                        @include d-flex();
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
-
             }
+
 
             // faq
             .tf-faq-items-wrapper {

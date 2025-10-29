@@ -62,6 +62,7 @@ class Sht_Hotel_Toolkit
         wp_enqueue_style('sht-style-min-css', SHT_HOTEL_TOOLKIT_URL . 'assets/css/style.min.css', array(), SHT_HOTEL_TOOLKIT_VERSION, 'all');
         wp_enqueue_style('sht-swiper-css', '//cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css', array(), SHT_HOTEL_TOOLKIT_VERSION, 'all');
         wp_enqueue_script('sht-swiper-js', '//cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js', array('jquery'), SHT_HOTEL_TOOLKIT_VERSION, true);
+        wp_enqueue_script('sht-ig-embed-js', SHT_HOTEL_TOOLKIT_URL . 'assets/js/ig-embed.js', array('jquery'), SHT_HOTEL_TOOLKIT_VERSION, true);
         wp_enqueue_script('sht-main-js', SHT_HOTEL_TOOLKIT_URL . 'assets/js/main.js', array('jquery'), SHT_HOTEL_TOOLKIT_VERSION, true);
         wp_localize_script('sht-main-js', 'sht_params', array(
             'nonce'            => wp_create_nonce('sht_ajax_nonce'),
@@ -565,38 +566,20 @@ class Sht_Hotel_Toolkit
                     'default' => __('Guest Experiences', 'spa-hotel-toolkit'),
                 ),
                 array(
-                    'id'      => 'feeds-account-id',
-                    'type'    => 'text',
-                    'label'   => __('Account ID', 'spa-hotel-toolkit'),
-                    'placeholder' => __('Add your account ID', 'spa-hotel-toolkit'),
+                    'id'      => 'instagram-posts',
+                    'type'         => 'repeater',
+                    'label' => esc_html__('Insert / Create Instagram Posts', 'spa-hotel-toolkit'),
+                    'button_title' => esc_html__('Add New', 'spa-hotel-toolkit'),
+                    'class'        => 'tf-field-class',
+                    'fields'       => array(
+                        array(
+                            'id'          => 'instagram-post-url',
+                            'type'        => 'text',
+                            'label'       => esc_html__('Post URL', 'spa-hotel-toolkit'),
+                            'placeholder' => esc_html__('Add post URL', 'spa-hotel-toolkit'),
+                        ),
+                    ),
                 ),
-                array(
-                    'id'      => 'feeds-username',
-                    'type'    => 'text',
-                    'label'   => __('Username', 'spa-hotel-toolkit'),
-                    'placeholder' => __('Add your username', 'spa-hotel-toolkit'),
-                ),
-                array(
-                    'id'      => 'feeds-access-token',
-                    'type'    => 'text',
-                    'label'   => __('Access Token', 'spa-hotel-toolkit'),
-                    'placeholder' => __('Add your access token', 'spa-hotel-toolkit'),
-                ),
-                // array(
-                //     'id'      => 'instagram-posts',
-                //     'type'         => 'repeater',
-                //     'label' => esc_html__('Insert / Create Instagram Posts', 'spa-hotel-toolkit'),
-                //     'button_title' => esc_html__('Add New', 'spa-hotel-toolkit'),
-                //     'class'        => 'tf-field-class',
-                //     'fields'       => array(
-                //         array(
-                //             'id'          => 'instagram-post-url',
-                //             'type'        => 'text',
-                //             'label'       => esc_html__('Post URL', 'spa-hotel-toolkit'),
-                //             'placeholder' => esc_html__('Add post URL', 'spa-hotel-toolkit'),
-                //         ),
-                //     ),
-                // ),
             ),
         );
 
