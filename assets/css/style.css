@@ -1908,6 +1908,12 @@ a:focus {
 }
 .spa-hotel .spa-single-details .tf-container .tf-insta-feeds .tf-insta-post-wrap .tf-insta-post {
   flex-basis: calc(25% - 24px);
+  height: fit-content;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid rgb(219, 219, 219);
 }
 @media only screen and (max-width: 991.98px) {
   .spa-hotel .spa-single-details .tf-container .tf-insta-feeds .tf-insta-post-wrap .tf-insta-post {
@@ -1923,6 +1929,12 @@ a:focus {
   .spa-hotel .spa-single-details .tf-container .tf-insta-feeds .tf-insta-post-wrap .tf-insta-post {
     flex-basis: 100%;
   }
+}
+.spa-hotel .spa-single-details .tf-container .tf-insta-feeds .tf-insta-post-wrap .tf-insta-post iframe {
+  min-width: 100% !important;
+  margin-bottom: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 .spa-hotel .spa-single-details .tf-container .tf-faq-items-wrapper {
   display: -webkit-box;
@@ -1992,19 +2004,6 @@ a:focus {
   .spa-related-hotels {
     padding: 40px 0;
   }
-}
-
-iframe {
-  min-width: 100% !important;
-}
-
-.EmbeddedMediaImage {
-  max-height: 282px !important;
-  min-height: 282px !important;
-}
-
-.EmbedFrame {
-  padding-bottom: 100% !important;
 }
 
 .spa-hotel-archive-template .tf-container {
