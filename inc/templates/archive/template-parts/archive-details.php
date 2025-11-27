@@ -155,7 +155,7 @@ if ($current_term && isset($current_term->term_id)) {
                                 $tf_booking_url  = $tf_booking_query_url = $tf_booking_attribute = '';
                                 if (function_exists('is_tf_pro') && is_tf_pro()) {
                                     $tf_booking_type      = ! empty($meta['booking-by']) ? $meta['booking-by'] : 1;
-                                    $tf_booking_url       = ! empty($meta['booking-url']) ? esc_url($meta['booking-url']) : '';
+                                    $tf_booking_url       = ! empty($meta['booking-url']) ? esc_url($meta['booking-url']) : '#';
                                 }
                                 if (2 == $tf_booking_type && ! empty($tf_booking_url)) {
                                     $external_search_info = array(

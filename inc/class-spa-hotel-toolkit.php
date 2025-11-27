@@ -385,8 +385,8 @@ class Sht_Hotel_Toolkit
                 array(
                     'id'      => 'rator-heading',
                     'type'    => 'heading',
-                    'label'   => __('Spa Rator Settings', 'spa-hotel-toolkit'),
-                    'subtitle' => esc_html__('These are some spa rator settings specific to this Hotel.', 'spa-hotel-toolkit'),
+                    'title'   => __('Spa Rator Settings', 'spa-hotel-toolkit'),
+                    'content' => esc_html__('These are some spa rator settings specific to this Hotel.', 'spa-hotel-toolkit'),
                 ),
                 array(
                     'id'      => 'rator-sec-title',
@@ -417,8 +417,20 @@ class Sht_Hotel_Toolkit
                 array(
                     'id'      => 'availability-heading',
                     'type'    => 'heading',
-                    'label'   => __('Availability Settings', 'spa-hotel-toolkit'),
-                    'subtitle' => esc_html__('These are some availability settings specific to this Hotel.', 'spa-hotel-toolkit'),
+                    'title'   => __('Availability Settings', 'spa-hotel-toolkit'),
+                    'content' => esc_html__('These are some availability settings specific to this Hotel.', 'spa-hotel-toolkit'),
+                ),
+                array(
+                    'id'      => 'availability-btn-label',
+                    'type'    => 'text',
+                    'label'   => __('Availability Button', 'spa-hotel-toolkit'),
+                    'default' => __('Check Availability', 'spa-hotel-toolkit'),
+                ),
+                array(
+                    'id'      => 'availability-btn-link',
+                    'type'    => 'text',
+                    'label'   => __('Availability Button Link', 'spa-hotel-toolkit'),
+                    'default' => __('#', 'spa-hotel-toolkit'),
                 ),
                 array(
                     'id'      => 'availability-sec-title',
@@ -470,8 +482,8 @@ class Sht_Hotel_Toolkit
                 array(
                     'id'      => 'rating-heading',
                     'type'    => 'heading',
-                    'label'   => __('Rating Settings', 'spa-hotel-toolkit'),
-                    'subtitle' => esc_html__('These are some rating settings specific to this Hotel.', 'spa-hotel-toolkit'),
+                    'title'   => __('Rating Settings', 'spa-hotel-toolkit'),
+                    'content' => esc_html__('These are some rating settings specific to this Hotel.', 'spa-hotel-toolkit'),
                 ),
                 array(
                     'id'      => 'rating-sec-title',
@@ -483,7 +495,7 @@ class Sht_Hotel_Toolkit
                 array(
                     'id'      => 'rating-booking-heading',
                     'type'    => 'heading',
-                    'label'   => __('Booking', 'spa-hotel-toolkit'),
+                    'title'   => __('Booking', 'spa-hotel-toolkit'),
                 ),
                 array(
                     'id'      => 'rating-booking-feedback',
@@ -507,7 +519,7 @@ class Sht_Hotel_Toolkit
                 array(
                     'id'      => 'rating-google-heading',
                     'type'    => 'heading',
-                    'label'   => __('Google', 'spa-hotel-toolkit'),
+                    'title'   => __('Google', 'spa-hotel-toolkit'),
                 ),
 
                 array(
@@ -528,7 +540,7 @@ class Sht_Hotel_Toolkit
                 array(
                     'id'      => 'rating-tripadvisor-heading',
                     'type'    => 'heading',
-                    'label'   => __('Tripadvisor', 'spa-hotel-toolkit'),
+                    'title'   => __('Tripadvisor', 'spa-hotel-toolkit'),
                 ),
 
                 array(
@@ -556,8 +568,8 @@ class Sht_Hotel_Toolkit
                 array(
                     'id'      => 'feeds-heading',
                     'type'    => 'heading',
-                    'label'   => __('Feeds Settings', 'spa-hotel-toolkit'),
-                    'subtitle' => esc_html__('These are some instagram feeds settings specific to this Hotel.', 'spa-hotel-toolkit'),
+                    'title'   => __('Feeds Settings', 'spa-hotel-toolkit'),
+                    'content' => esc_html__('These are some instagram feeds settings specific to this Hotel.', 'spa-hotel-toolkit'),
                 ),
                 array(
                     'id'      => 'feeds-sec-title',

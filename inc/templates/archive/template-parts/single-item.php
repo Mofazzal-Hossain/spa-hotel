@@ -12,7 +12,7 @@ use \Tourfic\Classes\Hotel\Pricing;
     </div>
     <!-- destination thumbnail -->
     <div class="sht-hotel-item-thumbnail">
-        <a href="<?php echo esc_url(get_the_permalink()) ?>">
+        <a href="<?php echo esc_url($tf_booking_url); ?>">
             <?php $sht_hotel_image = !empty(get_the_post_thumbnail_url(get_the_ID())) ? esc_url(get_the_post_thumbnail_url(get_the_ID())) : esc_url(site_url() . '/wp-content/plugins/elementor/assets/images/placeholder.png');                                    ?>
             <img src="<?php echo esc_url($sht_hotel_image); ?>" alt="post thumbnail">
         </a>

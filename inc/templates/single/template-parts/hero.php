@@ -3,6 +3,10 @@
 defined('ABSPATH') || exit;
 
 $rating_badge = sht_sparator_rating_badge($post_id);
+$hotel_meta = get_post_meta($post_id, 'tf_hotels_opt', true);
+$availability_btn_label = ! empty($hotel_meta['availability-btn-label']) ? $hotel_meta['availability-btn-label'] : esc_html__('Check Availability', 'spa-hotel-toolkit');
+$availability_btn_link = ! empty($hotel_meta['availability-btn-link']) ? $hotel_meta['availability-btn-link'] : '#';
+
 ?>
 <div class="spa-hero-wrapper tf-single-hero">
     <!-- Search -->
@@ -70,12 +74,14 @@ $rating_badge = sht_sparator_rating_badge($post_id);
             <?php endif; ?>
         </div>
         <div class="tf-head-right">
-            <a href="#" class="sht-btn">
-                <?php echo esc_html__('Check Availability', 'spa-hotel-toolkit'); ?>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M4.16663 9.99935H15.8333M15.8333 9.99935L9.99996 4.16602M15.8333 9.99935L9.99996 15.8327" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-            </a>
+            <?php if(!empty($availability_btn_label)): ?>
+                <a href="<?php echo esc_url($availability_btn_link); ?>" class="sht-btn">
+                    <?php echo esc_html($availability_btn_label); ?>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4.16663 9.99935H15.8333M15.8333 9.99935L9.99996 4.16602M15.8333 9.99935L9.99996 15.8327" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </a>
+            <?php endif; ?>
         </div>
     </div>
 
