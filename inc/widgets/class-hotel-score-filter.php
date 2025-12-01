@@ -29,6 +29,7 @@ class Sht_Hotel_Score_Filter extends \WP_Widget
 
         $counts = $this->get_spa_rator_property_counts();
 
+    
         // Current rating base (5 or 10)
         $tf_settings_base = !empty(Helper::tfopt('r-base'))
             ? intval(Helper::tfopt('r-base'))
@@ -74,6 +75,7 @@ class Sht_Hotel_Score_Filter extends \WP_Widget
         echo '<div class="sht-filter"><ul>';
 
         foreach ($ratings as $rating) {
+         
             echo '<li class="sht-filter-item spa-rator-item">';
             echo '<label class="sht-rator-badge ' . esc_attr($rating['key']) . '">';
 
@@ -116,11 +118,7 @@ class Sht_Hotel_Score_Filter extends \WP_Widget
 
     private function get_spa_rator_property_counts()
     {
-        $cache_key = 'spa_rator_counts';
-        $cached = get_transient($cache_key);
-        if ($cached !== false) {
-            return $cached;
-        }
+ 
 
         $args = [
             'post_type'      => 'tf_hotel',
@@ -186,7 +184,7 @@ class Sht_Hotel_Score_Filter extends \WP_Widget
             }
         }
 
-        set_transient($cache_key, $ranges, 6 * HOUR_IN_SECONDS);
+     
 
         return $ranges;
     }
