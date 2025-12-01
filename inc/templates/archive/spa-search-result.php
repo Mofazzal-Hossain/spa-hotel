@@ -32,7 +32,7 @@ $args = array(
             'taxonomy' => 'hotel_location',
             'field' => 'slug',
             'terms' => $place,
-            'include_children' => false,
+            // 'include_children' => false,
         )
     )
 );
@@ -73,8 +73,6 @@ $hotels = new \WP_Query($args);
                     </ul>
                 </div>
             </div>
-
-
 
             <?php
 

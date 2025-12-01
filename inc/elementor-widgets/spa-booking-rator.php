@@ -1,6 +1,4 @@
 <?php
-
-use \Tourfic\App\TF_Review;
 use \Tourfic\Classes\Helper;
 
 class Spa_Booking_Rator extends \Elementor\Widget_Base
@@ -145,60 +143,85 @@ class Spa_Booking_Rator extends \Elementor\Widget_Base
     {
         $settings = $this->get_settings_for_display();
 
-        /**
-         * Review query
-         */
-        $hotel_posts = get_posts([
+        $tf_settings_base = ! empty(Helper::tfopt('r-base')) ? Helper::tfopt('r-base') : 10;
+        $tf_hotel_review = ! empty(Helper::tf_data_types(Helper::tfopt('r-hotel'))) ? Helper::tf_data_types(Helper::tfopt('r-hotel')) : [];
+
+        $rator_data = [];
+        $total_rating_sum = 0;
+        $total_hotel_count = 0;
+
+        // Get all hotels
+        $hotels = get_posts([
             'post_type'      => 'tf_hotel',
+            'post_status'    => 'publish',
             'posts_per_page' => -1,
             'fields'         => 'ids',
         ]);
-        $args = [
-            'post__in' => $hotel_posts,
-            'status'   => 'approve',
-            'type'     => 'comment',
-        ];
 
-        $comments_query = new WP_Comment_Query($args);
-        $comments = $comments_query->comments;
+        foreach ($hotels as $post_id) {
+            $hotel_meta = get_post_meta($post_id, 'tf_hotels_opt', true);
 
-        $tf_overall_rate        = [];
-        $tf_settings_base = ! empty(Helper::tfopt('r-base')) ? Helper::tfopt('r-base') : 10;
-        $tf_hotel_review     = ! empty(Helper::tf_data_types(Helper::tfopt('r-hotel'))) ? Helper::tf_data_types(Helper::tfopt('r-hotel')) : [];
+            $hotel_total = 0;
+            $hotel_count = 0;
 
-        TF_Review::tf_calculate_comments_rating($comments, $tf_overall_rate, $total_rating);
-        TF_Review::tf_get_review_fields($fields);
+            foreach ($tf_hotel_review as $field) {
+                if (empty($field['r-field-type'])) continue;
 
-        if (!empty($tf_hotel_review)) {
-            foreach ($tf_hotel_review as $review_field) {
-                $key   = !empty($review_field['r-field-type']) ? sanitize_title($review_field['r-field-type']) : '';
-                $label = !empty($review_field['r-field-type']) ? $review_field['r-field-type'] : '';
-                $icon  = !empty($review_field['r-field-icon']) ? $review_field['r-field-icon'] : '';
-                $normalized_label = strtolower(str_replace([' ', '_'], '', $label));
-                $score = 0;
-                foreach ($tf_overall_rate as $rate_key => $values) {
-                    $normalized_rate_key = strtolower(str_replace([' ', '_'], '', $rate_key));
-                    if ($normalized_label === $normalized_rate_key) {
-                        $score = TF_Review::Tf_average_ratings($values);
-                        break;
-                    }
+                $label = $field['r-field-type'];
+                $icon = isset($field['r-field-icon']) ? $field['r-field-icon'] : '';
+                $slug  = sanitize_title($label);
+                $meta_key = "rator-{$slug}-score";
+
+                $score = isset($hotel_meta[$meta_key]) ? floatval($hotel_meta[$meta_key]) : 0;
+                if ($score > 0) {
+                    $hotel_total += $score;
+                    $hotel_count++;
                 }
-                $key = sanitize_title($label);
-                if ($key) {
-                    $rator_data[$key] = [
+
+                // Collect rator data for the first hotel only for display
+                if (!isset($rator_data[$slug])) {
+                    $rator_data[$slug] = [
                         'label' => $label,
-                        'score' => $score,
-                        'icon'  => $icon,
+                        'score' => 0,
+                        'count' => 0,
+                        'icon' => $icon,
                     ];
                 }
+
+                if ($score > 0) {
+                    $rator_data[$slug]['score'] += $score;
+                    $rator_data[$slug]['count']++;
+                }
+            }
+
+            if ($hotel_count > 0) {
+                $total_rating_sum += ($hotel_total / $hotel_count);
+                $total_hotel_count++;
             }
         }
+        $total_rating = $total_hotel_count ? ($total_rating_sum / $total_hotel_count) : 0;
+        if ($tf_settings_base != 10) {
+            $total_rating = ($total_rating / 10) * $tf_settings_base;
+        }
 
-        $rator_meter = SHT_HOTEL_TOOLKIT_ASSETS . 'images/rator-meter.png';
+        // Normalize each field's score
+        foreach ($rator_data as $key => &$item) {
+            $item['score'] = $item['count'] ? $item['score'] / $item['count'] : 0;
+
+            // Convert 10-base → 5-base
+            if ($tf_settings_base != 10) {
+                $item['score'] = ($item['score'] / 10) * $tf_settings_base;
+            }
+        }
+        unset($item);
+
+        if($tf_settings_base == 10) {
+            $rator_meter  = SHT_HOTEL_TOOLKIT_ASSETS . 'images/rator-meter.png';
+        }else{
+            $rator_meter  = SHT_HOTEL_TOOLKIT_ASSETS . 'images/rator-meter-min.png';
+        }
         $rator_handle = SHT_HOTEL_TOOLKIT_ASSETS . 'images/rator-handle.png';
-        $transform = get_rating_transform($total_rating);
-
-
+        $transform    = get_rating_transform($total_rating, $tf_settings_base);
 ?>
         <div class="sht-review-rator-box">
             <div class="sht-review-gauge">
@@ -211,7 +234,15 @@ class Spa_Booking_Rator extends \Elementor\Widget_Base
                     </div>
                     <div class="sht-gauge-score">
                         <span class="sht-text"><?php echo esc_html($settings['rator_title']); ?></span>
-                        <span class="sht-score"><?php echo esc_html($total_rating); ?></span>
+                        <span class="sht-score">
+                            <?php
+                            if ($total_rating == 10 || $total_rating == 5) {
+                                echo esc_html($tf_settings_base);
+                            } else {
+                                echo esc_html(number_format($total_rating, 1));
+                            }
+                            ?>
+                        </span>
                         <span class="sht-text"><?php echo esc_html($settings['rator_score']); ?></span>
                     </div>
                 </div>
@@ -225,7 +256,15 @@ class Spa_Booking_Rator extends \Elementor\Widget_Base
                         <div class="sht-review-item-content">
                             <div class="sht-review-progress-report">
                                 <span class="sht-review-label"><?php echo esc_html($item['label']); ?></span>
-                                <div class="sht-review-score"><?php echo esc_html($item['score']); ?>/<?php echo esc_html($tf_settings_base); ?></div>
+                                <div class="sht-review-score">
+                                    <?php
+                                    if ($item['score'] == 10 || $item['score'] == 5) {
+                                        echo esc_html($tf_settings_base);
+                                    } else {
+                                        echo esc_html(number_format($item['score'], 1));
+                                    }
+                                    ?>/<?php echo esc_html($tf_settings_base); ?>
+                                </div>
                             </div>
                             <div class="sht-review-bar">
                                 <span class="sht-bar-fill" style="width: <?php echo intval(($item['score'] / $tf_settings_base) * 100); ?>%"></span>
@@ -243,43 +282,45 @@ class Spa_Booking_Rator extends \Elementor\Widget_Base
 }
 
 // Get rating transform
-function get_rating_transform($average)
+function get_rating_transform($average, $base = 10)
 {
+
+    if ($base == 5) {
+        $average = ($average / 5) * 10;
+    }
+
+    // Position map (1–10)
     $positions = [
         1  => ['rotate' => -92, 'tx' => -28, 'ty' => -60],
         2  => ['rotate' => -73, 'tx' => -27, 'ty' => -35],
         3  => ['rotate' => -52, 'tx' => -28, 'ty' => -20],
         4  => ['rotate' => -30, 'tx' => -28, 'ty' => -6],
-        5  => ['rotate' => -14, 'tx' =>  -4, 'ty' =>  1],
-        6  => ['rotate' =>   14, 'tx' =>   8, 'ty' =>  0],
-        7  => ['rotate' =>  38, 'tx' =>   12, 'ty' => -0],
-        8  => ['rotate' =>  54, 'tx' =>  20, 'ty' => -22],
-        9  => ['rotate' =>  70, 'tx' =>  28, 'ty' => -32],
-        10 => ['rotate' =>  90, 'tx' =>  30, 'ty' => -50],
+        5  => ['rotate' => -14, 'tx' => -4,  'ty' => 1],
+        6  => ['rotate' => 14,  'tx' => 8,   'ty' => 0],
+        7  => ['rotate' => 38,  'tx' => 12,  'ty' => 0],
+        8  => ['rotate' => 54,  'tx' => 20,  'ty' => -22],
+        9  => ['rotate' => 70,  'tx' => 28,  'ty' => -32],
+        10 => ['rotate' => 90,  'tx' => 30,  'ty' => -50],
     ];
 
-    // Clamp value between 1 and 10
     $average = max(1, min(10, $average));
 
-    // Find the two closest positions to interpolate between
     $floor = floor($average);
-    $ceil = ceil($average);
+    $ceil  = ceil($average);
 
-    // If it's exactly on an integer, return that position
     if ($floor == $ceil) {
         return $positions[$floor];
     }
 
-    // Calculate interpolation ratio (0 to 1)
     $ratio = $average - $floor;
 
-    // Interpolate between the two positions
     $result = [];
-    foreach (['rotate', 'tx', 'ty'] as $property) {
-        $start = $positions[$floor][$property];
-        $end = $positions[$ceil][$property];
-        $result[$property] = $start + ($end - $start) * $ratio;
+    foreach (['rotate', 'tx', 'ty'] as $prop) {
+        $start = $positions[$floor][$prop];
+        $end   = $positions[$ceil][$prop];
+        $result[$prop] = $start + ($end - $start) * $ratio;
     }
 
     return $result;
 }
+

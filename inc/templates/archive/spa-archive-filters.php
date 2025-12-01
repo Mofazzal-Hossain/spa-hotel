@@ -4,7 +4,6 @@ defined('ABSPATH') || exit;
 use \Tourfic\Classes\Helper;
 use \Tourfic\Classes\Hotel\Pricing;
 use \Tourfic\Classes\Room\Room;
-use \Tourfic\App\TF_Review;
 
 // Register AJAX actions
 add_action('wp_ajax_sht_archive_filter', 'sht_archive_filter_ajax');
@@ -18,6 +17,7 @@ function sht_archive_filter_ajax()
     if (empty($_POST['_nonce']) || ! wp_verify_nonce(sanitize_text_field($_POST['_nonce']), 'sht_ajax_nonce')) {
         wp_send_json_error(['message' => 'Invalid nonce']);
     }
+
 
     // Initialize WP_Query args
     $args = [
@@ -45,27 +45,16 @@ function sht_archive_filter_ajax()
         list($minLat, $minLng, $maxLat, $maxLng) = $mapCoordinates;
     }
 
-    
-   
-
     $tax_query = [];
 
     // taxonomy filter
     if (!empty($taxonomy) && $taxonomy != 'undefined' && !empty($term) && $term != 'undefined') {
-        if (!empty($place_location) && $place_location == $term) {
-            $tax_query[] = [
-                'taxonomy' => $taxonomy,
-                'field'    => 'slug',
-                'terms'    => [$term],
-            ];
-        } else {
-            $tax_query[] = [
-                'taxonomy' => $taxonomy,
-                'field'    => 'slug',
-                'terms'    => [],
-            ];
-        }
-    } elseif (!empty($place_location)) {
+        $tax_query[] = [
+            'taxonomy' => $taxonomy,
+            'field'    => 'slug',
+            'terms'    => [$term],
+        ];
+    } elseif (!empty($place_location) && $place_location != 'undefined') {
         $tax_query[] = [
             'taxonomy' => 'hotel_location',
             'field'    => 'slug',
@@ -105,18 +94,34 @@ function sht_archive_filter_ajax()
             'fields'         => 'ids',
         ]);
 
+        $tf_hotel_review = Helper::tf_data_types(Helper::tfopt('r-hotel')) ?: [];
+
         foreach ($hotels as $post_id) {
-            $comments = get_comments([
-                'post_id' => $post_id,
-                'status'  => 'approve',
-                'type'    => 'comment',
-            ]);
+            $meta = get_post_meta($post_id, 'tf_hotels_opt', true);
 
-            $tf_overall_rate = [];
             $total_rating = 0;
-            TF_Review::tf_calculate_comments_rating($comments, $tf_overall_rate, $total_rating);
-            $rating = floatval($total_rating);
+            $count = 0;
 
+            foreach ($tf_hotel_review as $field) {
+                if (empty($field['r-field-type'])) continue;
+
+                $label = $field['r-field-type'];
+                $slug  = sanitize_title($label);
+                $field_score = "rator-{$slug}-score";
+
+                // Get actual meta value
+                $value = isset($meta[$field_score]) ? floatval($meta[$field_score]) : 0;
+
+                if ($value > 0) {
+                    $total_rating += $value;
+                    $count++;
+                }
+            }
+
+            // Calculate average rating
+            $rating = $count > 0 ? $total_rating / $count : 0;
+
+            // Filter by $score
             if (!empty($score)) {
                 foreach ($score as $min) {
                     if ($min == 9) {
@@ -133,21 +138,17 @@ function sht_archive_filter_ajax()
                 }
             }
 
+            // Filter by $ratings
             if (!empty($ratings)) {
-                // Check if post has no rating
                 if ($rating <= 0 && in_array('no-rating', $ratings, true)) {
                     $filtered_ids[] = $post_id;
                     continue;
                 }
 
-                // For numeric rating filters (1–10)
                 foreach ($ratings as $selected) {
-                    if ($selected === 'no-rating') {
-                        continue;
-                    }
+                    if ($selected === 'no-rating') continue;
 
                     $selected = intval($selected);
-
                     $upper_limit = ($selected == 10) ? 10.0 : ($selected + 0.9999);
 
                     if ($rating >= $selected && $rating <= $upper_limit) {
@@ -161,6 +162,7 @@ function sht_archive_filter_ajax()
         // Apply filtered posts to query
         $args['post__in'] = !empty($filtered_ids) ? $filtered_ids : [0];
     }
+
 
 
     // Apply tax_query if any filters exist
@@ -297,7 +299,7 @@ function sht_archive_filter_ajax()
             $posts_html[] = ob_get_clean();
         }
         wp_reset_postdata();
-        ?>
+?>
 
         <?php
         $location_data = array_filter($locations) ? wp_json_encode(array_values($locations)) : wp_json_encode([]);

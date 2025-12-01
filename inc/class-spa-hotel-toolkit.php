@@ -66,7 +66,7 @@ class Sht_Hotel_Toolkit
         wp_enqueue_script('sht-main-js', SHT_HOTEL_TOOLKIT_URL . 'assets/js/main.js', array('jquery'), SHT_HOTEL_TOOLKIT_VERSION, true);
         wp_localize_script('sht-main-js', 'sht_params', array(
             'nonce'            => wp_create_nonce('sht_ajax_nonce'),
-            'ajax_url'               => admin_url( 'admin-ajax.php' ),
+            'ajax_url'               => admin_url('admin-ajax.php'),
             'map_marker_width' => !empty(Helper::tfopt('map_marker_width')) ? Helper::tfopt('map_marker_width') : '35',
             'map_marker_height' => !empty(Helper::tfopt('map_marker_height')) ? Helper::tfopt('map_marker_height') : '45',
         ));
@@ -124,7 +124,7 @@ class Sht_Hotel_Toolkit
 
         $atts = shortcode_atts(array('wpm' => 200,), $atts, 'reading_time');
         $content = get_post_field('post_content', $post->ID);
-        $word_count = str_word_count( wp_strip_all_tags( $content ) );
+        $word_count = str_word_count(wp_strip_all_tags($content));
         $minutes = ceil($word_count / $atts['wpm']);
         return $minutes . ' min read';
     }
@@ -132,7 +132,7 @@ class Sht_Hotel_Toolkit
     // Shortcode to get current year
     public function sht_current_year()
     {
-        return gmdate( 'Y' );
+        return gmdate('Y');
     }
 
     // Add custom body class
@@ -359,6 +359,29 @@ class Sht_Hotel_Toolkit
     public function sht_hotels_opt_sections($sections)
     {
 
+        $tf_hotel_review = Helper::tf_data_types(Helper::tfopt('r-hotel')) ?: [];
+        $sht_score_fields = [];
+
+        if (!empty($tf_hotel_review)) {
+            foreach ($tf_hotel_review as $field) {
+
+                $label = isset($field['r-field-type']) ? $field['r-field-type'] : 'Custom';
+                $slug = sanitize_title($label);
+
+                $sht_score_fields[] = array(
+                    'id'      => "rator-{$slug}-score",
+                    'type'    => 'number',
+                    'label'   => __($label . ' Score', 'spa-hotel-toolkit'),
+                    'subtitle' => esc_html__('Enter a number between 0 and 10', 'spa-hotel-toolkit'),
+                    'attributes' => array(
+                        'min' => '0',
+                        'max' => '10',
+                    ),
+                );
+            }
+        }
+
+
         // inside hotel information Other Facilities
         $sections['hotel_info']['fields'][] = array(
             'id'      => 'other-facilities-heading',
@@ -379,33 +402,44 @@ class Sht_Hotel_Toolkit
 
         // Brand rating section
         $sections['spa_rator'] = array(
-            'title'  => __('Spa Rator', 'spa-hotel-toolkit'),
-            'icon'   => 'fa-solid fa-spa',
-            'fields' => array(
-                array(
-                    'id'      => 'rator-heading',
-                    'type'    => 'heading',
-                    'title'   => __('Spa Rator Settings', 'spa-hotel-toolkit'),
-                    'content' => esc_html__('These are some spa rator settings specific to this Hotel.', 'spa-hotel-toolkit'),
-                ),
-                array(
-                    'id'      => 'rator-sec-title',
-                    'type'    => 'text',
-                    'label'   => __('Section Title', 'spa-hotel-toolkit'),
-                    'default' => __('SpaRator', 'spa-hotel-toolkit'),
-                ),
-                array(
-                    'id'      => 'rator-overall-text',
-                    'type'    => 'text',
-                    'label'   => __('Overall Text', 'spa-hotel-toolkit'),
-                    'default' => __('Overall Spa Score', 'spa-hotel-toolkit'),
-                ),
-                array(
-                    'id'      => 'rator-description',
-                    'type'    => 'textarea',
-                    'label'   => __('Description', 'spa-hotel-toolkit'),
-                    'default' => __("This spa provides everything any wellness enthusiast could need. From signature treatments to world-class facilities, this hotel has created a transformative spa atmosphere that you won't want to miss.", 'spa-hotel-toolkit'),
-                ),
+            'title' => __('Spa Rator', 'spa-hotel-toolkit'),
+            'icon'  => 'fa-solid fa-spa',
+            'fields' => array_merge(
+                [
+
+                    // Fixed fields
+                    array(
+                        'id'      => 'rator-heading',
+                        'type'    => 'heading',
+                        'title'   => __('Spa Rator Settings', 'spa-hotel-toolkit'),
+                        'content' => esc_html__('These are some spa rator settings specific to this Hotel.', 'spa-hotel-toolkit'),
+                    ),
+                    array(
+                        'id'      => 'rator-sec-title',
+                        'type'    => 'text',
+                        'label'   => __('Section Title', 'spa-hotel-toolkit'),
+                        'default' => __('SpaRator', 'spa-hotel-toolkit'),
+                    ),
+                    array(
+                        'id'      => 'rator-overall-text',
+                        'type'    => 'text',
+                        'label'   => __('Overall Text', 'spa-hotel-toolkit'),
+                        'default' => __('Overall Spa Score', 'spa-hotel-toolkit'),
+                    ),
+                    array(
+                        'id'      => 'rator-description',
+                        'type'    => 'textarea',
+                        'label'   => __('Description', 'spa-hotel-toolkit'),
+                        'default' => __("This spa provides everything any wellness enthusiast could need. From signature treatments to world-class facilities, this hotel has created a transformative spa atmosphere.", 'spa-hotel-toolkit'),
+                    ),
+                    array(
+                        'id'    => 'rator-heading',
+                        'type'  => 'heading',
+                        'title' => __('SpaRator Scores', 'spa-hotel-toolkit'),
+                    ),
+
+                ],
+                $sht_score_fields
             ),
         );
 
