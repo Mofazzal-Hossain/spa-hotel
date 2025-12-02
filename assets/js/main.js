@@ -56,23 +56,24 @@
         });
 
         // review modal 
-        $(document).on('click', '.tf-modal-btn', function (e) {
+        $(document).on('click', '.sht-modal-btn', function (e) {
             e.preventDefault();
-            var dataTarget = $(this).attr('data-target');
-            $(dataTarget).addClass('tf-modal-show');
-            $('body').addClass('tf-modal-open');
+            $('#sht-rating-modal').addClass('sht-modal-show');
+            $('body').addClass('sht-modal-open');
         });
-        $(document).on("click", '.tf-modal-close', function () {
-            $('.tf-modal').removeClass('tf-modal-show');
-            $('body').removeClass('tf-modal-open');
+        $(document).on("click", '.sht-modal-close', function () {
+            $('.sht-modal').removeClass('sht-modal-show');
+            $('body').removeClass('sht-modal-open');
         });
         $(document).on("click", function (event) {
-            if(!$('.tf-map-modal').length) {
-                if (!$(event.target).closest(".tf-modal-content,.tf-modal-btn").length) {
-                    $("body").removeClass("tf-modal-open");
-                    $(".tf-modal").removeClass("tf-modal-show");
-                }
+            if (!$(event.target).closest(".sht-modal-content,.sht-modal-btn, .tf-rating-wrapper, .flatpickr-calendar,.media-item").length) {
+                $("body").removeClass("sht-modal-open");
+                $(".sht-modal").removeClass("sht-modal-show");
             }
+        });
+
+        $(window).on('load', function () {
+            $("#tf-rating-modal").remove();
         });
 
         // Apartment full description toggle
@@ -565,7 +566,7 @@
 
             $submitBtn.addClass('tf-btn-loading')
             if ($form.find('#tf-location').val() != '') {
-               spaMakeFilter();
+                spaMakeFilter();
             } 
         });
 
@@ -586,14 +587,74 @@
             $overlay.removeClass('active');
         });
 
-        // Close sidebar on overlay click
+
         $overlay.on('click', function() {
             $sidebar.removeClass('active');
             $overlay.removeClass('active');
         });
 
+        $(document).on('click', '#sht-comment-submit', function(e) {
+            e.preventDefault();
+
+            let formValid = true;
+            const form = $('#sht-review-form');
+
+            $('.rating-error, .field-error').remove();
+
+
+            $('.ratings-container').each(function() {
+                const container = $(this);
+                const radios = container.find('input[type="radio"]');
+                if (!radios.is(':checked')) {
+                    formValid = false;
+                    if (container.next('.rating-error').length === 0) {
+                        container.after('<div class="rating-error" style="color:#f44; font-size:15px; margin-top:5px;">Please select a rating</div>');
+                    }
+                }
+            });
+
+
+            const requiredFields = [
+                { selector: '#first_name', name: 'First Name' },
+                { selector: '#user-email', name: 'Email' },
+                { selector: '#sht_comment', name: 'Review Description' }
+            ];
+
+            requiredFields.forEach(function(field) {
+                const input = form.find(field.selector);
+                if ($.trim(input.val()) === '') {
+                    formValid = false;
+                    if (input.next('.field-error').length === 0) {
+                        input.after('<div class="field-error" style="color:red; font-size:13px; margin-top:5px;">' + field.name + ' is required.</div>');
+                    }
+                }
+            });
+
+            if (!formValid) return false;
+
+            let formData = new FormData(form[0]);
+            formData.append('action', 'sht_submit_review');
+            $.ajax({
+                url: sht_params.ajax_url,
+                type: 'POST',
+                data: formData,
+                success: function(res) {
+                    if (res.success) {
+                        $('#sht-review-form')[0].reset();
+                        $('.review-success-message').show();
+                        setTimeout(() => {
+                            $('.review-success-message').hide();
+                        }, 5000);
+                    } else {
+                        alert(res.data.message);
+                    }
+                }
+            });
+        });
 
     });
+
+   
 })(jQuery);
 
 
@@ -663,4 +724,83 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
+});
+
+
+let selectedFiles = []; // store files manually
+
+function previewFiles(event) {
+    const previewContainer = document.getElementById('media-preview');
+    const input = event.target;
+
+    selectedFiles = Array.from(input.files); // reset and store
+
+    if (selectedFiles.length > 5) {
+        alert("You can upload maximum 5 files.");
+        input.value = "";
+        selectedFiles = [];
+        previewContainer.innerHTML = "";
+        return;
+    }
+
+    previewContainer.innerHTML = "";
+
+    selectedFiles.forEach((file, index) => {
+        const fileType = file.type;
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            // wrapper
+            const wrapper = document.createElement("div");
+            wrapper.classList.add("media-item");
+
+            // media element
+            const mediaElement = document.createElement(
+                fileType.startsWith("image") ? "img" : "video"
+            );
+            mediaElement.src = e.target.result;
+            mediaElement.classList.add("preview-item");
+
+            if (fileType.startsWith("video")) mediaElement.controls = true;
+
+            // close icon
+            const closeBtn = document.createElement("span");
+            closeBtn.classList.add("close-icon");
+            closeBtn.innerHTML = "&#10005;";
+
+            closeBtn.onclick = function () {
+                removeFile(index);
+            };
+
+            wrapper.appendChild(mediaElement);
+            wrapper.appendChild(closeBtn);
+            previewContainer.appendChild(wrapper);
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
+
+function removeFile(index) {
+    selectedFiles.splice(index, 1); // remove file
+
+    // Rebuild file input fileList
+    const input = document.getElementById("review_media");
+    const dataTransfer = new DataTransfer();
+
+    selectedFiles.forEach(f => dataTransfer.items.add(f));
+
+    input.files = dataTransfer.files;
+
+    previewFiles({ target: input }); // rebuild preview
+}
+
+
+jQuery(document).on("click", "#sht_visit_date", function () {
+    if (!this._flatpickr) {
+        jQuery(this).flatpickr({
+            dateFormat: "Y-m-d",
+            minminDate: "today",
+        });
+    }
 });

@@ -4,6 +4,14 @@ defined('ABSPATH') || exit;
 
 use \Tourfic\App\TF_Review;
 use \Tourfic\Classes\Helper;
+
+$tf_setting_base = ! empty(Helper::tfopt('r-base')) ? Helper::tfopt('r-base') : 10;
+$tf_hotel_review = !empty(Helper::tf_data_types(Helper::tfopt('r-hotel')))
+    ? Helper::tf_data_types(Helper::tfopt('r-hotel'))
+    : [];
+
+
+
 ?>
 <!-- Start Review Section -->
 <?php if (! $disable_review_sec == 1) { ?>
@@ -11,7 +19,6 @@ use \Tourfic\Classes\Helper;
         <h4 class="tf-section-title"><?php echo ! empty($meta['review-section-title']) ? esc_html($meta['review-section-title']) : ''; ?></h4>
         <div class="reviews">
             <?php comments_template(); ?>
-
             <div class="tf-single-review <?php echo esc_attr(get_post_type($post_id)) ?>">
                 <?php
                 if ($comments) {
@@ -19,7 +26,7 @@ use \Tourfic\Classes\Helper;
 
                         // Get rating details
                         $tf_overall_rate = get_comment_meta($comment->comment_ID, TF_TOTAL_RATINGS, true);
-             
+
 
                         if ($tf_overall_rate == false) {
                             $tf_comment_meta = get_comment_meta($comment->comment_ID, TF_COMMENT_META, true);
@@ -76,11 +83,121 @@ use \Tourfic\Classes\Helper;
                         </div>
                 <?php
                     }
+                }else {
+                    echo '<p class="tf-no-review">' . esc_html__('No Review Available', 'spa-hotel-toolkit') . '</p>';
                 }
                 ?>
+                <div class="tf-btn-wrap">
+                    <button class="tf-btn-wrap sht-modal-btn">
+                        <i class="fas fa-plus"></i>
+                        <?php echo esc_html(apply_filters('tourfic_add_review_button_text', __('Add Review', 'spa-hotel-toolkit'))); ?>
+                    </button>
+                </div>
+            </div>
+            <div class="sht-modal" id="sht-rating-modal">
+                <div class="sht-modal-dialog">
+                    <div class="sht-modal-content">
+                        <div class="sht-modal-header">
+                            <?php echo apply_filters('tf_rating_modal_header_content', ''); ?>
+                            <a data-dismiss="modal" class="sht-modal-close">&#10005;</a>
+                        </div>
+                        <div class="sht-modal-body">
+                            <div class="tf-review-form-container">
+                                <form method="post" id="sht-review-form"
+                                    class="tf-review-form">
+                                    <input type="hidden" name="sht_review_nonce" value="<?php echo wp_create_nonce('sht_review_nonce'); ?>">
+
+                                    <div class="tf-rating-wrapper tf-star-base-<?php echo esc_attr($tf_setting_base); ?>">
+
+                                        <?php foreach ($tf_hotel_review as $review_field) :
+
+                                            if (empty($review_field['r-field-type'])) continue;
+
+                                            // Raw and safe keys
+                                            $label_text   = $review_field['r-field-type'];
+                                            $field_key    = sanitize_title($label_text);
+
+                                        ?>
+                                            <div class="tf-form-single-rating">
+                                                <label for="<?php echo esc_attr('sht-' . $field_key); ?>"><?php echo esc_html($label_text); ?></label>
+
+                                                <div class="ratings-container star<?php echo esc_attr($tf_setting_base); ?>">
+
+                                                    <?php for ($i = $tf_setting_base; $i >= 1; $i--) :
+
+                                                        $input_id = $field_key . '-' . $i;
+                                                        $name     = 'sht_comment_meta[' . $field_key . ']';
+
+                                                    ?>
+                                                        <input
+                                                            type="radio"
+                                                            id="<?php echo esc_attr('sht-' . $input_id); ?>"
+                                                            name="<?php echo esc_attr($name); ?>"
+                                                            value="<?php echo esc_attr($i); ?>">
+                                                        <label for="<?php echo esc_attr('sht-' . $input_id); ?>"><?php echo esc_html($i); ?></label>
+
+                                                    <?php endfor; ?>
+
+                                                </div>
+
+                                            </div>
+
+                                        <?php endforeach; ?>
+
+                                    </div>
+                                    <div class="tf-fields">
+                                        <div class="tf-visitor-info">
+                                            <div><input type="text" id="first_name" name="first_name" aria-required="true" placeholder="First Name*" required></div>
+                                            <div><input type="text" id="surname" name="surname" aria-required="true" placeholder="Surname (Optional)"></div>
+                                        </div>
+                                        <div class="tf-visitor-email">
+                                            <input type="email" id="user-email" name="user-email" placeholder="Email*" required>
+                                        </div>
+
+                                        <div class="review-desc">
+                                            <textarea id="sht_comment" name="sht_comment" aria-required="true" placeholder="Review Description*" required></textarea>
+                                        </div>
+                                        <div class="tf-review-media">
+                                            <label for="review_media" class="media-upload-label">
+                                                Upload Photos/Videos (Optional, up to 5)
+                                            </label>
+
+                                            <input type="file"
+                                                id="review_media"
+                                                name="review_media[]"
+                                                accept="image/*,video/*"
+                                                multiple
+                                                onchange="previewFiles(event)"
+                                                hidden>
+
+                                            <div id="media-preview" class="media-preview"></div>
+                                        </div>
+
+                                        <div class="tf-visit-date">
+                                            <input type="text"
+                                                name="sht_visit_date"
+                                                id="sht_visit_date"
+                                                class="tf-visit-date-input flatpickr-input"
+                                                placeholder="Visit Date (Optional)"
+                                                readonly>
+                                        </div>
+
+                                        <div class="tf-review-submit">
+                                            <input name="submit" type="submit" id="sht-comment-submit" class="tf_btn tf_btn_small" value="Submit">
+                                            <input type="hidden" name="sht_comment_post_ID" value="<?php echo get_the_ID(); ?>" id="sht_comment_post_ID">
+                                            <input type="hidden" name="sht_comment_parent" id="sht_comment_parent" value="0">
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="review-success-message" style="display: none;">
+                                    <p><?php echo esc_html__('We appreciate your feedback! Your review will be visible once approved.', 'spa-hotel-toolkit'); ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 <?php } ?>
 

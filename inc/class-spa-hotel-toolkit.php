@@ -53,6 +53,12 @@ class Sht_Hotel_Toolkit
 
         // Add custom archive filters
         include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/spa-archive-filters.php';
+
+        // Review submission via AJAX
+        add_action('wp_ajax_sht_submit_review', [$this, 'sht_submit_review']);
+        add_action('wp_ajax_nopriv_sht_submit_review', [$this, 'sht_submit_review']);
+
+        add_action('add_meta_boxes_comment', [$this, 'sht_add_meta_boxes_comment']);
     }
 
 
@@ -692,4 +698,103 @@ class Sht_Hotel_Toolkit
         }
         return $args;
     }
+
+    // Review submission via AJAX
+    function sht_submit_review()
+    {
+        error_log(print_r($_POST, true));
+
+        if (!isset($_POST['sht_review_nonce']) || !wp_verify_nonce($_POST['sht_review_nonce'], 'sht_review_nonce')) {
+            wp_send_json_error('Invalid request.');
+        }
+
+
+        $post_id   = intval($_POST['sht_comment_post_ID']);
+        $parent_id = intval($_POST['sht_comment_parent']);
+        $author    = sanitize_text_field($_POST['first_name']);
+        $email     = sanitize_email($_POST['user-email']);
+        $comment   = sanitize_textarea_field($_POST['sht_comment']);
+        $visit_date = !empty($_POST['sht_visit_date']) ? sanitize_text_field($_POST['sht_visit_date']) : '';
+
+        $ratings = [];
+        if (!empty($_POST['sht_comment_meta'])) {
+            foreach ($_POST['sht_comment_meta'] as $key => $value) {
+                $ratings[sanitize_key($key)] = intval($value);
+            }
+        }
+
+        // Validation: check if at least one rating selected
+        if (empty($ratings)) {
+            wp_send_json_error(['message' => 'Please select at least one star rating.']);
+        }
+
+        $commentdata = [
+            'comment_post_ID'      => $post_id,
+            'comment_parent'       => $parent_id,
+            'comment_author'       => $author,
+            'comment_author_email' => $email,
+            'comment_content'      => $comment,
+            'comment_approved'     => 1, // auto approve
+        ];
+
+        $comment_id = wp_insert_comment($commentdata);
+
+        if (!$comment_id) {
+            wp_send_json_error(['message' => 'Failed to submit comment.']);
+        }
+
+        // Save custom meta
+        update_comment_meta($comment_id, 'sht_visit_date', $visit_date);
+        update_comment_meta($comment_id, 'sht_ratings', $ratings);
+
+        // Handle file uploads
+        if (!empty($_FILES['review_media'])) {
+            $uploaded_files = [];
+            $files = $_FILES['review_media'];
+            foreach ($files['name'] as $i => $name) {
+                if ($files['error'][$i] === 0) {
+                    $file_array = [
+                        'name'     => $files['name'][$i],
+                        'type'     => $files['type'][$i],
+                        'tmp_name' => $files['tmp_name'][$i],
+                        'error'    => $files['error'][$i],
+                        'size'     => $files['size'][$i],
+                    ];
+                    $attach_id = media_handle_upload("review_media[$i]", 0);
+                    if (!is_wp_error($attach_id)) {
+                        $uploaded_files[] = $attach_id;
+                    }
+                }
+            }
+            if ($uploaded_files) {
+                update_comment_meta($comment_id, 'sht_review_media', $uploaded_files);
+            }
+        }
+
+        wp_send_json_success(['message' => 'Review submitted successfully!']);
+    }
+   function sht_add_meta_boxes_comment(){
+    add_meta_box('sht_comment_meta_box', 'Spa Hotel Review Details', function($comment){
+        $ratings = get_comment_meta($comment->comment_ID, 'sht_ratings', true);
+        $visit_date = get_comment_meta($comment->comment_ID, 'sht_visit_date', true);
+        $media = get_comment_meta($comment->comment_ID, 'sht_review_media', true);
+
+        echo '<p><strong>Visit Date:</strong> ' . esc_html($visit_date) . '</p>';
+        if(!empty($ratings)){
+            echo '<p><strong>Ratings:</strong></p><ul>';
+            foreach($ratings as $key => $value){
+                echo '<li>' . esc_html(ucwords(str_replace('-', ' ', $key))) . ': ' . esc_html($value) . '</li>';
+            }
+            echo '</ul>';
+        }
+
+        if(!empty($media)){
+            echo '<p><strong>Media:</strong></p>';
+            foreach($media as $att_id){
+                $url = wp_get_attachment_url($att_id);
+                echo '<a href="'.esc_url($url).'" target="_blank">'.basename($url).'</a><br>';
+            }
+        }
+    }, 'comment', 'normal', 'high');
+   }
 }

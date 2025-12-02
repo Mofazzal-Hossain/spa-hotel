@@ -251,3 +251,7 @@ a:focus {
     padding-left: 16px;
     padding-right: 16px;
 }
+
+body .flatpickr-calendar.open {
+    z-index: 999999;
+}
