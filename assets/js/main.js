@@ -638,16 +638,49 @@
                 url: sht_params.ajax_url,
                 type: 'POST',
                 data: formData,
+                contentType: false, 
+                processData: false,
+                beforeSend: () => {
+                    $('.sht-modal-content').block({
+                        message: null,
+                        overlayCSS: { background: "#fff", opacity: 0.7 }
+                    });
+                    $('.sht-modal-content .loader').show();
+
+                },
                 success: function(res) {
+                    const modalContent = $('.sht-modal-content'); 
+                    let messageElement;
+
                     if (res.success) {
                         $('#sht-review-form')[0].reset();
+                        $('#media-preview').html('');
                         $('.review-success-message').show();
-                        setTimeout(() => {
-                            $('.review-success-message').hide();
-                        }, 5000);
+                        messageElement = $('.review-success-message');
                     } else {
-                        alert(res.data.message);
+                        $('.review-error-message').text(res.data.message).show();
+                        messageElement = $('.review-error-message');
                     }
+
+                    // Scroll smoothly to the message
+                    if (messageElement.length && modalContent.length) {
+                        modalContent.animate({
+                            scrollTop: modalContent.scrollTop() + messageElement.offset().top - modalContent.offset().top
+                        }, 500);
+                    }
+
+                    // Hide the message after 7 seconds
+                    setTimeout(() => {
+                        if (res.success) {
+                            $('.review-success-message').hide();
+                        } else {
+                            $('.review-error-message').hide();
+                        }
+                    }, 7000);
+                },
+                complete: () => {
+                    $('.sht-modal-content').unblock();
+                    $('.sht-modal-content .loader').hide();
                 }
             });
         });

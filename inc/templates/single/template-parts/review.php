@@ -24,16 +24,12 @@ $tf_hotel_review = !empty(Helper::tf_data_types(Helper::tfopt('r-hotel')))
                 if ($comments) {
                     foreach ($comments as $comment) {
 
-                        // Get rating details
-                        $tf_overall_rate = get_comment_meta($comment->comment_ID, TF_TOTAL_RATINGS, true);
+                        $review_images = get_comment_meta($comment->comment_ID, 'sht_review_media', true);
+                        $rating_params = get_comment_meta($comment->comment_ID, 'sht_ratings', true);
 
+                        $tf_overall_rate = TF_Review::Tf_average_ratings($rating_params);
 
-                        if ($tf_overall_rate == false) {
-                            $tf_comment_meta = get_comment_meta($comment->comment_ID, TF_COMMENT_META, true);
-                            $tf_overall_rate = TF_Review::Tf_average_ratings($tf_comment_meta);
-                        }
-                        $base_rate = get_comment_meta($comment->comment_ID, TF_BASE_RATE, true);
-                        $c_rating  = TF_Review::tf_single_rating_change_on_base($tf_overall_rate, $base_rate);
+                        $c_rating  = TF_Review::tf_single_rating_change_on_base($tf_overall_rate, $tf_setting_base);
 
                         // Comment details
                         $c_avatar      = get_avatar($comment, '56');
@@ -80,10 +76,38 @@ $tf_hotel_review = !empty(Helper::tf_data_types(Helper::tfopt('r-hotel')))
                             <?php if ($post_type == 'hotel' && $tf_hotel_selected_template == "default" && strlen($c_content) > 200): ?>
                                 <div class="tf-hotel-show-more"><?php esc_html_e("Show more", "spa-hotel-toolkit") ?></div>
                             <?php endif; ?>
+
+                            <?php if (!empty($review_images) && is_array($review_images)): ?>
+                                <div class="tf-review-images">
+                                    <?php foreach ($review_images as $img_id):
+                                        $img_url = wp_get_attachment_url($img_id);
+                                        $mime = get_post_mime_type($img_id);
+                                    ?>
+                                        <?php if (!empty($img_url)): ?>
+                                            <div class="tf-review-image-item">
+                                                <a href="<?php echo esc_url($img_url); ?>" data-fancybox="review-images">
+                                                    <?php if (strpos($mime, 'video') !== false): ?>
+                                                        <div class="video-thumb-wrapper">
+                                                            <video width="100" height="100">
+                                                                <source src="<?php echo esc_url($img_url); ?>" type="<?php echo esc_attr($mime); ?>">
+                                                            </video>
+                                                            <div class="video-overlay">
+                                                                <span class="video-play-icon"><i class="fa-regular fa-circle-play"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    <?php else: ?>
+                                                        <img src="<?php echo esc_url($img_url); ?>">
+                                                    <?php endif; ?>
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                 <?php
                     }
-                }else {
+                } else {
                     echo '<p class="tf-no-review">' . esc_html__('No Review Available', 'spa-hotel-toolkit') . '</p>';
                 }
                 ?>
@@ -137,11 +161,8 @@ $tf_hotel_review = !empty(Helper::tf_data_types(Helper::tfopt('r-hotel')))
                                                         <label for="<?php echo esc_attr('sht-' . $input_id); ?>"><?php echo esc_html($i); ?></label>
 
                                                     <?php endfor; ?>
-
                                                 </div>
-
                                             </div>
-
                                         <?php endforeach; ?>
 
                                     </div>
@@ -186,12 +207,14 @@ $tf_hotel_review = !empty(Helper::tf_data_types(Helper::tfopt('r-hotel')))
                                             <input name="submit" type="submit" id="sht-comment-submit" class="tf_btn tf_btn_small" value="Submit">
                                             <input type="hidden" name="sht_comment_post_ID" value="<?php echo get_the_ID(); ?>" id="sht_comment_post_ID">
                                             <input type="hidden" name="sht_comment_parent" id="sht_comment_parent" value="0">
+                                            <div class="loader" style="display: none;"></div>
                                         </div>
                                     </div>
                                 </form>
                                 <div class="review-success-message" style="display: none;">
                                     <p><?php echo esc_html__('We appreciate your feedback! Your review will be visible once approved.', 'spa-hotel-toolkit'); ?></p>
                                 </div>
+                                <div class="review-error-message" style="display: none;"></div>
                             </div>
                         </div>
                     </div>

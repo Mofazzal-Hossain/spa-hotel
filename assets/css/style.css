@@ -1654,6 +1654,12 @@ body .flatpickr-calendar.open {
   margin: 20px auto;
   position: relative;
   pointer-events: none;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .sht-modal .sht-modal-dialog::-webkit-scrollbar {
+  display: none;
 }
 @media (min-width: 576px) {
   .spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .sht-modal .sht-modal-dialog {
@@ -1670,6 +1676,7 @@ body .flatpickr-calendar.open {
   display: -webkit-flex;
   display: flex;
   flex-wrap: wrap;
+  flex-wrap: nowrap;
   -webkit-flex-direction: vertical;
   -moz-flex-direction: vertical;
   -ms-flex-direction: column;
@@ -1681,7 +1688,6 @@ body .flatpickr-calendar.open {
   outline: 0;
   margin: 0 auto;
   border-radius: 10px;
-  overflow: hidden;
 }
 .spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .sht-modal .sht-modal-content .sht-modal-header {
   display: -webkit-box;
@@ -1779,7 +1785,8 @@ body .flatpickr-calendar.open {
   background: transparent;
   border: 1px solid #DCCCBB;
   padding: 8px 20px;
-  height: 42px;
+  min-width: 42px;
+  height: auto;
   color: #4e4e4e;
   width: 100%;
 }
@@ -1815,6 +1822,11 @@ body .flatpickr-calendar.open {
 }
 .spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .sht-modal .sht-modal-content .tf-review-form-container .tf-review-form .tf-fields .tf-visitor-info > div {
   flex: 1;
+}
+@media only screen and (max-width: 575.98px) {
+  .spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .sht-modal .sht-modal-content .tf-review-form-container .tf-review-form .tf-fields .tf-visitor-info > div {
+    flex: 100%;
+  }
 }
 .spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .sht-modal .sht-modal-content .tf-review-form-container .tf-review-form .tf-fields .review-desc {
   display: -webkit-box;
@@ -1994,9 +2006,78 @@ body .flatpickr-calendar.open {
   font-weight: 500;
   margin-top: 5px;
 }
-.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .review-success-message {
+.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .tf-single-review .tf-single-details .tf-review-images {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 16px 0 0;
+}
+.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .tf-single-review .tf-single-details .tf-review-images .tf-review-image-item {
+  width: 120px;
+  height: 120px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 0.2px solid #EAE1D7;
+}
+@media only screen and (max-width: 575.98px) {
+  .spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .tf-single-review .tf-single-details .tf-review-images .tf-review-image-item {
+    width: calc(50% - 8px);
+  }
+}
+@media (max-width: 350px) {
+  .spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .tf-single-review .tf-single-details .tf-review-images .tf-review-image-item {
+    width: 100%;
+    height: 100px;
+  }
+}
+.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .tf-single-review .tf-single-details .tf-review-images .tf-review-image-item img,
+.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .tf-single-review .tf-single-details .tf-review-images .tf-review-image-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .tf-single-review .tf-single-details .tf-review-images .tf-review-image-item .video-thumb-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  width: 100%;
+  height: 100%;
+}
+.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .tf-single-review .tf-single-details .tf-review-images .tf-review-image-item .video-thumb-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .tf-single-review .tf-single-details .tf-review-images .tf-review-image-item .video-thumb-wrapper .video-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+}
+.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .tf-single-review .tf-single-details .tf-review-images .tf-review-image-item .video-thumb-wrapper .video-overlay .video-play-icon {
+  font-size: 32px;
+  color: #fff;
+  opacity: 0.9;
+}
+.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .review-success-message,
+.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .review-error-message {
   margin-top: 24px;
   text-align: center;
+  color: #27AE60;
+  font-weight: 600;
+}
+.spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .review-error-message {
+  color: #ff4444;
 }
 .spa-hotel .spa-single-details .tf-container .tf-hotel-location-section iframe {
   height: 250px;

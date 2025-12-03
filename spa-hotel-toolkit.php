@@ -24,6 +24,7 @@ define('SHT_HOTEL_TOOLKIT_VERSION', '1.0.0');
 require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/class-spa-hotel-toolkit.php';
 require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/metabox/spa-metabox.php';
 require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/spa-rator-hotel-rating.php';
+require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/spa-reviews.php';
 
 // Initialize
 function sht_hotel_toolkit_init()
