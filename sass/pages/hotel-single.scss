@@ -615,11 +615,11 @@
                             position: relative;
                             pointer-events: none;
                             overflow: scroll;
-                            -webkit-overflow-scrolling: touch;
                             scroll-behavior: smooth;
                             &::-webkit-scrollbar {
                                 display: none;
                             }
+
                             @media (min-width: 576px) {
                                 height: 100%;
                             }
@@ -639,7 +639,10 @@
                             margin: 0 auto;
                             border-radius: 10px;
      
-
+                            @media #{$max575} {
+                                height: 100vh;
+                                overflow-y: auto;
+                            }
                             .sht-modal-header {
                                 @include d-flex();
                                 flex-direction: column;

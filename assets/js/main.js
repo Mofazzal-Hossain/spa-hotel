@@ -616,16 +616,29 @@
 
             const requiredFields = [
                 { selector: '#first_name', name: 'First Name' },
-                { selector: '#user-email', name: 'Email' },
-                { selector: '#sht_comment', name: 'Review Description' }
+                { selector: '#user-email', name: 'Email', type: 'email' },
+                { selector: '#sht_comment', name: 'Review Description', minLength: 50 }
             ];
 
             requiredFields.forEach(function(field) {
                 const input = form.find(field.selector);
-                if ($.trim(input.val()) === '') {
+                const value = $.trim(input.val());
+                
+                if (!value || (field.minLength && value.length < field.minLength)) {
                     formValid = false;
                     if (input.next('.field-error').length === 0) {
-                        input.after('<div class="field-error" style="color:red; font-size:13px; margin-top:5px;">' + field.name + ' is required.</div>');
+                        input.after('<div class="field-error" style="color:red; font-size:13px; margin-top:5px;">' + field.name + (field.minLength ? ` must be at least ${field.minLength} characters.` : ' is required.') + '</div>');
+                    }
+                }
+
+                // Email validation
+                if (field.type === 'email' && value) {
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(value)) {
+                        formValid = false;
+                        if (input.next('.field-error').length === 0) {
+                            input.after('<div class="field-error" style="color:red; font-size:13px; margin-top:5px;">Please enter a valid email address.</div>');
+                        }
                     }
                 }
             });
@@ -760,20 +773,34 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-let selectedFiles = []; // store files manually
+let selectedFiles = []; 
+const MAX_FILE_SIZE = 1 * 1024 * 1024; 
+const MAX_FILE_COUNT = 5;
 
 function previewFiles(event) {
     const previewContainer = document.getElementById('media-preview');
     const input = event.target;
 
-    selectedFiles = Array.from(input.files); // reset and store
+    selectedFiles = Array.from(input.files); 
 
-    if (selectedFiles.length > 5) {
-        alert("You can upload maximum 5 files.");
+
+    if (selectedFiles.length > MAX_FILE_COUNT) {
+        alert(`You can upload maximum ${MAX_FILE_COUNT} files.`);
         input.value = "";
         selectedFiles = [];
         previewContainer.innerHTML = "";
         return;
+    }
+
+    // Check file sizes
+    for (let i = 0; i < selectedFiles.length; i++) {
+        if (selectedFiles[i].size > MAX_FILE_SIZE) {
+            alert(`${selectedFiles[i].name} is too large. Maximum file size is 1MB.`);
+            input.value = "";
+            selectedFiles = [];
+            previewContainer.innerHTML = "";
+            return;
+        }
     }
 
     previewContainer.innerHTML = "";
@@ -783,11 +810,10 @@ function previewFiles(event) {
         const reader = new FileReader();
 
         reader.onload = function(e) {
-            // wrapper
             const wrapper = document.createElement("div");
             wrapper.classList.add("media-item");
 
-            // media element
+            // Media element
             const mediaElement = document.createElement(
                 fileType.startsWith("image") ? "img" : "video"
             );
@@ -796,7 +822,7 @@ function previewFiles(event) {
 
             if (fileType.startsWith("video")) mediaElement.controls = true;
 
-            // close icon
+            // Close icon
             const closeBtn = document.createElement("span");
             closeBtn.classList.add("close-icon");
             closeBtn.innerHTML = "&#10005;";
@@ -815,18 +841,17 @@ function previewFiles(event) {
 }
 
 function removeFile(index) {
-    selectedFiles.splice(index, 1); // remove file
+    selectedFiles.splice(index, 1); 
 
-    // Rebuild file input fileList
     const input = document.getElementById("review_media");
     const dataTransfer = new DataTransfer();
 
     selectedFiles.forEach(f => dataTransfer.items.add(f));
-
     input.files = dataTransfer.files;
 
-    previewFiles({ target: input }); // rebuild preview
+    previewFiles({ target: input }); 
 }
+
 
 
 jQuery(document).on("click", "#sht_visit_date", function () {

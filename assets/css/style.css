@@ -1655,7 +1655,6 @@ body .flatpickr-calendar.open {
   position: relative;
   pointer-events: none;
   overflow: scroll;
-  -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 }
 .spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .sht-modal .sht-modal-dialog::-webkit-scrollbar {
@@ -1688,6 +1687,12 @@ body .flatpickr-calendar.open {
   outline: 0;
   margin: 0 auto;
   border-radius: 10px;
+}
+@media only screen and (max-width: 575.98px) {
+  .spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .sht-modal .sht-modal-content {
+    height: 100vh;
+    overflow-y: auto;
+  }
 }
 .spa-hotel .spa-single-details .tf-container .tf-review-wrapper .reviews .sht-modal .sht-modal-content .sht-modal-header {
   display: -webkit-box;

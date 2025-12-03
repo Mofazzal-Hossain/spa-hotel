@@ -21,6 +21,9 @@ function sht_submit_review()
     $comment   = sanitize_textarea_field($_POST['sht_comment']);
     $visit_date = !empty($_POST['sht_visit_date']) ? sanitize_text_field($_POST['sht_visit_date']) : '';
 
+    if (!is_email($email)) {
+        wp_send_json_error(['message' => 'Please enter a valid email address.']);
+    }
     $existing_comments = get_comments([
         'post_id' => $post_id,
         'author_email' => $email,
@@ -41,6 +44,10 @@ function sht_submit_review()
 
     if (empty($ratings)) {
         wp_send_json_error(['message' => 'Please select at least one star rating.']);
+    }
+
+    if (strlen($comment) < 50) {
+        wp_send_json_error(['message' => 'Review Description must be at least 50 characters.']);
     }
 
     $commentdata = [
@@ -149,20 +156,22 @@ function sht_render_comment_meta_box($comment)
             $url  = wp_get_attachment_url($id);
             $mime = get_post_mime_type($id);
 
-            echo '<div style="margin-bottom:10px;">';
+            if (!empty($url)) {
+                echo '<div style="margin-bottom:10px;">';
 
-            if (strpos($mime, 'video') !== false) {
-                echo '<video width="100" height="100" controls style="border-radius:5px;border:.2px solid #eae1d7;">
+                if (strpos($mime, 'video') !== false) {
+                    echo '<video width="100" height="100" controls style="border-radius:5px;border:.2px solid #eae1d7;">
                 <source src="' . esc_url($url) . '" type="' . esc_attr($mime) . '">
               </video>';
-            } else {
-                echo '<img src="' . esc_url($url) . '" style="width:100px;height:100px;object-fit:cover;border-radius:5px;border:.2px solid #eae1d7;">';
-            }
+                } else {
+                    echo '<img src="' . esc_url($url) . '" style="width:100px;height:100px;object-fit:cover;border-radius:5px;border:.2px solid #eae1d7;">';
+                }
 
-            echo '<label style="display:block;cursor:pointer;margin:2px 0 0;">
+                echo '<label style="display:block;cursor:pointer;margin:2px 0 0;">
             <input type="checkbox" name="sht_remove_media[]" value="' . $id . '" style="margin: -2px 0 0;"> Remove
           </label>';
-            echo '</div>';
+                echo '</div>';
+            }
         }
         ?>
     </div>
