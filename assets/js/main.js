@@ -114,6 +114,9 @@
             }
         });
 
+        if ($('.tf-testimonial-slider').hasClass('no-slide')) {
+            return;
+        }
 
         $('.tf-testimonial-slider').slick({
             infinite: true,

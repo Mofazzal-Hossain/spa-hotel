@@ -733,11 +733,37 @@ body .flatpickr-calendar.open {
     display: none;
   }
 }
+.tf-testimonial-wrapper .tf-testimonial-inner.hide-blur::after, .tf-testimonial-wrapper .tf-testimonial-inner.hide-blur::before {
+  display: none;
+}
 .tf-testimonial-wrapper .tf-testimonial-inner::before {
   left: 0;
 }
 .tf-testimonial-wrapper .tf-testimonial-inner::after {
   right: 0;
+}
+.tf-testimonial-wrapper .tf-testimonial-inner .tf-testimonial-slider.no-slide {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.tf-testimonial-wrapper .tf-testimonial-inner .tf-testimonial-slider.no-slide .tf-testimonial-item {
+  flex-basis: calc(33.333% - 16px);
+  margin-bottom: 0;
+}
+@media only screen and (max-width: 991.98px) {
+  .tf-testimonial-wrapper .tf-testimonial-inner .tf-testimonial-slider.no-slide .tf-testimonial-item {
+    flex-basis: calc(50% - 16px);
+  }
+}
+@media only screen and (max-width: 575.98px) {
+  .tf-testimonial-wrapper .tf-testimonial-inner .tf-testimonial-slider.no-slide .tf-testimonial-item {
+    flex-basis: 100%;
+  }
 }
 .tf-testimonial-wrapper .tf-testimonial-inner .tf-testimonial-slider .tf-testimonial-item {
   padding: 24px;

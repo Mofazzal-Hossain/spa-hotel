@@ -97,10 +97,18 @@
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(1px);
             z-index: 2;
+
             @media #{$max1199} {
                 width: 200px;
             }
+
             @media #{$max991} {
+                display: none;
+            }
+        }
+        &.hide-blur {
+            &::after,
+            &::before {
                 display: none;
             }
         }
@@ -114,6 +122,21 @@
         }
 
         .tf-testimonial-slider {
+            &.no-slide {
+                @include d-flex();
+                gap: 24px;
+                .tf-testimonial-item {
+                    flex-basis: calc(33.333% - 16px);
+                    margin-bottom: 0;
+                    @media #{$max991} {
+                        flex-basis: calc(50% - 16px);
+                    }
+                    @media #{$max575} {
+                        flex-basis: 100%;
+                    }
+                }
+            }
+
             .tf-testimonial-item {
                 padding: 24px;
                 background: $sht-color-white;
@@ -195,9 +218,11 @@
 
             .slick-list {
                 margin: 0 -32px;
+
                 @media #{$max1199} {
                     margin: 0 -16px;
                 }
+
                 @media #{$max991} {
                     margin: 0 -8px;
                 }
@@ -210,10 +235,12 @@
                         margin-left: 32px;
                         margin-right: 32px;
                         height: auto;
+
                         @media #{$max1199} {
                             margin-left: 16px;
                             margin-right: 16px;
                         }
+
                         @media #{$max991} {
                             margin-left: 8px;
                             margin-right: 8px;

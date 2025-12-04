@@ -2,6 +2,7 @@
 // Don't load directly
 defined('ABSPATH') || exit;
 
+use Mpdf\Tag\P;
 use \Tourfic\Classes\Helper;
 use \Tourfic\App\TF_Review;
 
@@ -9,11 +10,18 @@ $testimonial_subtitle  = ! empty(Helper::tfopt('testimonial-subtitle')) ? Helper
 $testimonial_title  = ! empty(Helper::tfopt('testimonial-title')) ? Helper::tfopt('testimonial-title') : '';
 $testimonial_desc  = ! empty(Helper::tfopt('testimonial-description')) ? Helper::tfopt('testimonial-description') : '';
 
-
+$term = get_queried_object();
 $hotel_posts = get_posts([
     'post_type'      => 'tf_hotel',
     'posts_per_page' => -1,
     'fields'         => 'ids',
+    'tax_query'      => [
+        [
+            'taxonomy' => 'hotel_location',
+            'field'    => 'term_id',
+            'terms'    => $term->term_id,
+        ]
+    ]
 ]);
 $args = [
     'post__in' => $hotel_posts,
@@ -23,6 +31,8 @@ $args = [
 
 $comments_query = new WP_Comment_Query($args);
 $comments = $comments_query->comments;
+$comment_count = count($comments);
+
 ?>
 <div class="tf-testimonial-wrapper sht-sec-space">
     <div class="tf-container">
@@ -43,8 +53,8 @@ $comments = $comments_query->comments;
                 </p>
             <?php endif; ?>
         </div>
-        <div class="tf-testimonial-inner">
-            <div class="tf-testimonial-slider">
+        <div class="tf-testimonial-inner<?php echo ($comment_count < 4) ? ' hide-blur' : ''; ?>">
+            <div class="tf-testimonial-slider <?php echo ($comment_count > 3) ? 'has-slider' : 'no-slide'; ?>">
                 <?php
                 if ($comments) {
                     foreach ($comments as $comment) {
@@ -66,7 +76,7 @@ $comments = $comments_query->comments;
                         if ($comment->user_id) {
                             $user_designation = get_user_meta($comment->user_id, 'designation', true);
                         }
-                        if(empty($user_designation)){
+                        if (empty($user_designation)) {
                             $user_designation = 'Entrepreneur';
                         }
                         $c_author_name = $comment->comment_author;
@@ -123,23 +133,29 @@ $comments = $comments_query->comments;
 
 
             </div>
-            <!-- slider controls -->
-            <div class="sht-slider-controls">
-                <button class="sht-arrow sht-prev" type="button" aria-label="Previous">
-                    <span class="sht-arrow-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M15 18L9 12L15 6" stroke="#BB7C3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                </button>
-                <button class="sht-arrow sht-next" type="button" aria-label="Next">
-                    <span class="sht-arrow-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M9 18L15 12L9 6" stroke="#BB7C3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                </button>
-            </div>
+            <?php if ($comment_count > 3): ?>
+                <!-- slider controls -->
+                <div class="sht-slider-controls">
+                    <button class="sht-arrow sht-prev" type="button" aria-label="Previous">
+                        <span class="sht-arrow-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M15 18L9 12L15 6" stroke="#BB7C3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </button>
+                    <button class="sht-arrow sht-next" type="button" aria-label="Next">
+                        <span class="sht-arrow-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 18L15 12L9 6" stroke="#BB7C3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+            <?php endif; ?>
+
+            <?php if($comment == 0): ?>
+                <p class="no-review-found" style="text-align: center;"><?php esc_html_e('No reviews found.', 'spa-hotel-toolkit'); ?></p>    
+            <?php endif; ?>
         </div>
     </div>
 </div>

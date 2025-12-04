@@ -24,7 +24,7 @@ $hotels = new \WP_Query($args);
 		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/breadcrumb.php';
 		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/archive-details.php';
 		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/latest-posts.php';
-		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/reviews.php';
+		// include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/reviews.php';
 		include SHT_HOTEL_TOOLKIT_TEMPLATES . 'archive/template-parts/faq.php';
 	?>
 </div>
