@@ -1503,6 +1503,15 @@ body .flatpickr-calendar.open {
 .spa-hotel .spa-single-details .tf-container .tf-single-description .tf-full-description {
   display: none;
 }
+.spa-hotel .spa-single-details .tf-container .tf-single-description .tf-full-description p {
+  margin-bottom: 16px;
+}
+.spa-hotel .spa-single-details .tf-container .tf-single-description .tf-full-description p:last-child {
+  margin-bottom: 0;
+}
+.spa-hotel .spa-single-details .tf-container .tf-single-description .tf-full-description p:empty {
+  display: none;
+}
 .spa-hotel .spa-single-details .tf-container .tf-single-description .tf-hotel-place-review {
   margin-top: 24px;
 }

@@ -1,5 +1,8 @@
 ;(function($){
     $(document).ready(function(){
+
+       
+
         new Swiper(".sht-hotels-slider", {
             slidesPerView: 2.4,
             spaceBetween: 32,
@@ -206,7 +209,7 @@
         // }
 
         // view switcher
-        $('.sht-archive-view button').on('click', function () {
+        $(document).on('click', '.sht-archive-view button', function () {
             var $this = $(this);
             var isList = $this.hasClass('list-view');
             var isMap = $this.hasClass('map-view');

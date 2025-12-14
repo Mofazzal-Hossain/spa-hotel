@@ -11,7 +11,7 @@ $rator_overall_text = !empty($hotel_meta['rator-overall-text']) ? $hotel_meta['r
 $rator_description = !empty($hotel_meta['rator-description']) ? $hotel_meta['rator-description'] : '';
 
 $tf_settings_base = !empty(Helper::tfopt('r-base')) ? intval(Helper::tfopt('r-base')) : 10;
-$original_base = 10; 
+$original_base = 10;
 
 $tf_hotel_review = !empty(Helper::tf_data_types(Helper::tfopt('r-hotel')))
     ? Helper::tf_data_types(Helper::tfopt('r-hotel'))
@@ -49,7 +49,6 @@ foreach ($tf_hotel_review as $field) {
 
 // Calculate final avg
 $total_rating = $total_count ? ($total_sum / $total_count) : 0;
-
 ?>
 
 <div class="tf-rator-progress spa-single-section">
@@ -64,7 +63,11 @@ $total_rating = $total_count ? ($total_sum / $total_count) : 0;
                 <div class="average-text"><?php echo esc_html($rator_overall_text); ?></div>
 
                 <div class="rating">
-                    <?php echo esc_html(number_format($total_rating, 1)); ?>
+                    <?php
+                    $display_rating = (int) ($total_rating * 10) / 10;
+                    echo esc_html(number_format($display_rating, 1));
+
+                    ?>
                     <?php echo esc_html__('out of', 'spa-hotel-toolkit'); ?>
                     <span><?php echo esc_html($tf_settings_base); ?></span>
                 </div>

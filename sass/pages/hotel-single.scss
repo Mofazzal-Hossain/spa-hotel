@@ -476,6 +476,15 @@
 
                 .tf-full-description {
                     display: none;
+                    p{
+                        margin-bottom: 16px;
+                        &:last-child{
+                            margin-bottom: 0;
+                        }
+                        &:empty{
+                            display: none;
+                        }
+                    }
                 }
 
                 .tf-hotel-place-review {

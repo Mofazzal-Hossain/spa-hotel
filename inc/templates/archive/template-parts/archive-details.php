@@ -285,9 +285,6 @@ if ($current_term && isset($current_term->term_id)) {
                                         <div class="tf-archive-children">
                                             <div class="spa-heading-wrap">
                                                 <h4 class="spa-title"><?php echo esc_html(esc_html($child->name)); ?></h4>
-                                                <?php if (!empty($child->description)): ?>
-                                                    <p><?php echo esc_html(esc_html($child->description)); ?></p>
-                                                <?php endif; ?>
                                             </div>
 
                                             <?php
