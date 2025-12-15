@@ -117,11 +117,7 @@
             }
         });
 
-        if ($('.tf-testimonial-slider').hasClass('no-slide')) {
-            return;
-        }
-
-        $('.tf-testimonial-slider').slick({
+        $('.tf-testimonial-slider.has-slider').slick({
             infinite: true,
             slidesToShow: 3,
             slidesToScroll: 1,
@@ -464,6 +460,7 @@
             const facilities = termIdsByFieldName('sht_facilities');
             const ratings = termIdsByFieldName('ratings');
             const score = termIdsByFieldName('score');
+            const sortByFilter = $('.sht-sort-filter input[type="radio"]:checked').val();
 
             const taxonomy = $('.tf-sidebar').find('.tf-archive-taxonomy').val();
             const term = $('.tf-sidebar').find('.tf-archive-slug').val();
@@ -492,6 +489,7 @@
             formData.append('checkin', checkin);
             formData.append('checkout', checkout);
             formData.append('page', page);
+            formData.append('sortBy', sortByFilter);
 
             if(mapCoordinates.length === 4){
                 formData.append('mapCoordinates', mapCoordinates.join(','));
@@ -551,9 +549,17 @@
             }, 500);
         });
 
+        // Trigger filter on radio change
+        $(document).on('change', '.sht-sort-filter input[type="radio"]', function () {
+            spaMakeFilter();
+        });
+
         $(document).on('click', '.tf-sidebar .sht-sidebar-reset', function (e) {
             e.preventDefault();
             $('.sht-filter input[type="checkbox"]').prop('checked', false);
+            $('.sht-sort-filter input[type="radio"]').prop('checked', false);
+            $('.sht-sort-filter label:first-child input').prop('checked', true);
+            
             $('.sht-filter li').removeClass('active');
             spaMakeFilter();
 

@@ -38,19 +38,32 @@ $faqs = isset($tf_location_meta['location-faqs']) ? $tf_location_meta['location-
 $faq_items = !empty(Helper::tf_data_types($faqs)) ? Helper::tf_data_types($faqs) : [];
 
 
-$args = array(
-	'post_type' => 'tf_hotel',
-	'post_status' => 'publish',
-	'posts_per_page' => -1,
-	'tax_query' => array(
-		array(
-			'taxonomy' => 'hotel_location',
-			'field' => 'slug',
-			'terms' => $taxonomy_slug,
-			'include_children' => false,
-		)
-	)
-);
+$args = [
+    'post_type'      => 'tf_hotel',
+    'post_status'    => 'publish',
+    'posts_per_page' => -1,
+
+    'meta_key'       => 'sparator_score',
+    'orderby'        => 'meta_value_num',
+    'order'          => 'DESC',
+
+    'meta_query' => [
+        [
+            'key'     => 'sparator_score',
+            'compare' => 'EXISTS',
+        ],
+    ],
+
+    'tax_query' => [
+        [
+            'taxonomy'         => 'hotel_location',
+            'field'            => 'slug',
+            'terms'            => $taxonomy_slug,
+            'include_children' => false,
+        ],
+    ],
+];
+
 $hotels = new \WP_Query($args);
 
 ?>

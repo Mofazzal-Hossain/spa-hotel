@@ -2680,6 +2680,62 @@ body.sht-modal-open::after {
   font-size: 13px;
   margin-left: 3px;
 }
+.spa-hotel-archive-template .tf-archive-details .tf-archive-details-content .tf-booking-sidebar .tf_widget .sht-sort-filter {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 8px;
+}
+.spa-hotel-archive-template .tf-archive-details .tf-archive-details-content .tf-booking-sidebar .tf_widget .sht-sort-filter label {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #1a1a1a;
+  cursor: pointer;
+  font-weight: 400;
+}
+.spa-hotel-archive-template .tf-archive-details .tf-archive-details-content .tf-booking-sidebar .tf_widget .sht-sort-filter label input {
+  display: none;
+}
+.spa-hotel-archive-template .tf-archive-details .tf-archive-details-content .tf-booking-sidebar .tf_widget .sht-sort-filter label span {
+  padding-left: 20px;
+  position: relative;
+}
+.spa-hotel-archive-template .tf-archive-details .tf-archive-details-content .tf-booking-sidebar .tf_widget .sht-sort-filter label span::before, .spa-hotel-archive-template .tf-archive-details .tf-archive-details-content .tf-booking-sidebar .tf_widget .sht-sort-filter label span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 13px;
+  height: 13px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border: 1px solid #EAE1D7;
+  background: #FFFBF5;
+}
+.spa-hotel-archive-template .tf-archive-details .tf-archive-details-content .tf-booking-sidebar .tf_widget .sht-sort-filter label input:checked + span::after {
+  background: #D4A574;
+  border-color: #D4A574;
+  width: 9px;
+  height: 9px;
+  left: 2px;
+}
 .spa-hotel-archive-template .tf-archive-details .tf-archive-hotels {
   flex: 1;
   position: relative;

@@ -12,12 +12,10 @@ add_action('wp_ajax_nopriv_sht_archive_filter', 'sht_archive_filter_ajax');
 function sht_archive_filter_ajax()
 {
 
-
     // Check nonce
     if (empty($_POST['_nonce']) || ! wp_verify_nonce(sanitize_text_field($_POST['_nonce']), 'sht_ajax_nonce')) {
         wp_send_json_error(['message' => 'Invalid nonce']);
     }
-
 
     // Initialize WP_Query args
     $args = [
@@ -37,6 +35,7 @@ function sht_archive_filter_ajax()
     $place_location = !empty($_POST['placeLocation']) ? sanitize_text_field($_POST['placeLocation']) : '';
     $checkin     = !empty($_POST['checkin']) ? sanitize_text_field($_POST['checkin']) : '';
     $checkout     = !empty($_POST['checkout']) ? sanitize_text_field($_POST['checkout']) : '';
+    $sort_by     = !empty($_POST['sortBy']) ? sanitize_text_field($_POST['sortBy']) : '';
 
     //Map Template only
     $mapFilter = !empty($_POST['mapFilter']) ? sanitize_text_field($_POST['mapFilter']) : false;
@@ -163,6 +162,26 @@ function sht_archive_filter_ajax()
         $args['post__in'] = !empty($filtered_ids) ? $filtered_ids : [0];
     }
 
+    // Sort by
+    if (!empty($sort_by) && $sort_by === 'sparator-scores') {
+        $args['meta_key'] = 'sparator_score';
+        $args['orderby']  = 'meta_value_num';
+        $args['order']    = 'DESC';
+    } elseif (!empty($sort_by) && $sort_by === 'hotel-rates') {
+
+        $hotels = get_posts(array_merge($args, ['fields' => 'ids']));
+
+        $hotel_prices = [];
+        foreach ($hotels as $hotel_id) {
+            $min_price_arr = Pricing::instance($hotel_id)->get_min_price();
+            $hotel_prices[$hotel_id] = isset($min_price_arr['min_sale_price']) ? floatval($min_price_arr['min_sale_price']) : 0;
+        }
+
+        arsort($hotel_prices);
+        $sorted_ids = array_keys($hotel_prices);
+        $args['post__in'] = $sorted_ids;
+        $args['orderby'] = 'post__in';
+    }
 
 
     // Apply tax_query if any filters exist

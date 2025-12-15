@@ -4,6 +4,7 @@
 defined('ABSPATH') || exit;
 
 use \Tourfic\Classes\Helper;
+use \Tourfic\Classes\Hotel\Pricing;
 
 if (! function_exists('sht_sparator_rating_badge')) {
 
@@ -87,4 +88,65 @@ if (! function_exists('sht_sparator_rating_badge')) {
     }
 }
 
-    
+// Save SpaRator score
+function sht_save_sparator_score($post_id)
+{
+    static $running = false;
+    if ($running) return;
+
+    $running = true;
+
+    $badge = sht_sparator_rating_badge($post_id);
+
+    if (preg_match('/SpaRator\s([\d\.]+)/', $badge['text'], $matches)) {
+        $rating = floatval($matches[1]);
+    } else {
+        $rating = 0;
+    }
+
+    update_post_meta($post_id, 'sparator_score', $rating);
+
+    $running = false;
+}
+
+// Update SpaRator score
+add_action('updated_post_meta', function ($meta_id, $post_id, $meta_key, $meta_value) {
+
+    if (get_post_type($post_id) !== 'tf_hotel') {
+        return;
+    }
+
+    if ($meta_key !== 'tf_hotels_opt') {
+        return;
+    }
+
+    sht_save_sparator_score($post_id);
+
+}, 10, 4);
+
+// Save post meta
+add_action('save_post_tf_hotel', function ($post_id) {
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (wp_is_post_revision($post_id)) return;
+
+    sht_save_sparator_score($post_id);
+
+});
+
+
+// add_action('admin_init', function () {
+
+//     if (!current_user_can('manage_options')) return;
+
+//     $hotels = get_posts([
+//         'post_type'      => 'tf_hotel',
+//         'posts_per_page' => -1,
+//         'fields'         => 'ids',
+//     ]);
+
+//     foreach ($hotels as $hotel_id) {
+//         sht_save_sparator_score($hotel_id);
+//     }
+
+// });

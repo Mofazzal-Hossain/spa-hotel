@@ -2,7 +2,6 @@
 // Don't load directly
 defined('ABSPATH') || exit;
 
-use Mpdf\Tag\P;
 use \Tourfic\Classes\Helper;
 use \Tourfic\App\TF_Review;
 
@@ -82,7 +81,7 @@ $comment_count = count($comments);
                         $c_author_name = $comment->comment_author;
                         $c_content     = $comment->comment_content;
                         global $post_type;
-                ?>
+                        ?>
                         <div class="tf-testimonial-item">
                             <div class="tf-shape">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="34" height="40" viewBox="0 0 34 40" fill="none">
@@ -126,12 +125,10 @@ $comment_count = count($comments);
                                 <div class="tf-hotel-show-more"><?php esc_html_e("Show more", "spa-hotel-toolkit") ?></div>
                             <?php endif; ?>
                         </div>
-                <?php
+                    <?php
                     }
                 }
                 ?>
-
-
             </div>
             <?php if ($comment_count > 3): ?>
                 <!-- slider controls -->
@@ -153,7 +150,7 @@ $comment_count = count($comments);
                 </div>
             <?php endif; ?>
 
-            <?php if($comment == 0): ?>
+            <?php if($comment_count == 0): ?>
                 <p class="no-review-found" style="text-align: center;"><?php esc_html_e('No reviews found.', 'spa-hotel-toolkit'); ?></p>    
             <?php endif; ?>
         </div>

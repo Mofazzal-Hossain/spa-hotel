@@ -70,6 +70,7 @@ class Sht_Hotel_Toolkit
             'map_marker_width' => !empty(Helper::tfopt('map_marker_width')) ? Helper::tfopt('map_marker_width') : '35',
             'map_marker_height' => !empty(Helper::tfopt('map_marker_height')) ? Helper::tfopt('map_marker_height') : '45',
         ));
+        
     }
 
     // Add custom category for Elementor widgets
@@ -641,10 +642,12 @@ class Sht_Hotel_Toolkit
         require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/widgets/class-hotel-feature-filter.php';
         require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/widgets/class-hotel-other-facility-filter.php';
         require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/widgets/class-hotel-rating-filter.php';
+        require_once SHT_HOTEL_TOOLKIT_PATH . 'inc/widgets/class-hotel-sort-by-filter.php';
         register_widget('Spa_Hotel_Toolkit\Widgets\Sht_Hotel_Score_Filter');
         register_widget('Spa_Hotel_Toolkit\Widgets\Sht_Hotel_Feature_Filter');
         register_widget('Spa_Hotel_Toolkit\Widgets\Sht_Hotel_Other_Facility_Filter');
         register_widget('Spa_Hotel_Toolkit\Widgets\Sht_Rating_Filter_Widget');
+        register_widget('Spa_Hotel_Toolkit\Widgets\Sht_Hotel_Sort_By_Filter');
     }
 
     /**
