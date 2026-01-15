@@ -18,6 +18,9 @@
         flex-direction: column;
         padding-left: 16px;
         padding-right: 16px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
 
         @media #{$max768} {
             min-height: 280px;

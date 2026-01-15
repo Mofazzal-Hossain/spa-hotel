@@ -533,6 +533,12 @@ class Sht_Hotel_Toolkit
                     'title'   => __('Booking', 'spa-hotel-toolkit'),
                 ),
                 array(
+                    'id'      => 'rating-booking-url',
+                    'type'    => 'text',
+                    'label'   => __('URL', 'spa-hotel-toolkit'),
+                    'default' => '#',
+                ),
+                array(
                     'id'      => 'rating-booking-feedback',
                     'type'    => 'text',
                     'label'   => __('Feedback', 'spa-hotel-toolkit'),
@@ -556,14 +562,19 @@ class Sht_Hotel_Toolkit
                     'type'    => 'heading',
                     'title'   => __('Google', 'spa-hotel-toolkit'),
                 ),
-
+                array(
+                    'id'      => 'rating-google-url',
+                    'type'    => 'text',
+                    'label'   => __('URL', 'spa-hotel-toolkit'),
+                    'default' => '#',
+                ),
                 array(
                     'id'      => 'rating-google-score',
                     'type'    => 'text',
                     'label'   => __('Rating', 'spa-hotel-toolkit'),
                     'default' => __('4.5', 'spa-hotel-toolkit'),
                 ),
-
+               
                 array(
                     'id'      => 'rating-google-desc',
                     'type'    => 'text',
@@ -576,6 +587,12 @@ class Sht_Hotel_Toolkit
                     'id'      => 'rating-tripadvisor-heading',
                     'type'    => 'heading',
                     'title'   => __('Tripadvisor', 'spa-hotel-toolkit'),
+                ),
+                array(
+                    'id'      => 'rating-tripadvisor-url',
+                    'type'    => 'text',
+                    'label'   => __('URL', 'spa-hotel-toolkit'),
+                    'default' => '#',
                 ),
 
                 array(

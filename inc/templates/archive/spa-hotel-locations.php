@@ -21,9 +21,7 @@ $tf_location_image = ! empty($tf_location_meta['image']) ? $tf_location_meta['im
 
 $tf_hotel_arc_selected_template = ! empty(Helper::tf_data_types(Helper::tfopt('tf-template'))['hotel-archive']) ?  Helper::tf_data_types(Helper::tfopt('tf-template'))['hotel-archive'] : 'design-1';
 $tf_template = Helper::tf_data_types(Helper::tfopt('tf-template'));
-$tf_hotel_arc_banner = ! empty($tf_template['hotel_archive_design_1_bannar'])
-	? $tf_template['hotel_archive_design_1_bannar']
-	: '';
+
 
 $banner_title = ! empty($tf_location_meta['location-banner-title']) ? $tf_location_meta['location-banner-title'] : '';
 $location_inner_title = ! empty($tf_location_meta['location-inner-title']) ? $tf_location_meta['location-inner-title'] : '';
@@ -68,9 +66,9 @@ $hotels = new \WP_Query($args);
 
 ?>
 <div class="spa-hotel-archive-template">
-	<?php if (! empty($tf_hotel_arc_banner)) : ?>
+	<?php if (! empty($tf_location_image)) : ?>
 		<div class="tf-hotel-archive-banner"
-			style="background-image: url('<?php echo esc_url($tf_hotel_arc_banner); ?>');">
+			style="background-image: url('<?php echo esc_url($tf_location_image); ?>');">
 		<?php else : ?>
 		<div class="tf-hotel-archive-banner">
 	<?php endif; ?>

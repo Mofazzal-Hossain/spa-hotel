@@ -476,12 +476,15 @@
 
                 .tf-full-description {
                     display: none;
-                    p{
+
+                    p {
                         margin-bottom: 16px;
-                        &:last-child{
+
+                        &:last-child {
                             margin-bottom: 0;
                         }
-                        &:empty{
+
+                        &:empty {
                             display: none;
                         }
                     }
@@ -504,51 +507,54 @@
                         }
 
                         li {
-                            @include d-flex();
-                            flex-wrap: nowrap;
-                            @include align-items(center);
-                            gap: 8px;
-
-                            .rating {
-                                background-color: $sht-twilight-blue;
-                                color: $sht-color-white;
-                                font-weight: 700;
-                                text-align: center;
-                                width: 40px;
-                                height: 40px;
-                                @include bd-radius(10px);
-                                @include d-flex();
-                                @include align-items(center);
-                                @include justify-content(center);
-                                position: relative;
-
-                                svg {
-                                    position: absolute;
-                                    bottom: 0px;
-                                    left: 0px;
-                                    width: 15px;
-                                    height: 12px;
-                                }
-                            }
-
-                            h6 {
+                            a {
                                 @include d-flex();
                                 flex-wrap: nowrap;
                                 @include align-items(center);
-                                gap: 4px;
+                                gap: 8px;
 
-                                .rating-icon {
+                                .rating {
+                                    background-color: $sht-twilight-blue;
+                                    color: $sht-color-white;
+                                    font-weight: 700;
+                                    text-align: center;
+                                    width: 40px;
+                                    height: 40px;
+                                    @include bd-radius(10px);
                                     @include d-flex();
+                                    @include align-items(center);
+                                    @include justify-content(center);
+                                    position: relative;
+
+                                    svg {
+                                        position: absolute;
+                                        bottom: 0px;
+                                        left: 0px;
+                                        width: 15px;
+                                        height: 12px;
+                                    }
                                 }
-                            }
 
-                            img {
-                                width: 40px;
-                                height: 40px;
-                            }
+                                h6 {
+                                    @include d-flex();
+                                    flex-wrap: nowrap;
+                                    @include align-items(center);
+                                    gap: 4px;
 
-                            p {
-                                font-size: 14px;
+                                    .rating-icon {
+                                        @include d-flex();
+                                    }
+                                }
+
+                                img {
+                                    width: 40px;
+                                    height: 40px;
+                                }
+
+                                p {
+                                    font-size: 14px;
+                                    color: $sht-color-text;
+                                }
                             }
                         }
                     }
@@ -625,6 +631,7 @@
                             pointer-events: none;
                             overflow: scroll;
                             scroll-behavior: smooth;
+
                             &::-webkit-scrollbar {
                                 display: none;
                             }
@@ -647,11 +654,12 @@
                             outline: 0;
                             margin: 0 auto;
                             border-radius: 10px;
-     
+
                             @media #{$max575} {
                                 height: 100vh;
                                 overflow-y: auto;
                             }
+
                             .sht-modal-header {
                                 @include d-flex();
                                 flex-direction: column;
@@ -765,6 +773,7 @@
 
                                             &>div {
                                                 flex: 1;
+
                                                 @media #{$max575} {
                                                     flex: 100%;
                                                 }
